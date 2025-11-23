@@ -6,13 +6,8 @@ const getSortedPosts = (posts: CollectionEntry<"blog">[]) => {
     .filter(postFilter)
     .sort(
       (a, b) =>
-        // 优先使用修改时间，如果没有则使用发布时间
-        Math.floor(
-          new Date(b.data.modDatetime ?? b.data.pubDatetime).getTime() / 1000
-        ) -
-        Math.floor(
-          new Date(a.data.modDatetime ?? a.data.pubDatetime).getTime() / 1000
-        )
+        Math.floor(new Date(b.data.updated ?? b.data.date).getTime() / 1000) -
+        Math.floor(new Date(a.data.updated ?? a.data.date).getTime() / 1000)
     );
 };
 

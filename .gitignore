@@ -26,14 +26,3 @@ pnpm-debug.log*
 # pagefind
 
 public/pagefind
-
-.vscode
-
-.trae
-node_modules
-
-Artalk.astro
-
-.pnpm-store/
-
-public/data/

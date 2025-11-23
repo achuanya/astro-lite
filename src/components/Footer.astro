@@ -1,6 +1,7 @@
 ---
-import Hr from "./Hr.astro";
-import Socials from "./Socials.astro";
+// import Socials from "./Socials.astro";
+import { _t } from "@/i18n/lang";
+import { SITE } from "@/config";
 
 const currentYear = new Date().getFullYear();
 
@@ -12,23 +13,45 @@ const { noMarginTop = false } = Astro.props;
 ---
 
 <footer class:list={["w-full", { "mt-auto": !noMarginTop }]}>
-  <Hr noPadding />
   <div
     class="flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4"
   >
-    <Socials centered />
-    <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
-      <span>
-        <a href="https://umami.lhasa.icu/share/lOlDwnGtk7wyfM4T/lhasa.icu" target="_blank">Umami</a>
-      </span>
-      <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
-      <span>
-        <a href="/about/" target="_blank">&#169;2018&nbsp;-&nbsp;{currentYear}</a>
-      </span>
-      <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
-      <span>
-        <a href="https://beian.miit.gov.cn/" target="_blank">豫ICP备2024046152号-1</a>
-      </span>
+    <!-- {SITE.displayOptions.showFooterSocialLinks && <Socials centered />} -->
+    <div class="my-2 mx-auto flex flex-col items-center whitespace-nowrap sm:flex-row sm:flex-row text-[#969696] text-[11px]">
+      {SITE.displayOptions.showCopyright && (
+        <>
+          <span>{_t.license.copyright} &#169; {currentYear}</span>
+        </>
+      )}
+      {SITE.displayOptions.showCopyright && SITE.displayOptions.showStatement && (
+        <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
+      )}
+      {SITE.displayOptions.showStatement && (
+        <>
+          <span>{_t.license.statement}</span>
+        </>
+      )}
+
+      {SITE.customFooterLink.enabled && (
+        <a href={SITE.customFooterLink.url} target="_blank">
+          {SITE.customFooterLink.text}
+        </a>
+      )}
+
+      {(SITE.displayOptions.showCopyright ||
+      SITE.displayOptions.showStatement ||
+      SITE.icp) &&
+      SITE.customFooterLink.enabled && (
+        <span class="hidden sm:inline">&nbsp;|&nbsp;</span>
+      )}
+
+      {(SITE.displayOptions.showCopyright || SITE.displayOptions.showStatement) &&
+        SITE.icp && <span class="hidden sm:inline">&nbsp;|&nbsp;</span>}
+      {SITE.icp && (
+        <a href="https://beian.miit.gov.cn/" target="_blank">
+          {_t.license.icp} {SITE.icp}
+        </a>
+      )}
     </div>
   </div>
 </footer>

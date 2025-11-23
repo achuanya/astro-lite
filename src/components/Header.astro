@@ -1,63 +1,55 @@
 ---
-import Hr from "./Hr.astro";
 import IconX from "@/assets/icons/IconX.svg";
-import IconMoon from "@/assets/icons/IconMoon.svg";
-import IconSearch from "@/assets/icons/IconSearch.svg";
-import IconArchive from "@/assets/icons/IconArchive.svg";
-import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
+// import IconMoon from "@/assets/icons/IconMoon.svg";
+// import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
-import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
+import { _t } from "@/i18n/lang";
+import YearProgress from "./YearProgress.astro";
 
-export interface Props {
-  currentCategory?: string;
-}
-
-const { currentCategory } = Astro.props;
 const { pathname } = Astro.url;
 
-const currentPath =
-  pathname.endsWith("/") && pathname !== "/" ? pathname.slice(0, -1) : pathname;
+const rawPath = pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+const currentPath = rawPath.endsWith("/") && rawPath !== "/" ? rawPath.slice(0, -1) : rawPath;
 
 const isActive = (path: string) => {
-  if (currentCategory) {
-    if (path === "/posts" && currentCategory === "technology") return true;
-    if (path === "/sports" && currentCategory === "sports") return true;
-    if (path === "/posts" && currentCategory === "life") return true;
-    if (path === "/posts" && currentCategory === "startup") return true;
-    return false;
-  }
-  
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
   const pathArray = path.split("/").filter(p => p.trim());
 
   return currentPath === path || currentPathArray[0] === pathArray[0];
 };
+interface Props {
+  leadingTitle?: string;
+  hideSiteTitle?: boolean;
+  leadingTitleTransition?: string;
+}
+const { leadingTitle, hideSiteTitle, leadingTitleTransition } = Astro.props as Props;
 ---
 
 <header>
   <a
     id="skip-to-content"
     href="#main-content"
-    class="absolute start-16 -top-full z-50 bg-background px-3 py-2 text-accent backdrop-blur-lg transition-all focus:top-4"
+    class="absolute -top-full left-16 z-50 bg-background px-3 py-2 text-accent backdrop-blur-lg transition-all focus:top-4"
   >
     Skip to content
   </a>
-  
   <div
     id="nav-container"
-    class="mx-auto flex max-w-app flex-col items-center justify-between sm:flex-row"
+    class="mx-auto flex max-w-3xl flex-col items-center justify-between sm:flex-row"
   >
     <div
       id="top-nav-wrap"
-      class="relative flex w-full items-baseline justify-between bg-background p-4 sm:items-center sm:py-6"
+      class="relative flex w-full items-center sm:items-baseline justify-between bg-background pb-2"
     >
       <a
         href="/"
-        class="absolute p-1 text-2xl leading-7 font-semibold whitespace-nowrap sm:static"
-        title="钓五湖四海，交八方朋友"
+        class="absolute text-lg leading-6 sm:text-xl sm:leading-7 sm:static max-w-[28ch] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-none sm:overflow-visible sm:text-clip"
       >
-        {SITE.title}
+        {leadingTitle && (
+          <span class="mr-2" transition:name={leadingTitleTransition}>{leadingTitle}</span>
+        )}
+        {!hideSiteTitle && SITE.title}
       </a>
       <nav
         id="nav-menu"
@@ -73,96 +65,110 @@ const isActive = (path: string) => {
           <IconX id="close-icon" class="hidden" />
           <IconMenuDeep id="menu-icon" />
         </button>
-        
-        <ul
-          id="menu-items"
-          class:list={[
-            "mt-4 grid w-44 grid-cols-2 place-content-center gap-2",
-            "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-2 sm:[&>li>a]:py-1",
-            "hidden",
-            "sm:mt-0 sm:ml-0 sm:flex sm:w-auto sm:gap-x-5 sm:gap-y-0",
-          ]}
-        >
-          <li class="col-span-2">
-            <a href="/posts/" class:list={{ "active-nav": isActive("/posts") }} title="全部文章、包括生活、运动、技术、创业">
-              全部
-            </a>
-          </li>
-          
-          <li class="col-span-2">
-            <a href="/sports/" class:list={{ "active-nav": isActive("/sports") }} title="我是一个非常懒惰的人，我之所以骑行、徒步，只是有瘾，而不是喜欢运动">
-              户外
-            </a>
-          </li>
-          
-          <li class="col-span-2">
-            <a href="/feeds/" class:list={{ "active-nav": isActive("/feeds") }} title="非友链，仅订阅有价值的 Blog，这也是我获取信息的主要渠道之一，Ta 们也会同步到我的 Folo">
-              逛逛
-            </a>
-          </li>
-          
-          <li class="col-span-2">
-            <a href="/about/" class:list={{ "active-nav": isActive("/about") }} title="了解更多关于 Blog 的信息">
-              关于
-            </a>
-          </li>
-          {
-            SITE.showArchives && (
-              <li class="col-span-2">
-                <LinkButton
-                  href="/archives/"
-                  class:list={[
-                    "focus-outline flex justify-center p-3 sm:p-1",
-                    {
-                      "active-nav [&>svg]:stroke-accent": isActive("/archives"),
-                    },
-                  ]}
-                  ariaLabel="archives"
-                  title="可查看往年所有文章"
-                >
-                  <IconArchive class="hidden sm:inline-block" />
-                  <span class="sm:sr-only">归档</span>
-                </LinkButton>
-              </li>
-            )
-          }
-          
-          <li class="col-span-1 flex items-center justify-center">
-            <LinkButton
-              href="/search/"
-              class:list={[
-                "focus-outline flex p-3 sm:p-1",
-                { "[&>svg]:stroke-accent": isActive("/search") },
-              ]}
-              ariaLabel="search"
-              title="基于 Pagefind 静态搜索，输入关键字查询博客所有内容"
-            >
-              <IconSearch />
-              <span class="sr-only">Search</span>
-            </LinkButton>
-          </li>
-          
-          {
-            SITE.lightAndDarkMode && (
-              <li class="col-span-1 flex items-center justify-center">
-                <button
-                  id="theme-btn"
-                  class="focus-outline relative size-12 p-4 sm:size-8 hover:[&>svg]:stroke-accent"
-                  title="切换浅色和深色主题，支持自动切换，支持日出日落模式、支持识别用户系统主题"
-                  aria-label="auto"
-                  aria-live="polite"
-                >
-                  <IconMoon class="absolute top-[50%] left-[50%] -translate-[50%] scale-100 rotate-0 transition-all [html[data-theme=dark]_&]:scale-0 [html[data-theme=dark]_&]:-rotate-90" />
-                  <IconSunHigh class="absolute top-[50%] left-[50%] -translate-[50%] scale-0 rotate-90 transition-all [html[data-theme=dark]_&]:scale-100 [html[data-theme=dark]_&]:rotate-0" />
-                </button>
-              </li>
-            )
-          }
-        </ul>
       </nav>
     </div>
   </div>
-  <Hr />
+  <!-- <div class="mx-auto w-full">
+    <hr class="border-skin-line" aria-hidden={true} />
+  </div> -->
+  <YearProgress />
+  <nav aria-label="Primary" class="mx-auto w-full max-w-3xl">
+    <ul
+      id="menu-items"
+      class:list={[
+        "hidden",
+        "my-2 flex flex-wrap gap-2",
+        "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-0 sm:[&>li>a]:py-1",
+        "[&>li>a]:text-[var(--nav-link)]",
+        "sm:flex sm:gap-x-5 sm:gap-y-0",
+      ]}
+    >
+      <li>
+        <a href="/posts" class:list={{ "active-nav": isActive("/posts") }}>
+          {_t.posts.title}
+        </a>
+      </li>
+      <li>
+        <a
+          href="/categories"
+          class:list={{ "active-nav": isActive("/categories") }}
+        >
+          {_t.categories.title}
+        </a>
+      </li>
+      <!-- <li>
+        <a href="/tags" class:list={{ "active-nav": isActive("/tags") }}>
+          {_t.tags.title}
+        </a>
+      </li> -->
+      <li>
+        <a href="/feeds" class:list={{ "active-nav": isActive("/feeds") }}>
+          {_t.feeds.title}
+        </a>
+      </li>
+      <li>
+        <a href="/about" class:list={{ "active-nav": isActive("/about") }}>
+          {_t.about.title}
+        </a>
+      </li>
+      {
+        SITE.showArchives && (
+          <li>
+            <a href="/archives" class:list={{ "active-nav": isActive("/archives") }}>
+              {_t.archives.title}
+            </a>
+            {/* <LinkButton
+              href="/archives"
+              class:list={[
+                "focus-outline flex p-3 sm:p-1",
+                {
+                  "active-nav [&>svg]:stroke-accent": isActive("/archives"),
+                },
+              ]}
+              ariaLabel={_t.archives.title}
+              title={_t.archives.title}
+            >
+              <IconArchive class="hidden sm:inline-block" />
+              <span class="sm:sr-only">{_t.archives.title}</span>
+            </LinkButton> */}
+          </li>
+        )
+      }
+      <li class="flex items-center">
+        <a href="/search" class:list={{ "active-nav": isActive("/search") }}>
+          {_t.search.title}
+        </a>
+        <!-- <LinkButton
+          href="/search"
+          class:list={[
+            "focus-outline flex p-3 sm:p-1",
+            { "[&>svg]:stroke-accent": isActive("/search") },
+          ]}
+          ariaLabel={_t.search.title}
+          title={_t.search.title}
+        >
+          <IconSearch />
+          <span class="sr-only">{_t.search.title}</span>
+        </LinkButton> -->
+      </li>
+      {
+        SITE.lightAndDarkMode && (
+          <li class="flex items-center">
+            <button
+              id="theme-btn"
+              class="focus-outline block px-4 py-3 sm:px-0 sm:py-1 hover:text-accent text-[var(--nav-link)] font-medium"
+              title={_t.common.themeBtn}
+              aria-label="auto"
+              aria-live="polite"
+            >
+              <span class="transition-all dark:hidden whitespace-nowrap">{_t.common.dark}</span>
+              <span class="transition-all hidden dark:inline whitespace-nowrap">{_t.common.light}</span>
+            </button>
+          </li>
+        )
+      }
+    </ul>
+  </nav>
 </header>
 
 <script>
@@ -176,7 +182,6 @@ const isActive = (path: string) => {
 
     menuBtn.addEventListener("click", () => {
       const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
-
       menuBtn.setAttribute("aria-expanded", openMenu ? "false" : "true");
       menuBtn.setAttribute("aria-label", openMenu ? "Open Menu" : "Close Menu");
 
@@ -188,5 +193,6 @@ const isActive = (path: string) => {
 
   toggleNav();
 
+  // Runs on view transitions navigation
   document.addEventListener("astro:after-swap", toggleNav);
 </script>

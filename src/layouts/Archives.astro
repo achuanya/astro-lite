@@ -1,0 +1,72 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Main from "@/layouts/Main.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import { SITE } from "@/config";
+import type { Page } from "astro";
+import type { CollectionEntry } from "astro:content";
+import getPostsByGroupCondition from "@/utils/getPostsByGroupCondition";
+import { getPath } from "@/utils/getPath";
+import { _t } from "@/i18n/lang";
+
+export interface Props {
+  page: Page<CollectionEntry<"blog">>;
+}
+
+const { page } = Astro.props;
+const groupedByYear = getPostsByGroupCondition(
+  page.data,
+  (item) => new Date(item.data.updated ?? item.data.date).getFullYear()
+);
+const years = Object.keys(groupedByYear)
+  .map((y) => Number(y))
+  .sort((a, b) => b - a);
+---
+
+<Layout title={`${_t.archives.title} | ${SITE.title}`}>
+  <Header />
+  <Main pageTitle="" pageDesc={_t.archives.desc}>
+    {years.map((year, i) => (
+      <section class={`archives-year mb-8 ${i >= SITE.archivesPerIndex ? 'hidden' : ''}`}>
+        <h2 class="text-base mb-1">
+          {year} ({groupedByYear[year].length})
+        </h2>
+        <ul class="mt-1 space-y-1">
+          {groupedByYear[year].map(({ data, id, filePath }) => {
+            const d = new Date(data.updated ?? data.date);
+            const mm = String(d.getMonth() + 1).padStart(2, "0");
+            const dd = String(d.getDate()).padStart(2, "0");
+            const dateText = `${mm}-${dd}`;
+            return (
+              <li class="flex items-center gap-2 leading-6">
+                <span class="w-14 text-right tabular-nums text-sm opacity-80">
+                  {dateText}
+                </span>
+                <span class="opacity-80">»</span>
+                <a href={getPath(id, filePath)} class="flex-1 text-sm text-accent hover:underline truncate">
+                  {data.title}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+    ))}
+    <div id="archives-sentinel" data-init={SITE.archivesPerIndex} data-chunk={SITE.archivesPerPage}></div>
+  </Main>
+  <Footer noMarginTop={true} />
+</Layout>
+
+<script is:inline src="/lazy-list.js"></script>
+<script is:inline>
+  function boot(){
+    window.setupLazyList({
+      sentinelId: 'archives-sentinel',
+      itemSelector: '.archives-year',
+      artalk: { enabled: false }
+    });
+  }
+  document.addEventListener('astro:after-swap', () => { if (typeof window.setupLazyList === 'function') boot(); });
+  document.addEventListener('astro:page-load', () => { if (typeof window.setupLazyList === 'function') boot(); });
+</script>

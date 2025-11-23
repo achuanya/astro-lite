@@ -4,8 +4,8 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root {
-  --font-sans: "Noto Sans", "Noto Sans TC", sans-serif;
-  --font-mono: "Roboto Mono", "Noto Sans TC", monospace;
+  --font-sans: "Noto Sans SC", "Noto Sans", sans-serif;
+  --font-mono: "Roboto Mono", "Noto Sans SC", monospace;
   --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
 
   /* Wonton comment */
@@ -16,75 +16,35 @@
 
 :root,
 html[data-theme="light"] {
-  --apple-gray-light: #f1f1f1;
-  --apple-silver: #d2d2d7;
   --background: #fdfdfd;
+  --page-background: #7db9de;
   --foreground: #282728;
-  --accent: #006cac;
+  --accent: #4a8bbd;
   --muted: #e6e6e6;
-  --border: #ece9e9;
-  
-  /* 评论数统计专用颜色变量 */
-  --comment-count-bg: #96d7f5;
-  --comment-count-text: #fff;
-  --comment-count-hover-bg: #2ea9df;
-  
-  /* Tooltip 专用颜色变量 - 浅色主题 */
-  --tooltip-bg: #ffffff;
-  --tooltip-border: #e1e5e9;
-  --tooltip-title: #0ea5e9;
-  --tooltip-divider: #e1e5e9;
-  --tooltip-param-name: #6b7280;
-  --tooltip-param-value: #0284c7;
-  --tooltip-article-title: #0969da;
-  --tooltip-shadow: 0 8px 24px rgba(140, 149, 159, 0.2); /* Tooltip 阴影 */
-  
-  /* MusicPlayer 专用颜色变量 - 浅色主题 */
-  --music-player-shadow: 0 2px 12px 8px rgba(0, 0, 0, 0.1); /* 播放器阴影 */
-  --blue-gray: #607d8b;
-  --color-neutral: #7b7a7a;
-  --color-neutral-hover: #5E5C5C;
+  --border: #e5e9f0;
+  --strong-font-weight: 700; /* Compensating visual weight */
+  --nav-link: #2ea9df;
+  --nav-link-active: #000000;
+  --comment-badge-bg: #96d7f5;
+  --toc-top-text-color: #ffffff;
+  --year-progress-fill: var(--page-background);
 }
 
-/* 深色主题颜色变量定义 */
 html[data-theme="dark"] {
-  /* --background: #212737;
-  --foreground: #eaedf3;
-  --accent: #ff6b01;
-  --muted: #343f60bf;
-  --border: #ab4b08; */
-
-  --apple-gray-light: var(--at-color-bg)
-  --apple-silver: var(--at-color-bg);
   --background: #23272e;
+  --page-background: #282c34;
   --foreground: #eaedf3;
   --accent: #d19a66;
   --muted: #343f60bf;
   --border: #4d4844;
-  
-  /* 评论数统计专用颜色变量 */
-  --comment-count-bg: #374151;
-  --comment-count-text: #e5e7eb;
-  --comment-count-hover-bg: #4b5563;
-  
-  /* Tooltip 专用颜色变量 - 深色主题 */
-  --tooltip-bg: #161b22;
-  --tooltip-border: #30363d; 
-  --tooltip-title: #ff8c1a;
-  --tooltip-divider: #30363d;
-  --tooltip-param-name: #8b949e;
-  --tooltip-param-value: #ffa657;
-  --tooltip-article-title: #ff7b00;
-  --tooltip-shadow: 0 16px 32px rgba(1, 4, 9, 0.85);
-  
-  --at-color-bg: #2c3138;
-  
-  /* MusicPlayer 专用颜色变量 - 深色主题 */
-  --blue-gray: #d2d2d7;
-  --music-player-shadow: 0 2px 12px 8px rgba(0, 0, 0, 0.3);
+  --strong-font-weight: 800; /* Compensating visual weight */
+  --nav-link: var(--foreground);
+  --nav-link-active: var(--accent);
+  --comment-badge-bg: var(--color-accent);
+  --toc-top-text-color: var(--foreground);
+  --year-progress-fill: var(--accent);
 }
 
-/* Tailwind 主题颜色映射配置 */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -93,169 +53,179 @@ html[data-theme="dark"] {
   --color-border: var(--border);
 }
 
-/* 基础样式层 */
 @layer base {
-  /* 全局元素样式重置 */
   * {
-    @apply border-border outline-accent/75;  /* 边框和焦点轮廓样式 */
-    scrollbar-width: auto;                   /* 滚动条宽度 */
-    scrollbar-color: var(--color-muted) transparent; /* 滚动条颜色 */
+    @apply border-border outline-accent/75;
+    scrollbar-width: auto;
+    scrollbar-color: color-mix(
+        in srgb,
+        var(--color-muted) 80%,
+        var(--color-foreground) 20%
+      )
+      transparent;
   }
-  
-  /* HTML 根元素样式 */
   html {
-    @apply overflow-y-scroll scroll-smooth;  /* 垂直滚动条和平滑滚动 */
+    @apply overflow-y-scroll scroll-smooth;
   }
-  
-  /* 页面主体样式 */
   body {
-    @apply flex min-h-svh flex-col bg-background font-mono text-foreground selection:bg-accent/75 selection:text-background;
+    @apply flex min-h-svh flex-col bg-background font-sans text-foreground selection:bg-accent/75 selection:text-background;
     font-family: var(--font-sans), var(--font-emoji);
   }
-  
-  /* 链接和按钮的焦点样式 */
   a,
   button {
-    @apply outline-offset-1 outline-accent focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-dashed;
+    @apply outline-offset-1 outline-accent focus-visible:no-underline focus-visible:outline-2;
   }
-  
-  /* 可交互按钮的鼠标指针样式 */
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
-  
-  /* 主要区块的布局约束 */
   section,
   footer {
-    @apply mx-auto max-w-app px-4;  /* 居中对齐，最大宽度，水平内边距 */
+    @apply mx-auto max-w-3xl;
   }
 }
 
-/* 自定义工具类 - 应用最大宽度约束 */
-@utility max-w-app {
-  @apply max-w-3xl;  /* 最大宽度设为 3xl（约 48rem/768px） */
-}
-
-/* 激活导航项的样式 */
 .active-nav {
-  @apply text-accent;  /* 使用强调色，移除下划线 */
+  color: var(--nav-link-active) !important;
 }
 
-/* 锚点滚动样式优化 */
-/* 来源: https://piccalil.li/blog/a-more-modern-css-reset/ */
-/* 为所有锚点目标添加额外的滚动边距，避免内容被固定头部遮挡 */
-:target {
-  scroll-margin-block: 1rem;  /* 块方向滚动边距 1rem */
+@layer utilities {
+  #sidebar {
+    @apply fixed z-40 transform overflow-y-auto bg-background text-sm;
+  }
+
+  /* Mobile styles */
+  @media (max-width: 1023px) {
+    #sidebar {
+      @apply fixed top-0 right-0 bottom-0 left-auto flex h-full max-h-none w-4/5 max-w-70 translate-x-full flex-col justify-end rounded-none p-6 pb-8;
+    }
+
+    #sidebar.mobile-open {
+      @apply translate-x-0;
+    }
+  }
+
+  /* Desktop styles */
+  @media (min-width: 1300px) {
+    #sidebar {
+      @apply top-36 right-10 m-2 max-h-[calc(100vh-12rem)] w-32 translate-x-0 rounded-none bg-transparent p-0 shadow-none;
+    }
+
+    /* When there's no TOC, position the sidebar lower */
+    #sidebar.no-toc {
+      @apply top-150;
+    }
+
+    /* xl breakpoint */
+    @media (min-width: 1280px) {
+      #sidebar {
+        @apply w-53;
+      }
+    }
+  }
+
+  /* tocbot */
+  .toc-list-item {
+    @apply truncate overflow-hidden whitespace-nowrap;
+    color: var(--toc-top-text-color);
+  }
+  .toc-link {
+    color: var(--toc-top-text-color);
+  }
+  .toc-link.is-active-link {
+    @apply !text-accent;
+  }
+  .toc-link::before {
+    @apply !hidden;
+    content: "";
+  }
+
+  @media (max-width: 1023px) {
+    .toc-list-item {
+      @apply my-4;
+    }
+  }
+
+  /* rehype-autolink-headings */
+  .icon-link::before {
+    @apply ml-1 inline-block text-accent !no-underline opacity-0 transition-opacity duration-200;
+    content: "#";
+  }
+
+  /* Back-to-Top text color in sidebar */
+  #sidebar #back-to-top svg {
+    color: var(--toc-top-text-color);
+  }
+
+  #sidebar #back-to-top span {
+    color: var(--toc-top-text-color);
+  }
+
+  h1:hover .icon-link::before,
+  h2:hover .icon-link::before,
+  h3:hover .icon-link::before,
+  h4:hover .icon-link::before,
+  h5:hover .icon-link::before,
+  h6:hover .icon-link::before {
+    @apply opacity-100;
+  }
+
+  /* Code blocks */
+  .expressive-code {
+    @apply mt-2 mb-4;
+  }
 }
 
-/* 评论数统计样式 */
-.comment-count-badge {
-  background-color: var(--comment-count-bg);
-  color: var(--comment-count-text);
-  border: 1px solid var(--comment-count-bg);
+/* 菜单展开时移除年度进度条底部间距（纯 CSS，通过 :has 检测可见菜单） */
+header:has(#menu-items:not(.hidden)) #year-progress {
+  margin-bottom: 0 !important;
 }
 
-.comment-count-badge:hover {
-  background-color: var(--comment-count-hover-bg);
-  border-color: var(--comment-count-hover-bg);
+/* ===== Ultra-thin scrollbar enhancement (no color change) ===== */
+
+/* Firefox */
+* {
+  scrollbar-width: thin; /* thinner than default */
 }
 
-/* 确保评论数文字在所有主题下都可见 */
-.artalk-comment-count {
-  font-weight: 500;
+/* WebKit (Chrome, Edge, Safari, Opera) */
+*::-webkit-scrollbar {
+  width: 3px;   /* from 6px → 3px: extremely thin */
+  height: 3px;
 }
 
-/* 当评论数为0时的特殊样式 */
-.artalk-comment-count:empty::before {
-  content: "0";
-  opacity: 0.7;
+*::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-clip: padding-box;
+  border: 1px solid transparent; /* smaller border for narrow bar */
 }
 
-/* Cal-Heatmap Tooltip 样式 - 使用专用颜色变量 */
-.ch-tooltip {
-  background: var(--tooltip-bg) !important;
-  border: 1px solid var(--tooltip-border) !important;
-  border-radius: 0.5rem !important;
-  box-shadow: var(--tooltip-shadow) !important;
-  padding: 0 !important;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace !important;
-  font-size: 0.8125rem !important;
-  line-height: 1.4 !important;
-  max-width: 17.5rem !important;
-  z-index: 9999 !important;
-  color: var(--tooltip-text) !important;
+*::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-/* 深色主题下的 tooltip 特殊样式 */
-html[data-theme="dark"] .ch-tooltip,
-#ch-tooltip[data-theme="dark"] {
-  background: var(--tooltip-bg) !important;
-  color: var(--tooltip-title) !important;
+*::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
-/* 浅色主题 - 无数据单元格样式 */
-:root .ch-subdomain-bg {
-  stroke: #1f23280d !important;
+/* Optional: touch devices slightly wider for usability */
+@media (pointer: coarse) {
+  *::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
 }
 
-/* 深色主题 - 无数据单元格样式 */
-html[data-theme="dark"] .ch-subdomain-bg {
-  stroke-width: 1px !important;
+/* 细滚动条 WebKit */
+.expressive-code pre::-webkit-scrollbar {
+  width: 3px !important;
+  height: 3px!important;
+}
+.expressive-code pre::-webkit-scrollbar-thumb {
+  border-radius: 3px!important;
 }
 
-/* 深色主题下的热力图颜色调整 - GitHub 风格 10 级配色 */
-html[data-theme="dark"] .ch-subdomain-bg[fill="#ebedf0"] {
-  fill: #161b22 !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#9be9a8"] {
-  fill: #0e4429 !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#40c463"] {
-  fill: #006d32 !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#30a14e"] {
-  fill: #26a641 !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#216e39"] {
-  fill: #39d353 !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#1a5a2e"] {
-  fill: #2ea043 !important;
-}
-
-/* Cal-Heatmap 单元格悬停效果 - 1px 描边 */
-/* 浅色主题悬停样式 */
-:root .ch-subdomain-bg:hover {
-  stroke: #0284c7 !important;
-  stroke-width: 1px !important;
-  cursor: pointer !important;
-}
-
-/* 深色主题悬停样式 */
-html[data-theme="dark"] .ch-subdomain-bg:hover {
-  stroke: #ff8c1a !important;
-  stroke-width: 1px !important;
-  cursor: pointer !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#0d4d21"] {
-  fill: #238636 !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#0a3f1a"] {
-  fill: #196c2e !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#073214"] {
-  fill: #0f5323 !important;
-}
-
-html[data-theme="dark"] .ch-subdomain-bg[fill="#05260f"] {
-  fill: #033a16 !important;
+/* Firefox */
+.expressive-code pre {
+  scrollbar-width: thin!important;
 }

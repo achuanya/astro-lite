@@ -1,48 +1,93 @@
 export const SITE = {
-  website: "https://lhasa.icu/",
-  author: "游钓四方",
+  website: "https://blog.lhasa.icu",
+  author: "lhasa",
   profile: "https://github.com/achuanya",
   desc: "骑过湖边的小径，走过文字里的角落，偶尔停下，看见风，也看见自己",
   title: "游钓四方",
-  
-  ogImage: "https://cos.lhasa.icu/StylePictures/my-photo.jpg",
-  notFoundImage: "https://cos.lhasa.icu/StylePictures/404.gif",
-  notFoundStaticImage: "https://cos.lhasa.icu/StylePictures/404.webp",
-  logo: "https://cos.lhasa.icu/StylePictures/apple-touch-icon.png",
-  
-  // 功能配置
-  lightAndDarkMode: true,    // 主题切换
-  showArchives: true,        // 归档
-  showBackButton: true,      // 返回按钮
-  dynamicOgImage: false,     // OG图片
-  
-  // 分页配置
-  postPerIndex: 12,          // 初始显示文章数量
-  postPerPage: 12,           // 每次加载文章数量
-  
-  // Sports 独立分页配置
-  sports: {
-    postPerPage: 12,
-  },
-  
-  // Archives 懒加载配置
-  archives: {
-    enableLazyLoad: true,     // 启用懒加载
-    initialYearsToShow: 1,    // 初始显示年份数量
-    yearsPerPage: 1,          // 每次加载年份数量
-  },
-  
-  // 定时发布配置
-  scheduledPostMargin: 15 * 60 * 1000,
-  
+  ogImage: "astropaper-og.jpg",
+  lightAndDarkMode: true,
+
+  // Posts 分页
+  postPerIndex: 10,
+  postPerPage: 10,
+
+  // 归档分页
+  archivesPerIndex: 2,
+  archivesPerPage: 3,
+
+  scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
+  genDescriptionMaxLines: 30, // Max number of lines to process
+  genDescriptionCount: 200, // If 'more' tag is not found, use this count of characters
+  showArchives: true,
+  showBackButton: false, // show back button in post detail
+  showPageDesc: false, // show page description in post detail
   editPost: {
     enabled: false,
-    text: "Edit page",
-    url: "https://github.com/achuanya/lhasa/edit/main/",
+    text: "Suggest Changes",
+    url: "https://github.com/satnaing/astro-paper/tree/main/",
+  },
+  dynamicOgImage: false,
+  lang: "zh-CN", // html lang code. Set this empty and default will be "en"
+  langOg: "zh_CN", // Open Graph locale tag, format 'language_TERRITORY' https://ogp.me/#optional
+  timezone: "Asia/Taipei", // Default global timezone (IANA format) https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  wontonCommentUrl: "", // Wonton comment server URL, set to empty string to disable comment
+  icp: "豫ICP备2024046152号-1", // Chinese ICP license number
+  
+  // 文章卡片显示选项
+  displayOptions: {
+    showSubtitle: false, // Show subtitle in article cards
+    showDescription: false, // Show description in article cards  
+    showCategories: false, // Show categories in article cards
+    showTags: false, // Show tags in article cards
+    showCommentCount: true, // Show comment count in article cards
+    showHeaderSocialLinks: false, // Show social links in header/main content area
+    showFooterSocialLinks: true, // Show social links in footer
+    showDate: false, // Show date in article pages
+    showCopyright: false, // Show copyright in footer
+    showStatement: false, // Show statement in footer
+  },
+
+  // 回到顶部按钮
+  backToTop: {
+    mobileBreakpoint: 1024,
+    showAfterRatio: 0.1,
+    minOverflowPx: 200,
+    minScrollTopPx: 300,
+  },
+
+  // 自定义页脚链接
+  customFooterLink: {
+    enabled: false,
+    text: "Stats",
+    url: "https://stats.lhasa.icu/blog.lhasa.icu",
   },
   
-  // 本地化配置
-  dir: "ltr",
-  lang: "zh-CN",
-  timezone: "Asia/Shanghai",
+// 图片组件配置
+  imageConfig: {
+    // 图片资源配置
+    imagesUrl: "https://cos.lhasa.icu/dist/images",
+    exifUrl: "https://lhasa-1253887673.cos.ap-shanghai.myqcloud.com/dist/images",
+    
+    // 标签样式配置
+    tags: {
+      defaultStyle: "l" as "l" | "s" | false,
+    },
+    
+    // EXIF配置
+    exif: {
+      enabled: true,           // EXIF信息显示开关
+      cache: {
+        enabled: true,         // EXIF缓存开关
+        expiryDays: 7,        // 缓存过期天数
+      },
+    },
+    
+    // 图片加载配置
+    loading: {
+      lazy: true,             // 懒加载开关
+      quality: {
+        enabled: true,        // 图片质量优化开关
+      },
+    },
+  },
 } as const;

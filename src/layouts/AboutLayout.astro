@@ -1,10 +1,10 @@
 ---
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Breadcrumb from "@/components/Breadcrumb.astro";
+// import Breadcrumb from "@/components/Breadcrumb.astro";
 import Layout from "./Layout.astro";
 import { SITE } from "@/config";
-import { getBlogStats } from "@/utils/getBlogStats";
+import { getBlogMetrics } from "@/utils/getBlogMetrics";
 
 export interface Props {
   frontmatter: {
@@ -14,16 +14,17 @@ export interface Props {
 }
 
 const { frontmatter } = Astro.props;
-const blogStats = await getBlogStats();
+const blogStats = await getBlogMetrics();
 ---
 
-<Layout title={`关于 | ${SITE.title}`}>
+<Layout title={`${frontmatter.title} | ${SITE.title}`}>
   <Header />
-  <Breadcrumb />
+  <!-- <Breadcrumb /> -->
   <main id="main-content">
-    <section id="about" class="app-prose mb-28 max-w-app prose-img:border-0">
-      <h1 class="text-2xl tracking-wider sm:text-3xl">{frontmatter.title}</h1>
-      <div id="blog-stats-data" 
+    <section id="about" class="prose mb-28 max-w-3xl prose-img:border-0 prose-img:block prose-img:-mx-4 prose-img:w-[calc(100%+2rem)] prose-img:max-w-[calc(100%+2rem)] sm:prose-img:-mx-[3.75rem] sm:prose-img:w-[calc(100%+7.5rem)] sm:prose-img:max-w-[calc(100%+7.5rem)]">
+      <h1 class="mt-6 text-2xl tracking-wider sm:text-3xl">
+        <!-- {frontmatter.title} -->
+        <div id="blog-stats-data" 
            data-running-days={blogStats.runningDays}
            data-total-posts={blogStats.totalPosts}
            data-total-words={blogStats.totalWordsInWan}
@@ -31,7 +32,8 @@ const blogStats = await getBlogStats();
            data-start-month="8"
            data-start-day="31"
            style="display: none;">
-      </div>
+        </div>
+      </h1>
       <slot />
     </section>
   </main>
@@ -90,19 +92,84 @@ const blogStats = await getBlogStats();
       { id: 'total-words', value: totalWords, duration: 2500, isDecimal: true }
     ];
     
+    // 预占位：根据最终字符串长度设置最小宽度，避免初始 0 导致布局抖动
+    const setMinWidth = (el: HTMLElement, len: number) => {
+      el.style.display = 'inline-block';
+      el.style.minWidth = `${len}ch`;
+      el.style.textAlign = 'center';
+    };
+
+    const elYear = document.getElementById('start-year') as HTMLElement | null;
+    const elMonth = document.getElementById('start-month') as HTMLElement | null;
+    const elDay = document.getElementById('start-day') as HTMLElement | null;
+    const elDays = document.getElementById('running-days') as HTMLElement | null;
+    const elPosts = document.getElementById('total-posts') as HTMLElement | null;
+    const elWords = document.getElementById('total-words') as HTMLElement | null;
+
+    if (elYear) setMinWidth(elYear, String(startYear).length);
+    if (elMonth) setMinWidth(elMonth, String(startMonth).length);
+    if (elDay) setMinWidth(elDay, String(startDay).length);
+    if (elDays) setMinWidth(elDays, String(runningDays).length);
+    if (elPosts) setMinWidth(elPosts, String(totalPosts).length);
+    if (elWords) setMinWidth(elWords, (totalWords.toFixed(1)).length);
+
+    // 启动数字动画
     elements.forEach((item, index) => {
       const element = document.getElementById(item.id);
       if (element) {
         setTimeout(() => {
-          animateNumber(element, item.value, item.duration, item.isDecimal || false);
+          animateNumber(element as HTMLElement, item.value, item.duration, item.isDecimal || false);
         }, index * 200);
       }
     });
   }
 
+  // 渲染博客进程时间轴
+  function renderTimeline() {
+    const timeline = document.getElementById('blog-timeline');
+    const dataEl = document.getElementById('blog-timeline-data');
+
+    if (!timeline || !dataEl) return;
+    if (timeline.dataset.initialized === 'true') return;
+
+    try {
+      const events = JSON.parse(dataEl.textContent || '[]');
+      const frag = document.createDocumentFragment();
+
+      events.forEach((evt: { date: string; text: string }) => {
+        const li = document.createElement('li');
+        li.className = 'flex items-center gap-2 leading-6';
+
+        const parts = (evt.date || '').split('-');
+        const ymd = parts.length === 3 ? `${parts[0]}-${parts[1]}-${parts[2]}` : (evt.date || '');
+
+        const date = document.createElement('span');
+        date.className = 'text-right tabular-nums text-sm opacity-80';
+        date.textContent = ymd;
+
+        const sep = document.createElement('span');
+        sep.className = 'opacity-80';
+        sep.textContent = '»';
+
+        const text = document.createElement('span');
+        text.className = 'flex-1 text-sm text-accent truncate';
+        text.textContent = evt.text;
+
+        li.append(date, sep, text);
+        frag.appendChild(li);
+      });
+
+      timeline.appendChild(frag);
+      timeline.dataset.initialized = 'true';
+    } catch (e) {
+      /* 忽略渲染错误 */
+    }
+  }
+
   function initializeAnimations() {
     setTimeout(() => {
       startAnimations();
+      renderTimeline();
     }, 300);
   }
 

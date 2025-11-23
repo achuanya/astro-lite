@@ -1,139 +1,99 @@
 @plugin '@tailwindcss/typography';
 
 @layer base {
-  /* ===== Override default Tailwind Typography styles ===== */
-  .app-prose {
-    @apply prose;
+  .prose {
+    @apply prose-headings:!mb-3 prose-headings:!text-foreground prose-h3:italic prose-p:!text-foreground prose-a:underline-offset-6 prose-blockquote:!border-l-accent/50 prose-blockquote:opacity-70 prose-figcaption:!text-foreground prose-figcaption:opacity-70 prose-strong:!text-foreground prose-code:rounded prose-code:bg-muted/75 prose-code:p-0.5 prose-code:!font-normal prose-code:!text-foreground prose-code:before:!content-none prose-code:after:!content-none prose-ol:!text-foreground prose-ul:overflow-x-clip prose-ul:!text-foreground prose-li:marker:!text-accent prose-table:text-foreground prose-th:border prose-th:border-border prose-td:border prose-td:border-border prose-img:mx-auto prose-img:!my-2 prose-hr:!border-border;
+  }
 
-    h1,
-    h2,
-    h3,
-    h4,
-    th {
-      @apply mb-3 text-foreground;
-    }
+  /* inline code */
+  .prose :not(pre) > code {
+    @apply !break-words !whitespace-pre-wrap;
+  }
 
-    h3 {
-      @apply italic;
-    }
+  .prose strong {
+    font-weight: var(--strong-font-weight) !important;
+  }
 
-    p,
-    strong,
-    ol,
-    ul,
-    figcaption,
-    table,
-    code {
-      @apply text-foreground;
-    }
+  .prose a {
+    @apply break-words !text-accent !no-underline hover:!underline;
+  }
+  .prose thead th:first-child,
+  tbody td:first-child,
+  tfoot td:first-child {
+    padding-inline-start: 0.5714286em !important;
+  }
 
-    a {
-      @apply break-words text-accent no-underline underline-offset-4 hover:underline hover:decoration-solid focus-visible:no-underline;
-    }
+  .prose blockquote {
+    @apply !font-normal; /* font-serif !not-italic */
+  }
+  .prose blockquote p::before {
+    content: "" !important;
+  }
 
-    ul {
-      @apply overflow-x-clip;
-    }
+  /* .prose h2#table-of-contents {
+    @apply mb-2;
+  } */
+  /* .prose h2#table-of-contents + p {
+    @apply hidden;
+  } */
 
-    li {
-      @apply marker:text-accent;
-    }
+  .prose details {
+    @apply inline-block cursor-pointer text-foreground select-none;
+  }
+  .prose summary {
+    @apply focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent;
+  }
 
-    hr {
-      @apply border-border;
-    }
+  .prose figcaption {
+    @apply text-center;
+  }
+  .prose kbd {
+    @apply rounded border-1 border-border bg-muted text-foreground!;
+  }
 
-    figcaption {
-      @apply opacity-75;
-    }
+  .responsive-table {
+    @apply overflow-x-auto;
+    -webkit-overflow-scrolling: touch;
+  }
 
-    table {
-      th,
-      td {
-        @apply border border-border p-2;
-      }
+  .responsive-table table {
+    @apply w-full min-w-full table-auto;
+  }
 
-      th {
-        @apply py-1.5;
-      }
+  .prose iframe {
+    @apply aspect-video w-full max-w-full;
+  }
 
-      code {
-        @apply break-all sm:break-normal;
-      }
-    }
-
-    code {
-      @apply rounded bg-muted/75 p-1 break-words text-foreground before:content-none after:content-none;
-    }
-
-    .astro-code code {
-      @apply flex-[1_0_100%] bg-inherit p-0;
-    }
-
-    blockquote {
-      @apply border-s-accent/80 break-words opacity-80;
-    }
-
-    details {
-      @apply inline-block cursor-pointer text-foreground select-none [&_p]:hidden [&_ul]:!my-0;
-    }
-
-    summary {
-      @apply focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent focus-visible:outline-dashed;
-    }
-
-    pre {
-      @apply focus-visible:border-transparent focus-visible:outline-2 focus-visible:outline-accent focus-visible:outline-dashed;
-    }
+  .prose .katex-display {
+    @apply text-foreground;
   }
 
   /* ===== Code Blocks & Syntax Highlighting ===== */
-  .astro-code {
-    @apply flex border bg-(--shiki-light-bg) text-(--shiki-light) outline-border [&_span]:text-(--shiki-light);
-  }
+  /* pre:has(code) {
+    @apply border border-border;
+  } */
 
-  html[data-theme="dark"] .astro-code {
-    @apply bg-(--shiki-dark-bg) text-(--shiki-dark) [&_span]:text-(--shiki-dark);
-  }
+  /* .prose code,
+  .prose blockquote {
+    @apply break-words;
+  } */
 
-  /* Styles for Shiki transformers */
-  /* https://shiki.style/packages/transformers */
-  .astro-code {
-    .line.diff.add {
-      @apply relative inline-block w-full bg-green-400/20 before:absolute before:-left-3 before:text-green-500 before:content-['+'];
-    }
-    .line.diff.remove {
-      @apply relative inline-block w-full bg-red-500/20 before:absolute before:-left-3 before:text-red-500 before:content-['-'];
-    }
-    .line.highlighted {
-      @apply inline-block w-full bg-slate-400/20;
-    }
-    .highlighted-word {
-      @apply rounded-sm border border-border px-0.5 py-px;
-    }
-  }
+  /* add line breaks whenever necessary for codes under table */
+  /* .prose table code {
+    @apply break-all sm:break-normal;
+  } */
 
-  /* ===== 二次开发图片样式 ===== */
-  .app-prose {
-    & :where(img):not(:where([class~="not-prose"], [class~="not-prose"] *)) {
-      margin-top: 0 !important;
-      margin-bottom: 0 !important;
-    }
-  }
+  /* pre > code {
+    white-space: pre;
+  } */
 
-  .prose .img-container {
-    margin: 1.5rem auto !important;
-    max-width: 100% !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-  
-  .prose .img-container figure {
-    margin: 0 !important;
-  }
-  
-  .prose .img-container img {
-    margin: 0 !important;
-    max-width: 100% !important;
-  }
+  /* Apply Dark Theme (if multi-theme specified) */
+  /* html[data-theme="dark"] pre:has(code),
+  html[data-theme="dark"] pre:has(code) span {
+    color: var(--shiki-dark) !important;
+    background-color: var(--shiki-dark-bg) !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  } */
 }

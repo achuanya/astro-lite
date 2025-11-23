@@ -4,6 +4,8 @@ import Main from "@/layouts/Main.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import { SITE } from "@/config";
+import { _t } from "@/i18n/lang";
+import Artalk from "@/components/Artalk.astro";
 
 const INITIAL_ITEMS_TO_SHOW = 4;
 const FALLBACK_OG_IMAGE = "https://cos.lhasa.icu/LinksAvatar/default.png";
@@ -17,9 +19,9 @@ const feedsDataForClient = {
 };
 ---
 
-<Layout title={`逛逛 | ${SITE.title}`}>
+<Layout title={`${_t.feeds.title} | ${SITE.title}`}>
   <Header />
-    <Main pageTitle="Feeds" pageDesc="">
+    <Main pageTitle="" pageDesc={_t.feeds.desc}>
       <section id="feeds-list-section" class="px-0">
         <div id="feeds-loading" class="my-6 text-center">
           <p>正在加载 Feeds...</p>
@@ -30,13 +32,15 @@ const feedsDataForClient = {
         <div id="feeds-no-content" class="my-6 text-center hidden">
           <p>暂无内容。</p>
         </div>
-        <ul id="feeds-list" class="list-none p-0">
+        <ul id="feeds-list" class="list-none mb-10">
         </ul>
         <div id="load-more-trigger" class="h-10" style="display: none;"></div>
       </section>
+      <div id="Comments"></div>
     </Main>
   <Footer />
 </Layout>
+<Artalk />
 
 <div id="feeds-data-json-container" data-json={JSON.stringify(feedsDataForClient)} style="display: none;"></div>
 
@@ -66,6 +70,7 @@ const feedsDataForClient = {
     }
   });
 </script>
+
 
 <style>
   #feeds-list-section {

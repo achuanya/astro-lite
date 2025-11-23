@@ -4,7 +4,7 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import { SITE } from "@/config";
-import Artalk from "@/components/Artalk.astro";
+import { _t } from "@/i18n/lang";
 ---
 
 <Layout title={`404 Not Found | ${SITE.title}`}>
@@ -17,24 +17,24 @@ import Artalk from "@/components/Artalk.astro";
       <div id="image-container" class="relative w-[350px] h-[350px]">
         <img 
           id="static-image"
-          src={SITE.notFoundStaticImage} 
+          src={_t.notFoundPage.staticImages}
           alt="404 Not Found" 
           class="w-full h-full object-contain absolute top-0 left-0 z-10"
         />
         <img 
           id="animated-image"
-          src={SITE.notFoundImage} 
+          src={_t.notFoundPage.images}
           alt="404 Not Found" 
           class="w-full h-full object-contain absolute top-0 left-0 hidden"
         />
       </div>
-      <p class="mt-4 text-2xl sm:text-3xl">你似乎来到了没有知识存在的荒原</p>
-      <!-- <LinkButton
+      <p class="mt-4 text-2xl sm:text-3xl">{_t.notFoundPage.title}</p>
+      <LinkButton
         href="/"
-        class="my-6 text-lg underline decoration-dashed underline-offset-8"
+        class="my-6 text-lg decoration-dashed underline-offset-8"
       >
         Go back home
-      </LinkButton> -->
+      </LinkButton>
     </div>
   </main>
   <Footer />

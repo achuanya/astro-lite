@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+export interface Props {
+  href?: string;
+  frontmatter: CollectionEntry<"blog">["data"];
+}
+
+const { href, frontmatter } = Astro.props;
+const { title, date, updated } = frontmatter;
+const latest = new Date(updated ?? date);
+const iso = latest.toISOString();
+---
+
+<li class="my-2">
+  <a
+    href={href}
+    class="flex flex-col space-x-4 rounded-md p-2 hover:bg-foreground/5 sm:flex-row"
+  >
+    <time class="mr-4 text-accent/80 w-24" datetime={iso}></time>
+    <span class="truncate overflow-hidden whitespace-nowrap">
+      {title}
+    </span>
+  </a>
+</li>

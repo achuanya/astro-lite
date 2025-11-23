@@ -1,13 +1,14 @@
 ---
 import { ClientRouter } from "astro:transitions";
-import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 import { SITE } from "@/config";
 import "@/styles/global.css";
-import "katex/dist/katex.min.css";
-import Artalk from "@/components/Artalk.astro";
+import BackToTop from "@/components/BackToTop.astro";
+
+const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 export interface Props {
   title?: string;
+  subtitle?: string;
   author?: string;
   profile?: string;
   description?: string;
@@ -16,20 +17,28 @@ export interface Props {
   pubDatetime?: Date;
   modDatetime?: Date | null;
   scrollSmooth?: boolean;
+  toc?: boolean;
+  math?: boolean;
+  comments?: boolean;
 }
 
 const {
   title = SITE.title,
+  subtitle,
   author = SITE.author,
   profile = SITE.profile,
   description = SITE.desc,
   ogImage = SITE.ogImage ? `/${SITE.ogImage}` : "/og.png",
-  canonicalURL = new URL(Astro.url.pathname, Astro.url),
+  canonicalURL = new URL(Astro.url.pathname.replace(/\.html?$/, ""), Astro.url), // remove .html extension
   pubDatetime,
   modDatetime,
   scrollSmooth = false,
+  toc = false,
+  math = false,
+  // comments = false,
 } = Astro.props;
 
+const fullDescription = subtitle ? `${subtitle}. ${description}` : description;
 const socialImageURL = new URL(ogImage, Astro.url);
 
 const structuredData = {
@@ -50,33 +59,51 @@ const structuredData = {
 ---
 
 <!doctype html>
-<html
-  dir={SITE.dir}
-  lang=`${SITE.lang ?? "en"}`
-  class={`${scrollSmooth && "scroll-smooth"}`}
->
+<html lang=`${SITE.lang ?? "en"}` class={`${scrollSmooth && "scroll-smooth"}`}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    
-    <link rel="icon" href="https://cos.lhasa.icu/StylePictures/favicon.ico" sizes="32x32" />
-    <link rel="icon" href="https://cos.lhasa.icu/StylePictures/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="https://cos.lhasa.icu/StylePictures/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
 
+    <!-- CSP -->
+    <!-- 'unsafe-inline' is dangerous! but it's difficult to avoid using it at the moment, see also Astro-Shield -->
+    <!-- <meta
+      http-equiv="Content-Security-Policy"
+      content=`
+  default-src 'none';
+  script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/tocbot/ https://cdnjs.cloudflare.com/ajax/libs/KaTeX/;
+  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdnjs.cloudflare.com/ajax/libs/tocbot/ https://cdnjs.cloudflare.com/ajax/libs/KaTeX/;
+  font-src 'self' https://fonts.gstatic.com/ https://cdnjs.cloudflare.com/ajax/libs/KaTeX/;
+  img-src 'self' data: https:;
+  connect-src 'self' ${SITE.wontonCommentUrl};
+  form-action 'self';
+  frame-src https://www.youtube.com/ https://www.youtube-nocookie.com/;
+  base-uri 'none';
+  object-src 'none';
+  manifest-src 'self';
+  upgrade-insecure-requests;
+  block-all-mixed-content;
+`
+    /> -->
+
+    <!-- General Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
-    <meta name="description" content={description} />
+    <meta name="description" content={fullDescription} />
     <meta name="author" content={author} />
     <link rel="sitemap" href="/sitemap-index.xml" />
 
+    <!-- Open Graph / Facebook -->
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={fullDescription} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:image" content={socialImageURL} />
+    <meta property="og:locale" content={SITE.langOg} />
+    <meta property="og:type" content="website" />
 
+    <!-- Article Published/Modified time -->
     {
       pubDatetime && (
         <meta
@@ -94,20 +121,22 @@ const structuredData = {
       )
     }
 
+    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
+    <meta property="twitter:description" content={fullDescription} />
     <meta property="twitter:image" content={socialImageURL} />
 
-    <meta name="fediverse:creator" content="@lhasarider@mastodon.social">
-
+    <!-- Google JSON-LD Structured data -->
     <script
       type="application/ld+json"
       is:inline
       set:html={JSON.stringify(structuredData)}
     />
 
+    <!-- Enable RSS feed auto-discovery  -->
+    <!-- https://docs.astro.build/en/recipes/rss/#enabling-rss-feed-auto-discovery -->
     <link
       rel="alternate"
       type="application/rss+xml"
@@ -118,35 +147,105 @@ const structuredData = {
     <meta name="theme-color" content="" />
 
     {
-      PUBLIC_GOOGLE_SITE_VERIFICATION && (
+      // If PUBLIC_GOOGLE_SITE_VERIFICATION is set in the environment variable,
+      // include google-site-verification tag in the heading
+      // Learn more: https://support.google.com/webmasters/answer/9008080#meta_tag_verification&zippy=%2Chtml-tag
+      googleSiteVerification && (
         <meta
           name="google-site-verification"
-          content={PUBLIC_GOOGLE_SITE_VERIFICATION}
+          content={googleSiteVerification}
         />
       )
     }
 
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;800&family=Noto+Sans:ital,wght@0,400;0,700;0,800;1,400;1,700;1,800&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- View transitions: https://docs.astro.build/en/guides/view-transitions/ -->
     <ClientRouter />
+
     <script is:inline src="/toggle-theme.js"></script>
-    
-    <slot name="head" />
-    
+
     <link href="https://cos.lhasa.icu/assets/artalk/Artalk.css" rel="stylesheet" />
     <script is:inline src="https://cos.lhasa.icu/assets/artalk/Artalk.js"></script>
-    
-    <script defer is:inline src="https://umami.lhasa.icu/script.js" data-website-id="f540bb26-76fd-4fa6-9257-e4814c6679bd"></script>
+
+    <link rel="prefetch" as="image" href="https://www.blogsclub.org/badge/blog.lhasa.icu">
+
+    <script is:inline data-domain="blog.lhasa.icu" src="https://stats.lhasa.icu/js/script.js"></script>
+
+    <!-- TOC -->
+    {
+      toc && (
+        <link
+          rel="stylesheet"
+          href="/tocbot/tocbot.min.css"
+          integrity="sha512-4q0OX9NAYcRTFEfy9nTK0AV9N7MxM665neDXEW3CjAj1pXc6+8Bcd6ryXl6cY8mTBBXt0aXepnSDLLQZSuJRww=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+        />
+      )
+    }
+
+    <!-- Math -->
+    {
+      math && (
+        <link
+          rel="stylesheet"
+          href="https://cos.lhasa.icu/dist/css/katex.min.css"
+          integrity="sha512-fHwaWebuwA7NSF5Qg/af4UeDx9XqUpYpOGgubo3yWu+b2IQR4UeQwbb42Ti7gVAjNtVoI/I9TEoYeu9omwcC6g=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer"
+        />
+      )
+    }
   </head>
-  <body>
-    <slot />
-    <Artalk />
+  <body class="site-outer-bg">
+    <div
+      id="site-frame"
+      class="mx-auto w-full px-4 pt-3 sm:mt-5 sm:w-[768px] sm:max-w-[72rem] sm:bg-[var(--color-background)] sm:shadow-[0_8px_24px_rgba(0,0,0,0.15)] sm:px-[3.75rem] sm:pt-[1.875rem]"
+    >
+      <slot />
+    </div>
+    <BackToTop />
   </body>
 </html>
 
+<script is:inline>
+window.__artalkConfig = { server: 'https://artalk.lhasa.icu', site: '游钓四方的博客' };
+document.addEventListener('astro:after-swap', tryLoad);
+document.addEventListener('DOMContentLoaded', tryLoad);
+function tryLoad() {
+  const els = document.querySelectorAll('.artalk-comment-count');
+  if (!els.length || typeof window === 'undefined' || typeof window.Artalk === 'undefined') return;
+  const cfg = window.__artalkConfig || {};
+  if (!cfg.server || !cfg.site) return;
+  window.Artalk.loadCountWidget({
+    server: cfg.server,
+    site: cfg.site,
+    countEl: '.artalk-comment-count',
+    statPageKeyAttr: 'data-page-key',
+  });
+}
+</script>
 <style>
   html,
   body {
     margin: 0;
     width: 100%;
     height: 100%;
+  }
+  .site-outer-bg {
+    background-color: var(--page-background);
+  }
+
+  @media (max-width: 639px) {
+    .site-outer-bg {
+      background-color: var(--color-background);
+    }
   }
 </style>

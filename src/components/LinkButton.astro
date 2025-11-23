@@ -6,8 +6,8 @@ export interface Props {
   ariaLabel?: string;
   title?: string;
   disabled?: boolean;
-  target?: string;
-  rel?: string;
+  external?: boolean;
+  reload?: boolean;
 }
 
 const {
@@ -17,20 +17,9 @@ const {
   ariaLabel,
   title,
   disabled = false,
-  target: propTarget,
-  rel: propRel,
+  external = false,
+  reload = false,
 } = Astro.props;
-
-let targetToApply = propTarget;
-let relToApply = propRel;
-
-if (href && href.startsWith("mailto:")) {
-  targetToApply = undefined;
-  relToApply = undefined;
-} else if (href && propTarget === "_blank") {
-  targetToApply = "_blank";
-  relToApply = propRel || "noopener noreferrer";
-}
 ---
 
 {
@@ -50,8 +39,9 @@ if (href && href.startsWith("mailto:")) {
       class:list={["group inline-block hover:text-accent", className]}
       aria-label={ariaLabel}
       title={title}
-      target={targetToApply}
-      rel={relToApply}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noopener noreferrer" : undefined}
+      data-astro-reload={reload ? "" : undefined}
     >
       <slot />
     </a>

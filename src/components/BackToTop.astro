@@ -1,0 +1,68 @@
+---
+import IconChevronUp from "@/assets/icons/IconChevronUp.svg";
+import { SITE } from "@/config";
+
+export interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<button
+  id="back-to-top"
+  aria-label="Back To Top"
+  class={`fixed right-4 sm:right-6 md:right-8 lg:right-12 xl:right-30 bottom-6 md:bottom-8 z-50 focus-outline px-3 py-1 whitespace-nowrap rounded-md bg-foreground/40 backdrop-blur-sm border border-foreground/20 text-background shadow-sm hover:bg-foreground/50 hover:opacity-100 transition duration-300 ease-in-out translate-y-8 opacity-0 pointer-events-none text-xs sm:text-sm flex items-center justify-center gap-1 ${className || ""}`}
+  data-mobile-width={SITE.backToTop.mobileBreakpoint}
+  data-show-after-ratio={SITE.backToTop.showAfterRatio}
+  data-min-overflow={SITE.backToTop.minOverflowPx}
+  data-min-scroll-top={SITE.backToTop.minScrollTopPx}
+>
+  <IconChevronUp class="h-4 w-4" />
+  <span>Back To Top</span>
+</button>
+
+<script is:inline data-astro-rerun type="module">
+  const el = document.getElementById("back-to-top");
+  const mobileWidth = Number(el?.dataset.mobileWidth);
+  const showAfterRatio = Number(el?.dataset.showAfterRatio);
+  const minOverflow = Number(el?.dataset.minOverflow);
+  const minScrollTop = Number(el?.dataset.minScrollTop);
+  const isMobileDevice = () => window.innerWidth < mobileWidth;
+
+  function updateVisibility() {
+    const el = document.getElementById("back-to-top");
+    if (!el) return;
+    const doc = document.documentElement;
+    const scrollTop = doc.scrollTop || document.body.scrollTop || 0;
+    const overflow = doc.scrollHeight - doc.clientHeight;
+    const hasEnoughOverflow = overflow >= minOverflow;
+    const ratio = overflow > 0 ? scrollTop / overflow : 0;
+    const show = hasEnoughOverflow && (ratio >= showAfterRatio || scrollTop >= minScrollTop);
+    if (show) {
+      el.classList.remove("translate-y-8", "opacity-0", "pointer-events-none");
+      el.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
+    } else {
+      el.classList.add("translate-y-8", "opacity-0", "pointer-events-none");
+      el.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
+    }
+  }
+
+  window.addEventListener("scroll", updateVisibility, { passive: true });
+  document.addEventListener("astro:page-load", updateVisibility);
+  document.addEventListener("astro:after-swap", updateVisibility);
+  updateVisibility();
+
+  document.getElementById("back-to-top")?.addEventListener("click", () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+
+    const sidebar = document.getElementById("sidebar");
+    const backdrop = document.getElementById("sidebar-backdrop");
+    if (isMobileDevice() && sidebar && backdrop) {
+      sidebar.classList.remove("mobile-open");
+      backdrop.classList.remove("opacity-100");
+      backdrop.classList.add("pointer-events-none");
+    }
+  });
+</script>

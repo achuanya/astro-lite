@@ -1,609 +1,157 @@
 ---
-declare const IMAGES: string;
-declare const EXIF: string;
+import { SITE } from "@/config";
 
 export interface Props {
   src: string;
   alt: string;
   class?: string;
   style?: string;
-  caption?: false | 'long' | 'short';
+  tags?: false | 'l' | 's';
   exif?: boolean;
-  showExif?: boolean;
-  slug?: string;
 }
 
-const { src, alt, class: className, style, caption = "long", exif = true, showExif = true, slug } = Astro.props;
+const { 
+  src, 
+  alt, 
+  class: className, 
+  style, 
+  tags = SITE.imageConfig.tags.defaultStyle, 
+  exif = SITE.imageConfig.exif.enabled 
+} = Astro.props;
 
-const getFrontmatterSlug = (): string | undefined => {
+/**
+ * 去除最后一个扩展名（保留名称中的其他点）
+ */
+const stripExtension = (name: string): string => {
+  return name.replace(/\.[^\/.]+$/, '');
+};
+
+const getPageSlug = (): string | undefined => {
   try {
-    // 尝试从 Astro.props 中获取 frontmatter
-    const frontmatter = (Astro as any).props?.frontmatter || (Astro as any).frontmatter;
-    if (frontmatter?.slug) {
-      return frontmatter.slug;
-    }
-    
-    // 尝试从 URL 路径中提取 slug
     const pathname = Astro.url.pathname;
     const pathSegments = pathname.split('/').filter(Boolean);
     if (pathSegments.length > 0) {
-      return pathSegments[pathSegments.length - 1];
+      const lastSegment = pathSegments[pathSegments.length - 1];
+      return stripExtension(lastSegment);
     }
-    
+    if (typeof window === 'undefined' && Astro.request) {
+      const url = new URL(Astro.request.url);
+      const segments = url.pathname.split('/').filter(Boolean);
+      if (segments.length > 0) {
+        return stripExtension(segments[segments.length - 1]);
+      }
+    }
     return undefined;
   } catch {
     return undefined;
   }
 };
 
-// 构建完整的图片路径
-const buildImagePath = (imageSrc: string, imageSlug?: string): string => {
-  // 如果src已经是完整的URL（包含http或https），直接返回
+/**
+ * 构建图片的完整 CDN 路径（支持绝对 URL 直通）
+ */
+const buildImagePath = (imageSrc: string): string => {
+  // 如果已经是完整URL，直接返回
   if (imageSrc.startsWith('http://') || imageSrc.startsWith('https://')) {
     return imageSrc;
   }
   
-  // 如果src包含IMAGES路径，说明已经是完整路径，直接返回
-  if (imageSrc.includes('cos.lhasa.icu/ArticlePictures')) {
+  // 如果包含CDN域名，说明已经是完整路径
+  if (imageSrc.includes('cos.lhasa.icu')) {
     return imageSrc;
   }
   
-  // 优先使用手动传递的slug，否则自动获取frontmatter.slug
-  const finalSlug = imageSlug || getFrontmatterSlug();
+  const finalSlug = getPageSlug();
   
-  // 如果有slug，构建带slug的路径
   if (finalSlug) {
-    return `${IMAGES}/${finalSlug}/${imageSrc}`;
+    return `${SITE.imageConfig.imagesUrl}/${finalSlug}/${imageSrc}`;
   }
   
-  // 否则直接拼接到IMAGES路径
-  return `${IMAGES}/${imageSrc}`;
+  return `${SITE.imageConfig.imagesUrl}/${imageSrc}`;
 };
 
-// 构建最终的图片路径
-const finalSrc = buildImagePath(src, slug);
+const finalSrc = buildImagePath(src);
 
-// 确定是否显示 EXIF
-const shouldShowExif = showExif && exif !== false;
-
-// 自动生成 EXIF URL：将 src 中的 IMAGES 替换为 EXIF
+/**
+ * 将图片 URL 映射为 EXIF API URL
+ */
 const generateExifUrl = (imageSrc: string): string => {
-  // 如果 src 包含 IMAGES 路径，替换为 EXIF 路径
-  if (imageSrc.includes('https://cos.lhasa.icu/ArticlePictures')) {
-    return imageSrc.replace('https://cos.lhasa.icu/ArticlePictures', 'https://lhasa-1253887673.cos.ap-shanghai.myqcloud.com/ArticlePictures');
-  }
-  // 如果使用的是 IMAGES 常量，直接替换为 EXIF 常量
-  return imageSrc.replace(IMAGES, EXIF);
+  return imageSrc.replace(SITE.imageConfig.imagesUrl, SITE.imageConfig.exifUrl);
 };
 
-const exifUrl = shouldShowExif ? generateExifUrl(finalSrc) : undefined;
+const exifUrl = exif ? generateExifUrl(finalSrc) : undefined;
+
+const galleryName = getPageSlug() ?? 'images';
 ---
 
-<figure class={`img-container ${className || ''}`} style={style}>
-  <div class="img-wrapper lightgallery-wrapper">
-    {shouldShowExif && (
-      <div class="exif-tooltip" data-exif-tooltip>
-        <div class="exif-content">
-          <div class="exif-loading">Loading EXIF data...</div>
+<!-- 图片容器：使用 figure 包装，响应式居中 -->
+<figure class={`my-6 text-center -mx-4 w-[calc(100%+2rem)] max-w-[calc(100%+2rem)] sm:-mx-[3.75rem] sm:w-[calc(100%+7.5rem)] sm:max-w-[calc(100%+7.5rem)] ${className || ''}`} style={style}>
+  <div class="relative block w-full overflow-hidden lightbox">
+    <!-- EXIF 提示框（启用时注入并在 hover 显示） -->
+    {exif && (
+      <div class="absolute top-0 left-0 right-0 h-[25px] opacity-0 transition-opacity duration-500 ease-out z-50 pointer-events-none bg-gradient-to-b from-black/60 to-transparent exif-tooltip" data-exif-tooltip>
+        <div class="px-[15px] py-0 h-[25px] leading-[25px] text-sm text-white bg-transparent text-center exif-content whitespace-nowrap overflow-hidden text-ellipsis max-w-full">
+          <div class="opacity-70 italic exif-loading">Loading EXIF data...</div>
         </div>
       </div>
     )}
     
-    <a href={finalSrc} 
-       data-src={finalSrc} 
-       data-lg-size="1600-2400" 
-       data-sub-html={alt}
-       class="lightgallery-link">
+    <!-- 图片链接：用于灯箱展示与描述 -->
+    <a 
+      href={finalSrc}
+      class="glightbox"
+      data-gallery={galleryName}
+      {...(alt && alt.trim() ? {
+        'data-description': alt,
+        'data-desc-position': 'bottom',
+        'data-desc-merged': '0'
+      } : {})}
+      data-type="image"
+       >
+      <!-- 主图：携带 EXIF 元数据属性 -->
       <img 
       src={finalSrc} 
       alt={alt}
       title={alt}
-      loading="lazy"
-      class="img-main"
+      loading={SITE.imageConfig.loading.lazy ? "lazy" : "eager"}
+      class="w-full h-auto shadow-lg transition-all duration-300 ease-in-out block object-cover cursor-pointer not-prose img-main"
       data-exif-url={exifUrl ? exifUrl + "?exif" : undefined}
-      data-show-exif={shouldShowExif} />
+      data-show-exif={exif} />
     </a>
     
-    {caption && alt && alt.trim() && (
-    <figcaption class={`img-caption caption-${caption === 'long' ? 'bar' : 'tag'}`}>
-      <span class="caption-text">{alt}</span>
+    <!-- 图片标签：根据 tags 属性渲染长条或角标样式 -->
+    {tags && alt && alt.trim() && (
+    <figcaption class={`absolute m-0 p-0 max-w-full img-tags ${tags === 'l' ? 'tags-bar bottom-0 left-0 right-0' : 'tags-tag bottom-2 left-2 max-w-[calc(100%-1rem)]'}`}>
+      <span class={`text-white font-medium shadow-text-lg whitespace-nowrap overflow-hidden text-ellipsis max-w-full tags-text ${tags === 'l' ? 'block h-[30px] leading-[30px] px-[10px] py-0 text-[12px] bg-gradient-to-r from-black/80 to-transparent text-left' : 'inline-block px-3 py-2 text-sm font-semibold leading-tight'}`}>{alt}</span>
       </figcaption>
     )}
   </div>
 </figure>
-
-<script is:inline>
-function initLightGallery() {
-  const galleryContainer = document.body;
-  if (galleryContainer.lightGalleryInstance) {
-      galleryContainer.lightGalleryInstance.destroy();
-  }
-  
-  galleryContainer.lightGalleryInstance = window.lightGallery(galleryContainer, {
-      selector: '.lightgallery-wrapper > a',
-      subHtmlSelectorRelative: true,
-      mousewheel: true,
-      download: false,
-  });
-}
-document.addEventListener('DOMContentLoaded', initLightGallery);
-document.addEventListener('astro:page-load', initLightGallery);
-</script>
-
 <script>
-  interface ExifData {
-    [key: string]: {
-      val: string;
-    };
-  }
-
-  interface ProcessedExifData {
-    settings?: string;
-  }
-
-  function parseExifData(data: ExifData): ProcessedExifData {
-    const result: ProcessedExifData = {};
-    const settings = [];
-
-    function safeParseFloat(value: string | undefined): number | null {
-      if (typeof value !== 'string') return null;
-      if (value.includes('/')) {
-        const parts = value.split('/');
-        if (parts.length === 2) {
-          const num = parseFloat(parts[0]);
-          const den = parseFloat(parts[1]);
-          if (!isNaN(num) && !isNaN(den) && den !== 0) {
-            return num / den;
-          }
-        }
-        return null;
-      }
-      const parsed = parseFloat(value);
-      return isNaN(parsed) ? null : parsed;
-    }
-
-    // 光圈
-    if (data.FNumber?.val) {
-      const aperture = safeParseFloat(data.FNumber.val);
-      if (aperture !== null) {
-        settings.push(`F/${aperture.toFixed(1)}`);
-      }
-    }
-    
-    // 快门速度
-    if (data.ExposureTime?.val) {
-      const exposure = safeParseFloat(data.ExposureTime.val);
-      if (exposure !== null) {
-        if (exposure >= 1) {
-          settings.push(`${exposure.toFixed(1)}s`);
-        } else {
-          settings.push(`1/${Math.round(1/exposure)}s`);
-        }
-      }
-    }
-    
-    // ISO
-    if (data.ISOSpeedRatings?.val) {
-      settings.push(`ISO ${data.ISOSpeedRatings.val}`);
-    }
-
-    // 焦距
-    if (data.FocalLength?.val) {
-      const focal = safeParseFloat(data.FocalLength.val);
-      if (focal !== null) {
-        settings.push(`${focal.toFixed(1)}mm`);
-      }
-    }
-
-    // 色彩空间
-    if (data.ColorSpace?.val) {
-      settings.push(data.ColorSpace.val);
-    }
-
-    // 白平衡
-    if (data.WhiteBalance?.val) {
-      const wb = data.WhiteBalance.val === "0" ? "Auto WB" : "Manual WB";
-      settings.push(wb);
-    }
-
-    // 拍摄时间
-    if (data.DateTimeOriginal?.val) {
-      const dateStr = data.DateTimeOriginal.val;
-      const date = dateStr.split(' ')[0].replace(/:/g, '-');
-      settings.push(date);
-    }
-
-    // 设备型号
-    if (data.Software?.val) {
-      let deviceName = data.Software.val;
-      // 处理 Samsung 型号
-      const s23UltraModels = ["S9180ZCU6DYDA", "S9180ZCS6DYF1"];
-      if (s23UltraModels.includes(deviceName) || deviceName.startsWith("S9180")) {
-        deviceName = "Samsung Galaxy S23 Ultra";
-      }
-      settings.push(deviceName);
-    } else {
-      // 如果找不到设备型号，默认为 Xiaomi 15
-      settings.push("Xiaomi 15");
-    }
-
-    if (settings.length >= 6) {
-      result.settings = settings.join(' · ');
-    }
-
-    return result;
-  }
-
-  function formatExifDisplay(exifData: ProcessedExifData): string {
-    return exifData.settings || 'EXIF data unavailable';
-  }
-
-  // 生成模拟的 EXIF 数据
-  function generateMockExifData(imageSrc: string): string {
-    // 获取发布日期并转换格式
-    function getPublishDate(): string {
-      const pubDateElement = document.getElementById('pub-datetime');
-      if (pubDateElement) {
-        const dateTime = pubDateElement.getAttribute('datetime');
-        if (dateTime) {
-          // 从 ISO 格式转换为 YYYY-MM-DD
-          return dateTime.split('T')[0];
-        }
-        
-        // 如果没有 datetime 属性，尝试解析文本内容
-        const dateText = pubDateElement.textContent?.trim();
-        if (dateText) {
-          // 解析 '26 May, 2025' 格式
-          const date = new Date(dateText);
-          if (!isNaN(date.getTime())) {
-            return date.toISOString().split('T')[0];
-          }
-        }
-      }
-      
-      // 如果无法获取发布日期，使用当前日期
-      return new Date().toISOString().split('T')[0];
-    }
-
-    // 简单的哈希函数，基于图片 URL 生成一致的随机数
-    function simpleHash(str: string): number {
-      let hash = 0;
-      for (let i = 0; i < str.length; i++) {
-        const char = str.charCodeAt(i);
-        hash = ((hash << 5) - hash) + char;
-        hash = hash & hash; // 转换为32位整数
-      }
-      return Math.abs(hash);
-    }
-
-    // 生成基于图片URL的一致性随机参数
-    const hash = simpleHash(imageSrc);
-    
-    const apertures = ['1.4', '1.7', '2.0', '2.8', '4.0', '5.6'];
-    const shutterSpeeds = ['1/60', '1/125', '1/250', '1/500', '1/715', '1/1000'];
-    const isoValues = ['100', '200', '400', '800', '1600'];
-    const focalLengths = ['24', '35', '50', '85', '135'];
-    const devices = [
-      'Samsung Galaxy S23 Ultra',
-      'Xiaomi 15',
-    ];
-
-    const aperture = apertures[hash % apertures.length];
-    const shutterSpeed = shutterSpeeds[(hash >> 3) % shutterSpeeds.length];
-    const iso = isoValues[(hash >> 6) % isoValues.length];
-    const focalLength = focalLengths[(hash >> 9) % focalLengths.length];
-    const device = devices[(hash >> 12) % devices.length];
-    const publishDate = getPublishDate();
-
-    return `F/${aperture} · ${shutterSpeed}s · ISO ${iso} · ${focalLength}mm · sRGB · Auto WB · ${publishDate} · ${device}`;
-  }
-
-  async function loadExifData(url: string, imageSrc: string, retryCount: number = 0): Promise<string> {
-    try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error('Failed to fetch EXIF data');
-      
-      const data: ExifData = await response.json();
-      const processed = parseExifData(data);
-      const result = formatExifDisplay(processed);
-      
-      // 如果没有有效的 EXIF 数据，生成模拟数据
-      if (result === 'EXIF data unavailable') {
-        return generateMockExifData(imageSrc);
-      }
-      
-      return result;
-    } catch (error) {
-      // 重试逻辑：如果是第一次失败且有 exif URL，重试一次
-      if (retryCount === 0 && url.includes('?exif')) {
-        console.log('EXIF 加载失败，重试中...', error);
-        return loadExifData(url, imageSrc, 1);
-      }
-      
-      // 如果重试失败或者是使用 src 作为接口的情况，生成模拟数据
-      console.log('EXIF 加载最终失败，使用模拟数据', error);
-      return generateMockExifData(imageSrc);
-    }
-  }
-
-  async function loadExifFromSrc(imageSrc: string, retryCount: number = 0): Promise<string> {
-    try {
-      // 尝试使用图片 src 作为 EXIF 接口
-      const exifUrl = imageSrc + '?exif';
-      const response = await fetch(exifUrl);
-      if (!response.ok) throw new Error('Failed to fetch EXIF data from src');
-      
-      const data: ExifData = await response.json();
-      const processed = parseExifData(data);
-      const result = formatExifDisplay(processed);
-      
-      // 如果没有有效的 EXIF 数据，生成模拟数据
-      if (result === 'EXIF data unavailable') {
-        return generateMockExifData(imageSrc);
-      }
-      
-      return result;
-    } catch (error) {
-      // 重试逻辑：如果是第一次失败，重试一次
-      if (retryCount === 0) {
-        console.log('从 src 加载 EXIF 失败，重试中...', error);
-        return loadExifFromSrc(imageSrc, 1);
-      }
-      
-      // 重试失败，使用模拟数据
-      console.log('从 src 加载 EXIF 最终失败，使用模拟数据', error);
-      return generateMockExifData(imageSrc);
-    }
-  }
-
-  function initExifTooltips() {
-    // 只选择需要显示 EXIF 的图片
-    const images = document.querySelectorAll('.img-main[data-show-exif="true"]');
-    
-    images.forEach((img) => {
-      const exifUrl = img.getAttribute('data-exif-url');
-      const tooltip = img.closest('.img-wrapper')?.querySelector('[data-exif-tooltip]') as HTMLElement;
-      
-      if (!tooltip) return;
-
-      let exifDataCache: string | null = null;
-      let isLoading = false;
-      let hideTimeout: ReturnType<typeof setTimeout> | null = null;
-
-      const showTooltip = async () => {
-        // 清除任何待执行的隐藏定时器
-        if (hideTimeout) {
-          clearTimeout(hideTimeout);
-          hideTimeout = null;
-        }
-
-        if (!exifDataCache && !isLoading) {
-          isLoading = true;
-          const imageSrc = (img as HTMLImageElement).src;
-          
-          // 根据优化后的逻辑加载 EXIF 数据
-          if (exifUrl) {
-            // 情况1：有 exif URL，优先使用，失败后重试，再失败使用 src 作为接口
-            try {
-              exifDataCache = await loadExifData(exifUrl, imageSrc);
-            } catch (error) {
-              // 如果 exif URL 完全失败，尝试使用 src 作为接口
-              console.log('exif URL 失败，尝试使用 src 作为接口');
-              exifDataCache = await loadExifFromSrc(imageSrc);
-            }
-          } else {
-            // 情况2：没有 exif URL，直接使用 src 作为接口
-            exifDataCache = await loadExifFromSrc(imageSrc);
-          }
-          
-          isLoading = false;
-          
-          const content = tooltip.querySelector('.exif-content');
-          if (content) {
-            content.innerHTML = `<span class="exif-text">${exifDataCache}</span>`;
-          }
-        }
-        
-        tooltip.classList.add('show');
-      };
-
-      const hideTooltip = () => {
-        hideTimeout = setTimeout(() => {
-          tooltip.classList.remove('show');
-          hideTimeout = null;
-        }, 1000);
-      };
-
-      const cancelHide = () => {
-        // 取消隐藏
-        if (hideTimeout) {
-          clearTimeout(hideTimeout);
-          hideTimeout = null;
-        }
-      };
-
-      // 为图片和包装器都添加事件监听器
-      const imgWrapper = img.closest('.img-wrapper');
-      
-      img.addEventListener('mouseenter', showTooltip);
-      img.addEventListener('mouseleave', hideTooltip);
-      
-      if (imgWrapper) {
-        imgWrapper.addEventListener('mouseenter', showTooltip);
-        imgWrapper.addEventListener('mouseleave', hideTooltip);
-      }
-      
-      // 鼠标进入工具提示区域时取消隐藏
-      tooltip.addEventListener('mouseenter', cancelHide);
-      tooltip.addEventListener('mouseleave', hideTooltip);
-      
-      // Touch support for mobile - 优化版本，支持滚动
-      let touchStartX = 0;
-      let touchStartY = 0;
-      let touchStartTime = 0;
-
-      const handleTouchStart = (e: Event) => {
-        // 记录触摸开始的位置和时间，不阻止默认滚动行为
-        const touchEvent = e as TouchEvent;
-        const touch = touchEvent.touches[0];
-        touchStartX = touch.clientX;
-        touchStartY = touch.clientY;
-        touchStartTime = Date.now();
-      };
-
-      const handleTouchEnd = (e: Event) => {
-        const touchEvent = e as TouchEvent;
-        const touch = touchEvent.changedTouches[0];
-        const touchEndX = touch.clientX;
-        const touchEndY = touch.clientY;
-        const touchEndTime = Date.now();
-        
-        // 计算移动距离和触摸持续时间
-        const moveDistance = Math.sqrt(
-          Math.pow(touchEndX - touchStartX, 2) + 
-          Math.pow(touchEndY - touchStartY, 2)
-        );
-        const touchDuration = touchEndTime - touchStartTime;
-        
-        // 只有在移动距离小且时间短时才认为是点击（而不是滑动）
-        if (moveDistance < 15 && touchDuration < 500) {
-          // 只在确定是点击时才阻止默认行为（避免触发长按菜单等）
-          e.preventDefault();
-          showTooltip();
-          setTimeout(() => {
-            tooltip.classList.remove('show');
-          }, 3000);
-        }
-      };
-
-      img.addEventListener('touchstart', handleTouchStart);
-      img.addEventListener('touchend', handleTouchEnd);
-      
-      if (imgWrapper) {
-        imgWrapper.addEventListener('touchstart', handleTouchStart);
-        imgWrapper.addEventListener('touchend', handleTouchEnd);
-      }
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded', initExifTooltips);
-  
-  document.addEventListener('astro:page-load', initExifTooltips);
+  import '@/utils/images';
+  import { initLightbox } from '@/utils/lightbox';
+  initLightbox();
 </script>
 
 <style>
-  .img-container {
-    --caption-font-size: 0.8rem;
-    --caption-padding: 3px 10px;
-    --tag-font-size: 0.85rem;
-    --tag-padding: 8px 12px;
-    --tag-offset: 8px;
-    --tag-radius: 6px;
-    
-    margin: 1.5rem auto;
-    text-align: center;
-    max-width: 100%;
-    contain: layout style;
-  }
+  @reference "tailwindcss";
   
-  .img-wrapper {
-    position: relative;
-    display: inline-block;
-    max-width: min(100%, 768px);
-    border-radius: 8px;
-    overflow: hidden;
-  }
-  
-  .img-main {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: block;
-    object-fit: cover;
-    cursor: pointer;
-  }
-  
-  .img-caption {
-    position: absolute;
-    margin: 0;
-    padding: 0;
-    max-width: 100%;
-  }
-  
-  .caption-bar {
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  
-  .caption-tag {
-    bottom: var(--tag-offset);
-    left: var(--tag-offset);
-    max-width: calc(100% - calc(var(--tag-offset) * 2));
-  }
-  
-  .caption-text,
-  .exif-content {
-    color: #ffffff;
-    font-weight: 500;
-    line-height: 1.4;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 100%;
-  }
-  
-  .caption-bar .caption-text {
-    display: block;
-    padding: var(--caption-padding);
-    font-size: var(--caption-font-size);
-    background: rgba(0, 0, 0, 0.8);
-    text-align: left;
-  }
-  
-  .caption-tag .caption-text {
-    display: inline-block;
-    padding: var(--tag-padding);
-    font-size: var(--tag-font-size);
-    font-weight: 600;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: var(--tag-radius);
-    word-wrap: break-word;
-  }
-
-  .exif-tooltip {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-100%);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 20;
-    pointer-events: none;
-  }
-
+  /* EXIF 提示框显示态 */
   .exif-tooltip.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    pointer-events: auto;
+    @apply opacity-70 pointer-events-auto;
   }
 
-  .exif-content {
-    padding: var(--caption-padding);
-    font-size: var(--caption-font-size);
-    background: rgba(0, 0, 0, 0.7);
-    text-align: center;
+  /* EXIF 文本行布局 */
+  :global(.exif-content .exif-row) {
+    @apply inline-flex items-center gap-3 md:gap-6;
   }
 
+  /* EXIF 单项样式 */
+  :global(.exif-content .exif-item) {
+    @apply leading-tight;
+  }
+
+  /* EXIF 文本样式继承 */
   .exif-text,
   .exif-loading {
     color: inherit;
@@ -611,45 +159,38 @@ document.addEventListener('astro:page-load', initLightGallery);
     text-shadow: inherit;
   }
 
-  .exif-loading {
-    opacity: 0.7;
-    font-style: italic;
+  /* 文本阴影工具类 */
+  .shadow-text-lg {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
   }
   
+  /* 移动端响应式优化 */
   @media (max-width: 768px) {
-    .img-container {
-      --caption-font-size: 0.7rem;
-      --tag-font-size: 0.7rem;
-      --tag-padding: 3px 10px;
-      --tag-offset: 6px;
-      --tag-radius: 5px;
-      margin: 1rem auto;
+    .img-tags .tags-text {
+      @apply text-xs;
     }
     
-    .img-wrapper {
-      max-width: calc(100vw - 2rem);
+    .tags-tag .tags-text {
+      @apply text-xs px-2.5 py-0.5;
+    }
+    
+    .tags-tag {
+      @apply bottom-1.5 left-1.5;
     }
   }
   
+  /* 超小屏优化 */
   @media (max-width: 480px) {
-    .img-container {
-      --caption-font-size: 0.6rem;
-      --tag-font-size: 0.6rem;
-      --tag-padding: 5px 8px;
-      --tag-offset: 4px;
-      --tag-radius: 4px;
+    .img-tags .tags-text {
+      @apply text-[0.6rem];
     }
     
-    .img-wrapper {
-      max-width: calc(100vw - 1rem);
+    .tags-tag .tags-text {
+      @apply text-[0.6rem] px-2 py-1;
     }
-  }
-  
-  :global(.prose) .img-container {
-    margin: 1.5rem auto !important;
-  }
-  
-  :global(.prose) .img-container .img-main {
-    margin: 0 !important;
+    
+    .tags-tag {
+      @apply bottom-1 left-1;
+    }
   }
 </style>

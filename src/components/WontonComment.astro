@@ -1,0 +1,95 @@
+---
+import { SITE } from "@/config";
+
+export interface Props {
+  post: string;
+}
+
+const { post } = Astro.props;
+---
+
+<div
+  id="wtc-app"
+  class="mt-12"
+  data-post={post}
+  data-api={SITE.wontonCommentUrl}
+>
+</div>
+
+<script is:inline type="module">
+  (() => {
+    let commentLoaded = false;
+
+    const loadCommentOnce = () => {
+      if (commentLoaded) return;
+      commentLoaded = true;
+
+      const commentEl = document.getElementById("wtc-app");
+      if (commentEl) commentEl.style.visibility = "hidden";
+
+      appendWontonCommentCSS(() => {
+        if (commentEl) commentEl.style.visibility = "";
+        initWontonCommentApp();
+      });
+    };
+
+    const appendWontonCommentCSS = onLoad => {
+      if (document.querySelector('link[href="/wonton-comment.css"]')) return;
+
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "/wonton-comment.css";
+      link.onload = onLoad;
+      link.onerror = onLoad;
+
+      document.head.appendChild(link);
+    };
+
+    const initWontonCommentApp = async () => {
+      try {
+        const app = document.getElementById("wtc-app");
+        if (!app) return;
+
+        const post = app.dataset.post;
+        const apiUrl = app.dataset.api;
+        if (!post || !apiUrl) return;
+
+        const { initWontonComment } = await import("/wonton-comment.es.js");
+        initWontonComment("wtc-app", { post, apiUrl });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.warn("Failed to initialize comment app:", err);
+      }
+    };
+
+    const observeElementOnce = (el, callback) => {
+      if (!("IntersectionObserver" in window)) {
+        callback();
+        return;
+      }
+
+      const observer = new IntersectionObserver(
+        entries => {
+          if (entries[0].isIntersecting) {
+            callback();
+            observer.disconnect();
+          }
+        },
+        {
+          rootMargin: "200px 0px",
+        }
+      );
+
+      observer.observe(el);
+    };
+
+    const initLazyLoad = () => {
+      const app = document.getElementById("wtc-app");
+      if (app) observeElementOnce(app, loadCommentOnce);
+    };
+
+    initLazyLoad();
+
+    document.addEventListener("astro:after-swap", initLazyLoad);
+  })();
+</script>

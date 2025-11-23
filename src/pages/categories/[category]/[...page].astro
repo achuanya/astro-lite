@@ -1,0 +1,80 @@
+---
+import { getCollection } from "astro:content";
+import type { GetStaticPathsOptions } from "astro";
+import Main from "@/layouts/Main.astro";
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Card from "@/components/Card.astro";
+import getUniqueCategories from "@/utils/getUniqueCategories";
+import getSortedPosts from "@/utils/getSortedPosts";
+import { SITE } from "@/config";
+import { _t } from "@/i18n/lang";
+import getDescription from "@/utils/getDescription";
+
+export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  const posts = await getCollection("blog");
+  const categories = getUniqueCategories(posts);
+
+  return categories.flatMap(({ category, categoryName }) => {
+    const categoryPosts = getSortedPosts(
+      posts.filter(post => post.data.categories.includes(categoryName))
+    );
+
+    return paginate(categoryPosts, {
+      params: { category },
+      props: { categoryName },
+      pageSize: categoryPosts.length,
+    });
+  });
+}
+
+const params = Astro.params;
+const { category } = params;
+const { page, categoryName } = Astro.props;
+---
+
+<Layout title={`${_t.category.title}${categoryName} | ${SITE.title}`}>
+  <Header
+    leadingTitle={`${_t.category.title}${categoryName}${page.currentPage > 1 ? ` (${page.currentPage})` : ''}`}
+    leadingTitleTransition={page.currentPage === 1 ? category : undefined}
+    hideSiteTitle={true}
+  />
+  <Main
+    pageTitle=""
+    pageDesc={_t.category.desc(categoryName)}
+  >
+    <ul class="category-posts-list">
+      {
+        page.data.map((data, i) => (
+          <Card
+            {...data}
+            fallbackDesc={getDescription(data.body || "")}
+            itemClass="category-post-item"
+            hidden={i >= SITE.postPerIndex}
+            showCommentCount={i < SITE.postPerIndex}
+          />
+        ))
+      }
+    </ul>
+    <div id="category-posts-sentinel" data-init={SITE.postPerIndex} data-chunk={SITE.postPerPage}></div>
+  </Main>
+  <Footer noMarginTop={true} />
+</Layout>
+
+<script is:inline src="/lazy-list.js"></script>
+<script is:inline>
+  function boot(){
+    window.setupLazyList({
+      sentinelId: 'category-posts-sentinel',
+      itemSelector: '.category-post-item',
+      artalk: {
+        enabled: true,
+        anchorSelector: 'a[href]',
+        wrapperSelector: '.relative.block.pr-12',
+      }
+    });
+  }
+  document.addEventListener('astro:after-swap', () => { if (typeof window.setupLazyList === 'function') boot(); });
+  document.addEventListener('astro:page-load', () => { if (typeof window.setupLazyList === 'function') boot(); });
+</script>

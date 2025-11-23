@@ -1,26 +1,38 @@
-// 主题切换系统 - 增强版
-// 功能特性：
+// 主题切换系
 // 1. 支持基于时间的自动主题切换（夜间自动切换到深色主题）
 // 2. 支持用户手动设置主题（当天有效，次日重新启用自动切换）
 // 3. 支持系统主题偏好检测
 // 4. 完整的错误处理和调试功能
 
-const primaryColorScheme = ""; // 主要颜色方案："light" | "dark" | "" (空字符串表示使用自动检测)
+const primaryColorScheme = "";
 
-// 调试模式配置 - 生产环境请设置为 false
+// 调试模式配置
 const DEBUG_THEME = false;
 
-// 调试日志输出函数
+const __memoryStore = new Map();
+
+function safeGet(key) {
+  try { return localStorage.getItem(key); } catch { return __memoryStore.get(key) ?? null; }
+}
+function safeSet(key, value) {
+  try { localStorage.setItem(key, value); } catch { __memoryStore.set(key, value); }
+}
+function safeRemove(key) {
+  try { localStorage.removeItem(key); } catch { __memoryStore.delete(key); }
+}
+function normalizeTheme(v) {
+  return v === "dark" ? "dark" : (v === "light" ? "light" : null);
+}
+// =======================================================================
+
 function debugLog(message, ...args) {
   if (DEBUG_THEME) {
     console.log(`[Theme Debug] ${message}`, ...args);
   }
 }
 
-// 全局错误处理函数
 function handleThemeError(error, context) {
   console.error(`[Theme Error] ${context}:`, error);
-  // 确保主题系统仍能基本工作，即使出现错误也能恢复
   try {
     reflectPreference();
   } catch (e) {
@@ -28,49 +40,38 @@ function handleThemeError(error, context) {
   }
 }
 
-// 全局变量，用于存储定时器和状态
 let autoThemeTimer = null;        // 自动主题检查定时器
 let systemThemeListener = null;   // 系统主题变化监听器
+let systemThemeMql = null;        // 重要 BUG 修复：缓存同一 MediaQueryList 实例
 
-// 本地存储操作函数组 - 动态获取主题数据，避免缓存过期问题
-
-// 获取当前存储的主题设置
 function getCurrentThemeFromStorage() {
-  return localStorage.getItem("theme");
+  return normalizeTheme(safeGet("theme"));
 }
 
-// 检查用户是否手动设置过主题
 function getUserManuallySetTheme() {
-  return localStorage.getItem("userSetTheme") === "true";
+  return safeGet("userSetTheme") === "true";
 }
 
-// 获取用户设置主题的日期
 function getUserSetThemeDate() {
-  return localStorage.getItem("userSetThemeDate");
+  return safeGet("userSetThemeDate");
 }
 
-// 时间基础的主题判断函数 - 检查是否应该根据时间自动使用深色主题
 function shouldUseDarkThemeByTime() {
   try {
-    // 使用上海时区确保时间判断的一致性（避免服务器和客户端时区差异）
     const now = new Date();
     const shanghaiTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
     const hour = shanghaiTime.getHours();
-    // 晚上6点(18:00)到早上7点(07:00)之间使用深色主题
     return hour >= 18 || hour < 7;
   } catch (error) {
     console.warn("时区转换失败，使用本地时间:", error);
-    // 降级到本地时间（兼容性处理）
     const now = new Date();
     const hour = now.getHours();
     return hour >= 18 || hour < 7;
   }
 }
 
-// 日期工具函数 - 获取今天的日期字符串 (YYYY-MM-DD 格式)
 function getTodayDateString() {
   try {
-    // 使用上海时区确保日期判断的一致性（避免跨时区日期差异）
     const now = new Date();
     const shanghaiTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
     return shanghaiTime.getFullYear() + '-' + 
@@ -78,7 +79,6 @@ function getTodayDateString() {
            String(shanghaiTime.getDate()).padStart(2, '0');
   } catch (error) {
     console.warn("时区转换失败，使用本地时间:", error);
-    // 降级到本地时间（兼容性处理）
     const today = new Date();
     return today.getFullYear() + '-' + 
            String(today.getMonth() + 1).padStart(2, '0') + '-' + 
@@ -86,18 +86,15 @@ function getTodayDateString() {
   }
 }
 
-// 用户偏好有效性检查 - 检查用户是否手动设置过主题且设置日期是今天
 function isUserPreferenceValidToday() {
-  // 如果用户没有手动设置过主题，直接返回false
   if (!getUserManuallySetTheme()) return false;
   
   const today = getTodayDateString();
   const setDate = getUserSetThemeDate();
   
-  // 如果用户设置的日期不是今天，清除手动设置标记（实现"当天有效"功能）
   if (setDate !== today) {
-    localStorage.removeItem("userSetTheme");
-    localStorage.removeItem("userSetThemeDate");
+    safeRemove("userSetTheme");
+    safeRemove("userSetThemeDate");
     console.log("用户主题设置已过期，重新启用自动切换");
     return false;
   }
@@ -105,13 +102,10 @@ function isUserPreferenceValidToday() {
   return true;
 }
 
-// 核心主题获取函数 - 根据优先级顺序确定应该使用的主题
 function getPreferTheme() {
   try {
-    // 动态获取当前主题，避免缓存问题
     const currentTheme = getCurrentThemeFromStorage();
     
-    // 调试信息输出
     debugLog("获取主题偏好", {
       currentTheme,
       isValidToday: isUserPreferenceValidToday(),
@@ -119,33 +113,28 @@ function getPreferTheme() {
       primaryScheme: primaryColorScheme
     });
     
-    // 优先级 1: 如果用户手动设置过主题且设置日期是今天，优先使用用户设置
     if (isUserPreferenceValidToday() && currentTheme) {
       debugLog("使用用户手动设置:", currentTheme);
       return currentTheme;
     }
 
-    // 优先级 2: 如果没有有效的手动设置，检查是否应该根据时间使用深色主题
     if (shouldUseDarkThemeByTime()) {
       debugLog("使用时间自动切换: dark");
       return "dark";
     }
 
-    // 优先级 3: 如果有预设的主题方案，使用预设方案
     if (primaryColorScheme) {
       debugLog("使用主题方案设置:", primaryColorScheme);
       return primaryColorScheme;
     }
 
-    // 优先级 4: 最后使用用户设备的系统颜色方案偏好
     const systemDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
     const systemTheme = systemDark ? "dark" : "light";
     debugLog("使用系统偏好:", systemTheme);
     return systemTheme;
   } catch (error) {
-    // 错误处理：如果出现任何错误，默认返回浅色主题
     handleThemeError(error, "getPreferTheme");
-    return "light"; // 默认浅色主题
+    return "light";
   }
 }
 
@@ -153,12 +142,10 @@ let themeValue = getPreferTheme();
 
 function setPreference(userManualSet = false) {
   try {
-    localStorage.setItem("theme", themeValue);
-    
-    // 只有用户手动设置时才标记为用户设置，并记录设置日期
+    safeSet("theme", themeValue);
     if (userManualSet) {
-      localStorage.setItem("userSetTheme", "true");
-      localStorage.setItem("userSetThemeDate", getTodayDateString());
+      safeSet("userSetTheme", "true");
+      safeSet("userSetThemeDate", getTodayDateString());
       console.log(`用户手动设置主题为: ${themeValue}，当天有效`);
       debugLog("用户手动设置主题", { theme: themeValue, date: getTodayDateString() });
     } else {
@@ -173,97 +160,87 @@ function setPreference(userManualSet = false) {
 
 function reflectPreference() {
   document.firstElementChild.setAttribute("data-theme", themeValue);
-
   document.querySelector("#theme-btn")?.setAttribute("aria-label", themeValue);
-
-  // Get a reference to the body element
   const body = document.body;
-
-  // Check if the body element exists before using getComputedStyle
   if (body) {
-    // Get the computed styles for the body element
     const computedStyles = window.getComputedStyle(body);
-
-    // Get the background color property
     const bgColor = computedStyles.backgroundColor;
-
-    // Set the background color in <meta theme-color ... />
     document
       .querySelector("meta[name='theme-color']")
       ?.setAttribute("content", bgColor);
   }
 }
 
-// 清理定时器和监听器
 function cleanupAutoTheme() {
   if (autoThemeTimer) {
     clearInterval(autoThemeTimer);
     autoThemeTimer = null;
   }
   
-  if (systemThemeListener) {
-    window.matchMedia("(prefers-color-scheme: dark)").removeEventListener("change", systemThemeListener);
+  if (systemThemeMql && systemThemeListener) {
+    if (typeof systemThemeMql.removeEventListener === "function") {
+      systemThemeMql.removeEventListener("change", systemThemeListener);
+    } else {
+      const legacy = /** @type {any} */ (systemThemeMql);
+      if (typeof legacy.removeListener === "function") {
+        legacy.removeListener(systemThemeListener);
+      }
+    }
     systemThemeListener = null;
+    systemThemeMql = null;
   }
 }
 
-// 设置自动主题检查
 function setupAutoTheme() {
-  // 先清理现有的定时器和监听器
   cleanupAutoTheme();
   
-  // 如果用户没有有效的手动设置主题，添加定时器检查时间变化
   if (!isUserPreferenceValidToday()) {
-    // 自动检查时间变化
     const autoThemeChecker = () => {
-      // 重新获取当前主题值，确保同步
       themeValue = getPreferTheme();
       reflectPreference();
     };
     
-    // 立即执行一次检查
     autoThemeChecker();
     
-    // 设置每分钟检查一次时间
     autoThemeTimer = setInterval(autoThemeChecker, 60000);
     
-    // 设置系统主题变化监听
+    systemThemeMql = window.matchMedia("(prefers-color-scheme: dark)");
     systemThemeListener = ({ matches: isDark }) => {
-      // 只有当用户没有有效的手动设置主题且当前不在夜间时间段时，才根据系统变化同步
       if (!isUserPreferenceValidToday() && !shouldUseDarkThemeByTime()) {
         themeValue = isDark ? "dark" : "light";
-        setPreference(false); // 系统同步不标记为用户手动设置
+        setPreference(false);
       }
     };
     
-    window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", systemThemeListener);
+    if (typeof systemThemeMql.addEventListener === "function") {
+      systemThemeMql.addEventListener("change", systemThemeListener);
+    } else {
+      const legacy = /** @type {any} */ (systemThemeMql);
+      if (typeof legacy.addListener === "function") {
+        legacy.addListener(systemThemeListener);
+      }
+    }
   }
 }
 
-// set early so no page flashes / CSS is made aware
 reflectPreference();
 
 window.onload = () => {
   function setThemeFeature() {
-    // set on load so screen readers can get the latest value on the button
     reflectPreference();
 
-    // 清理旧的事件监听器（避免重复绑定）
     const existingBtn = document.querySelector("#theme-btn");
     if (existingBtn && existingBtn._themeClickHandler) {
       existingBtn.removeEventListener("click", existingBtn._themeClickHandler);
     }
 
-    // 创建新的点击处理器
     const themeClickHandler = () => {
       themeValue = themeValue === "light" ? "dark" : "light";
-      setPreference(true); // 用户点击按钮切换主题，标记为用户手动设置
+      setPreference(true);
       
-      // 用户手动设置后，重新设置自动主题检查
       setupAutoTheme();
     };
 
-    // 绑定新的事件监听器
     const themeBtn = document.querySelector("#theme-btn");
     if (themeBtn) {
       themeBtn._themeClickHandler = themeClickHandler;
@@ -273,11 +250,8 @@ window.onload = () => {
 
   setThemeFeature();
 
-  // Runs on view transitions navigation
   document.addEventListener("astro:after-swap", setThemeFeature);
 
-  // Set theme-color value before page transition
-  // to avoid navigation bar color flickering in Android dark mode
   document.addEventListener("astro:before-swap", event => {
     const bgColor = document
       .querySelector("meta[name='theme-color']")
@@ -288,6 +262,77 @@ window.onload = () => {
       ?.setAttribute("content", bgColor);
   });
   
-  // 设置自动主题检查
   setupAutoTheme();
 };
+
+function __formatRelativeTime(date) {
+  const now = Date.now();
+  let diff = Math.floor((now - date.getTime()) / 1000);
+  if (diff < 0) diff = 0;
+  if (diff < 60) return "几秒前";
+  const m = Math.floor(diff / 60);
+  if (m < 2) return "1分钟前";
+  if (m < 60) return `${m} 分钟前`;
+  const h = Math.floor(m / 60);
+  if (h < 2) return "1 小时前";
+  if (h < 24) return `${h} 小时前`;
+  const d = Math.floor(h / 24);
+  if (d < 2) return "1 天前";
+  if (d < 30) return `${d} 天前`;
+  const mo = Math.floor(d / 30);
+  if (mo < 2) return "1 个月前";
+  if (mo < 12) return `${mo} 个月前`;
+  const y = Math.floor(d / 365);
+  if (y < 2) return "1 年前";
+  return `${y} 年前`;
+}
+
+let __relativeTimer = null;
+let __relativeObserver = null;
+
+function __updateRelativeTimes() {
+  const nodes = document.querySelectorAll('time[datetime]');
+  nodes.forEach(el => {
+    const dt = el.getAttribute('datetime');
+    if (!dt) return;
+    const date = new Date(dt);
+    if (isNaN(date.getTime())) return;
+    el.textContent = __formatRelativeTime(date);
+  });
+}
+
+function __setupRelativeObserver() {
+  if (typeof MutationObserver === 'undefined') return;
+  if (__relativeObserver) __relativeObserver.disconnect();
+  __relativeObserver = new MutationObserver(mutations => {
+    let shouldUpdate = false;
+    for (const m of mutations) {
+      if (m.type === 'childList') {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1) {
+            const el = /** @type {Element} */(node);
+            if (el.matches && el.matches('time[datetime]')) shouldUpdate = true;
+            if (el.querySelector && el.querySelector('time[datetime]')) shouldUpdate = true;
+          }
+        });
+      }
+    }
+    if (shouldUpdate) __updateRelativeTimes();
+  });
+  __relativeObserver.observe(document.body, { childList: true, subtree: true });
+}
+
+function __startRelativeTimer() {
+  if (__relativeTimer) clearInterval(__relativeTimer);
+  __updateRelativeTimes();
+  __relativeTimer = setInterval(__updateRelativeTimes, 60000);
+}
+
+function setupRelativeTime() {
+  __startRelativeTimer();
+  __setupRelativeObserver();
+}
+
+document.addEventListener('DOMContentLoaded', setupRelativeTime);
+document.addEventListener('astro:page-load', setupRelativeTime);
+document.addEventListener('astro:after-swap', setupRelativeTime);

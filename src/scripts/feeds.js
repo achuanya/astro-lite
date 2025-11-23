@@ -5,22 +5,6 @@ import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const calendarIconSvg = `
-  <svg class="inline-block size-6 min-w-[1.375rem]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-    <path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" />
-    <path d="M16 3v4" />
-    <path d="M8 3v4" />
-    <path d="M4 11h16" />
-    <path d="M7 14h.013" />
-    <path d="M10.01 14h.005" />
-    <path d="M13.01 14h.005" />
-    <path d="M16.015 14h.005" />
-    <path d="M13.015 17h.005" />
-    <path d="M7.01 17h.005" />
-    <path d="M10.01 17h.005" />
-  </svg>`;
-
 function createFeedCardHTML(item, siteTimezone, fallbackOgImageGlobal) {
   let displayDate = "";
   let displayTime = "";
@@ -65,10 +49,7 @@ function createFeedCardHTML(item, siteTimezone, fallbackOgImageGlobal) {
     displayDate = "Date not available";
   }
 
-  const description = `By ${item.blog_name}`;
-  const shortDescription = description.length > 40 ? description.substring(0, 40) + "..." : description;
-
-  const defaultImageClass = "w-[76px] sm:w-[50px] h-auto object-cover rounded-md aspect-square group-hover:opacity-90 transition-opacity duration-300";
+  const defaultImageClass = "w-[50px] h-[50px] object-cover rounded-md shrink-0 group-hover:opacity-90 transition-opacity duration-300";
 
   let imgSrc = item.avatar || '';
   if ((!imgSrc || imgSrc.trim() === "") && fallbackOgImageGlobal) {
@@ -77,36 +58,38 @@ function createFeedCardHTML(item, siteTimezone, fallbackOgImageGlobal) {
   
   const onerrorHandler = fallbackOgImageGlobal ? `this.onerror=null; this.src='${fallbackOgImageGlobal}';` : '';
 
+  const blogName = typeof item.blog_name === 'string' ? item.blog_name.trim() : '';
+  const blogNameDisplay = blogName ? (blogName.startsWith('@') ? blogName : `@${blogName}`) : '';
+
   return `
-    <li class="my-6 grid grid-cols-[auto_1fr] items-center gap-4">
-      ${imgSrc ? `
-        <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="shrink-0">
-          <img
-            src="${imgSrc}"
-            alt="${item.title}"
-            class="${defaultImageClass}" 
-            loading="lazy"
-            onerror="${onerrorHandler}"
-          />
-        </a>
-      ` : ''}
-      <div>
-        <a
-          href="${item.link}" target="_blank" rel="noopener noreferrer"
-          class="inline-block text-lg font-medium text-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
-        >
-          <h3 class="text-lg font-medium decoration-dashed hover:underline">${item.title}</h3>
-        </a>
-        <div class="flex items-center gap-x-2 opacity-80">
-          <span class="sr-only">Published:</span>
-          <span class="text-xs">
-            <time datetime="${isoTimestamp}">${displayDate}</time>
-            ${displayTime ? `
-            <span aria-hidden="true"> | </span>
-            <span class="sr-only">&nbsp;at&nbsp;</span>
-            <span class="text-nowrap">${displayTime}</span>
-            ` : ''}
-          </span>
+    <li class="mb-4">
+      <div class="relative block pr-12">
+        <div class="flex items-center gap-3">
+          ${imgSrc ? `
+            <img
+              src="${imgSrc}"
+              alt="${item.title}"
+              class="${defaultImageClass}"
+              loading="lazy"
+              onerror="${onerrorHandler}"
+            />
+          ` : ''}
+          <div class="min-w-0 flex-1 ">
+            <div class="text-lg font-medium text-accent underline-offset-4 min-w-0">
+              <h3 class="text-base font-medium truncate overflow-hidden whitespace-nowrap min-w-0">
+                <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:underline">${item.title}</a>
+              </h3>
+            </div>
+            <div class="mt-1 flex items-center gap-x-2 opacity-80 text-xs whitespace-nowrap">
+              <span class="sr-only">Published:</span>
+              <time class="opacity-80" datetime="${isoTimestamp}">
+                ${displayDate}
+              </time>
+              ${blogName ? `
+                <span class="truncate min-w-0 flex-1 opacity-80 text-xs font-normal">${blogNameDisplay}</span>
+              ` : ''}
+            </div>
+          </div>
         </div>
       </div>
     </li>

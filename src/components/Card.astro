@@ -3,100 +3,124 @@ import { slugifyStr } from "@/utils/slugify";
 import type { CollectionEntry } from "astro:content";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
+// import Tag from "@/components/Tag.astro";
+import IconCategory from "@/assets/icons/IconCategory.svg";
+import IconTag from "@/assets/icons/IconTag.svg";
+import { SITE } from "@/config";
 
 export interface Props extends CollectionEntry<"blog"> {
   variant?: "h2" | "h3";
-  showDescription?: boolean;
-  imageClass?: string;
-  fallbackOgImage?: string;
+  fallbackDesc?: string;
+  itemClass?: string;
+  hidden?: boolean;
   showCommentCount?: boolean;
-  showDatetime?: boolean;
-  compact?: boolean;
 }
 
-const { 
-  variant = "h2",
-  data, 
-  id, 
-  filePath, 
-  showDescription = true,
-  imageClass, 
-  fallbackOgImage,
-  showCommentCount = true,
-  showDatetime = true,
-  compact = false
-} = Astro.props;
+const { variant = "h2", data, id, filePath, fallbackDesc, itemClass, hidden = false, showCommentCount } = Astro.props;
 
-const { title, description, pubDatetime, modDatetime, timezone, ogImage } = data;
+const {
+  title,
+  subtitle,
+  description,
+  date,
+  updated,
+  timezone,
+  tags,
+  categories,
+  image,
+} = data;
 
 const headerProps = {
   style: { viewTransitionName: slugifyStr(title) },
-  class: "text-lg font-medium hover:underline",
+  class: "text-base font-medium truncate overflow-hidden whitespace-nowrap min-w-0",
 };
 
-const defaultImageClass = "w-[76px] sm:w-[50px] h-auto object-cover rounded-md aspect-square group-hover:opacity-90 transition-opacity duration-300";
+const { showSubtitle, showDescription, showCategories, showTags, showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
+const displayCommentCount = typeof showCommentCount === "boolean" ? showCommentCount : defaultShowCommentCount;
 
-let imgSrc = typeof ogImage === 'string' ? ogImage : (ogImage as any)?.src;
+const buildCoverSrc = (): string | undefined => {
+  const src = typeof image === "string" ? image.trim() : "";
+  if (!src) return undefined;
+  if (src.startsWith("http://") || src.startsWith("https://")) return src;
+  if (src.includes("cos.lhasa.icu")) return src;
+  const segments = id.split("/").filter(Boolean);
+  const slug = segments.length ? segments[segments.length - 1] : "";
+  return `${SITE.imageConfig.imagesUrl}/${slug}/${src}`;
+};
 
-if ((!imgSrc || imgSrc.trim() === "") && fallbackOgImage) {
-  imgSrc = fallbackOgImage;
-}
+const coverSrc = buildCoverSrc();
 ---
 
-<li class:list={[compact ? "my-2" : "my-6", "grid grid-cols-[auto_1fr] items-center gap-4"]}>
-  <!-- {/* 缩略图 */}
-  {imgSrc && (
-    <a href={getPath(id, filePath)} class="shrink-0">
-      <img
-        src={imgSrc}
-        alt={title}
-        class={`${imageClass || defaultImageClass} mx-auto my-auto`}
-        loading="lazy"
-        onerror={fallbackOgImage ? `this.onerror=null; this.src='${fallbackOgImage}';` : undefined}
-      />
-    </a>
-  )} -->
-
-  <div>
-    <a
-      href={getPath(id, filePath)}
-      class="inline-block text-lg font-medium text-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
-    >
-      {variant === "h2" ? (
-        <h2 {...headerProps}>{title}</h2>
-      ) : (
-        <h3 {...headerProps}>{title}</h3>
+<li class={`mb-4 ${itemClass ?? ''} ${hidden ? 'hidden' : ''}`}>
+  <div class="relative block pr-12">
+    <div class="flex items-center gap-3">
+      {coverSrc && (
+        <img
+          src={coverSrc}
+          alt={title}
+          loading={SITE.imageConfig.loading.lazy ? "lazy" : "eager"}
+          class="w-[50px] h-[50px] object-cover rounded-md shrink-0"
+        />
       )}
-    </a>
+      <div class="min-w-0 flex-1">
+        <div
+          class="text-lg font-medium text-accent underline-offset-4 min-w-0"
+        >
+          {
+            variant === "h2" ? (
+              <h2 {...headerProps}>
+                <a href={getPath(id, filePath)} class="hover:underline focus-visible:no-underline focus-visible:underline-offset-0">{title}</a>
+              </h2>
+            ) : (
+              <h3 {...headerProps}>
+                <a href={getPath(id, filePath)} class="hover:underline focus-visible:no-underline focus-visible:underline-offset-0">{title}</a>
+              </h3>
+            )
+          }
+        </div>
+        {subtitle && showSubtitle && <h4 class="text-md mb-3">{subtitle}</h4>}
+        {showDescription && <p class="mb-1 text-sm">{description || fallbackDesc}</p>}
 
-    <!-- {/* 文章描述 */}
-    {showDescription && (
-      <p class="mt-2 text-sm text-gray-700 dark:text-gray-300 hidden sm:block">
-        {description.length > 40
-          ? description.substring(0, 40) + "..."  // 超过40字符时截断并添加省略
-          : description}
-      </p>
-    )} -->
-
-    <div class="flex items-center gap-x-1">
-      {showDatetime && (
-        <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} timezone={timezone} />
-      )}
-      {showCommentCount && (
-        <span class="text-xs opacity-80">
-          {showDatetime && "· "}<span class="artalk-comment-count" data-page-key={getPath(id, filePath)}></span> Comments
-        </span>
-      )}
+        <div class="mt-1 flex flex-row flex-nowrap items-center space-x-2 whitespace-nowrap">
+          <div class="mr-1 flex items-center space-x-0.5">
+            <Datetime
+              pubDatetime={date}
+              modDatetime={updated}
+              {timezone}
+              class="opacity-80"
+            />
+          </div>
+          {
+            showCategories && categories.length > 0 && (
+              <div class="mr-1 flex items-center space-x-0.5 opacity-80">
+                <IconCategory class="mt-0.5 h-3 w-3" />
+                <span class="text-xs">{categories}</span>
+              </div>
+            )
+          }
+          {
+            showTags && tags.length > 0 && (
+              <div class="flex items-center space-x-0.5 opacity-80">
+                <IconTag class="mt-0.5 h-3 w-3" />
+                <div class="flex flex-wrap">
+                  {tags.map((tag: string) => (
+                    <p class="mr-2 text-xs">#{tag}</p>
+                  ))}
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
     </div>
+    {
+      displayCommentCount && (
+        <span
+          class="artalk-comment-count absolute right-0 top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full text-xs font-medium shadow-sm"
+          style="width:30px;height:16px;background-color:var(--comment-badge-bg);color:var(--color-background)"
+          data-page-key={getPath(id, filePath)}
+        />
+      )
+    }
   </div>
 </li>
-
-<style>
-  /* 自定义样式 */
-  /* 例如：确保图片高度一致性（如果aspect-video在某些浏览器中不工作） */
-  /*
-  .aspect-video {
-    aspect-ratio: 16 / 9;
-  }
-  */
-</style>

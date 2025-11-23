@@ -1,125 +1,183 @@
-import { defineConfig, envField } from "astro/config";
-import tailwindcss from "@tailwindcss/vite";
-import sitemap from "@astrojs/sitemap";
-import remarkToc from "remark-toc";
-import remarkCollapse from "remark-collapse";
-import {
-  transformerNotationDiff,
-  transformerNotationHighlight,
-  transformerNotationWordHighlight,
-} from "@shikijs/transformers";
-import { transformerFileName } from "./src/utils/transformers/fileName";
 import { SITE } from "./src/config";
+import { defineConfig } from "astro/config";
+import fs from "node:fs";
+import tailwindcss from "@tailwindcss/vite";
+import sitemap, { type SitemapOptions } from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
+import rehypeFigure from "@microflash/rehype-figure";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
+import rehypeRewrite, { type RehypeRewriteOptions } from "rehype-rewrite";
+import rehypeWrapAll from "rehype-wrap-all";
+import rehypeExternalLinks from "rehype-external-links";
+import rehypeImgSizeCache from "@ziteh/rehype-img-size-cache";
+import expressiveCode, {
+  ExpressiveCodeTheme,
+  type AstroExpressiveCodeOptions,
+} from "astro-expressive-code";
+import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
+import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
+import compressor from "astro-compressor";
+import { minify } from "@zokki/astro-minify";
 
-// 官方文档: https://astro.build/config
+// Import custom theme
+const themeJsoncString = fs.readFileSync(
+  new URL("./theme/mod-min-light.jsonc", import.meta.url),
+  "utf-8"
+);
+const modMinLightTheme = ExpressiveCodeTheme.fromJSONString(themeJsoncString);
+
+// Expressive Code syntax highlighting, https://expressive-code.com/reference/configuration/
+const expressiveCodeOption: AstroExpressiveCodeOptions = {
+  plugins: [pluginLineNumbers(), pluginCollapsibleSections()],
+  themes: ["one-dark-pro", modMinLightTheme],
+  themeCssSelector: theme => {
+    if (theme.name === "one-dark-pro") {
+      return "[data-theme='dark']";
+    }
+    return "[data-theme='light']";
+  },
+  defaultProps: {
+    wrap: false,
+    showLineNumbers: false,
+    overridesByLang: {
+      "bash,cmd,powershell,ps,sh,shell,zsh": { frame: "none" },
+    },
+  },
+  styleOverrides: {
+    codeFontFamily: "var(--font-mono), var(--font-emoji)",
+    uiFontFamily: "var(--font-sans), var(--font-emoji)",
+    borderWidth: "0",
+    textMarkers: {
+      backgroundOpacity: "33%",
+      inlineMarkerBorderWidth: "0.1px",
+    },
+    frames: {
+      editorTabBarBackground: "transparent",
+      frameBoxShadowCssValue: "transparent",
+      tooltipSuccessBackground: "#6b7280",
+    },
+  },
+};
+
+// Rehype rewrite options, https://github.com/jaywcjlove/rehype-rewrite
+const rehypeRewriteOption: RehypeRewriteOptions = {
+  rewrite: node => {
+    // Also look for Astro's Responsive Images
+    if (node.type === "element" && node.tagName === "img") {
+      node.properties = {
+        ...node.properties,
+        loading: "lazy",
+        decoding: "async",
+        // fetchpriority: "auto",
+      };
+    }
+    // Use rehype-external-links instead
+    // if (
+    //   node.type === "element" &&
+    //   node.tagName === "a" &&
+    //   node.properties?.href
+    // ) {
+    //   const href = node.properties.href;
+    //   if (
+    //     typeof href === "string" &&
+    //     !href.startsWith("/") &&
+    //     !href.startsWith(SITE.website)
+    //   ) {
+    //     // Add target="_blank" (open in new tab)
+    //     // and rel="noopener noreferrer" (security and privacy)
+    //     node.properties = {
+    //       ...node.properties,
+    //       target: "_blank",
+    //       rel: "noopener noreferrer",
+    //     };
+    //   }
+    // }
+  },
+};
+
+// Sitemap options, https://docs.astro.build/en/guides/integrations-guide/sitemap/
+const sitemapOption: SitemapOptions = {
+  serialize(item) {
+    if (/\/(tags|categories|archives|page|search)/.test(item.url)) {
+      item.priority = 0.2;
+    } else if (/\/posts\/\d+\/?$/.test(item.url)) {
+      item.priority = 0.3;
+    } else if (/\/posts\//.test(item.url)) {
+      // Main blog page
+      item.priority = 0.8;
+    } else {
+      // Default priority for all other pages
+      item.priority = 0.5;
+    }
+
+    return item;
+  },
+};
+
+// https://astro.build/config
 export default defineConfig({
   site: SITE.website,
-
-  // 集成插件
   integrations: [
-    // MDX 支持
-    mdx({
-      remarkPlugins: [remarkMath], 
-      rehypePlugins: [rehypeKatex],
-    }),
-    
-    sitemap({
-      // 决定哪些页面包含在站点地图中
-      // 如果不显示归档页面，则排除 /archives
-      filter: page => SITE.showArchives || !page.endsWith("/archives"),
-    }),
+    expressiveCode(expressiveCodeOption),
+    mdx(),
+    sitemap(sitemapOption),
+    minify(),
+    // minify({
+    //   // Re-enable CSS minification with error recovery to avoid parser crashes
+    //   css: { minify: true, errorRecovery: true },
+    // }),
+    compressor({ gzip: true, brotli: true }),
   ],
-  
-  // Markdown 文件处理
   markdown: {
-    remarkPlugins: [
-      remarkToc, 
-      // 可折叠的目录区块
-      [remarkCollapse, { test: "Table of contents" }], 
-    ],
-    
-    // Shiki 代码高亮
-    shikiConfig: {
-      // 代码主题配置
-      themes: { 
-        // 浅色主题
-        light: "min-light", 
-        // 深色主题
-        dark: "night-owl"  
-      },
-      
-      // 不使用默认颜色，而是使用主题定义的颜色
-      defaultColor: false,
-      
-      // 不自动换行
-      wrap: false,
-      
-      // 代码转换器配置
-      transformers: [
-        // 显示文件名
-        transformerFileName({ style: "v2", hideDot: false }),              
-        // 高亮指定行
-        transformerNotationHighlight(),
-        // 高亮指定词汇
-        transformerNotationWordHighlight(),
-        // 显示代码差异
-        transformerNotationDiff({ matchAlgorithm: "v3" }), 
+    remarkPlugins: [remarkMath],
+    rehypePlugins: [
+      rehypeKatex,
+      rehypeFigure,
+      rehypeImgSizeCache,
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: "append" }],
+      [rehypeExternalLinks, { target: "_blank", rel: "noopener noreferrer" }],
+      [
+        rehypeWrapAll,
+        {
+          selector: "table",
+          wrapper: "div.responsive-table",
+        },
       ],
-    },
+      [rehypeRewrite, rehypeRewriteOption],
+    ],
+    // Use ExpressiveCode instead of shiki
+    syntaxHighlight: false,
+    // shikiConfig: {
+    //   // For more themes, visit https://shiki.style/themes
+    //   themes: { light: "min-light", dark: "night-owl" },
+    //   wrap: true,
+    // },
   },
-  // Vite 构建工具
   vite: {
-    // Tailwind CSS 支持
-    plugins: [tailwindcss()], 
-    
-    // 依赖优化
+    plugins: [tailwindcss()],
     optimizeDeps: {
-      // 排除不需要预构建的依赖
-      exclude: ["@resvg/resvg-js"], 
-    },
-    
-    // 开发服务器
-    server: {
-      // 允许的主机名
-      allowedHosts: ["lhasa.icu"],
-      // 允许外部设备访问
-      host: "0.0.0.0",
-    },
-    
-    // 全局常量
-    define: {
-      // 图片资源 CDN 地址
-      IMAGES: JSON.stringify("https://cos.lhasa.icu/ArticlePictures"),
-      // EXIF 数据 API 地址
-      EXIF: JSON.stringify("https://lhasa-1253887673.cos.ap-shanghai.myqcloud.com/ArticlePictures"),
+      exclude: ["@resvg/resvg-js"],
     },
   },
-  // 图片处理
-  image: {
-    // 启用响应式样式
-    responsiveStyles: true,
-    // 图片布局模式
-    layout: "constrained", // 约束布局，保持宽高比
+  trailingSlash: "never",
+  build: {
+    format: "file", // generate `page.html` instead of `page/index.html`
   },
-  
-  // 环境变量
-  env: {
-    schema: {
-      // Google 站点验证公钥
-      PUBLIC_GOOGLE_SITE_VERIFICATION: envField.string({
-        access: "public",    // 公开访问
-        context: "client",   // 客户端可用
-        optional: true,      // 可选
-      }),
-    },
+  compressHTML: true,
+  prefetch: {
+    prefetchAll: true,
   },
-  
-  // 实验性功能
-  experimental: {
-    // 保持脚本执行顺序
-    preserveScriptOrder: true,
-  },
+  // image: {
+  //   // Used for all Markdown images; not configurable per-image
+  //   // Used for all `<Image />` and `<Picture />` components unless overridden with a prop
+  //   experimentalLayout: "constrained",
+  // },
+  // experimental: {
+  //   responsiveImages: true,
+  //   preserveScriptOrder: true,
+  // },
 });

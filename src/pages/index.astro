@@ -3,15 +3,17 @@ import { getCollection } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
-import Socials from "@/components/Socials.astro";
+// import Socials from "@/components/Socials.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import Card from "@/components/Card.astro";
 import Hr from "@/components/Hr.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
-import IconRss from "@/assets/icons/IconRss.svg";
+// import IconRss from "@/assets/icons/IconRss.svg";
 import IconArrowRight from "@/assets/icons/IconArrowRight.svg";
 import { SITE } from "@/config";
-import { SOCIALS } from "@/constants";
+// import { SOCIALS } from "@/constants";
+import { _t } from "@/i18n/lang";
+import getDescription from "@/utils/getDescription";
 
 const posts = await getCollection("blog");
 
@@ -23,7 +25,7 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
 <Layout>
   <Header />
   <main id="main-content" data-layout="index">
-    <section id="hero" class="pt-0 pb-6">
+    <!-- <section id="hero" class="pt-8 pb-6">
       <h1 class="my-4 inline-block text-4xl font-bold sm:my-8 sm:text-5xl">
         Hello, welcome
       </h1>
@@ -32,47 +34,43 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
         href="/rss.xml"
         class="inline-block"
         aria-label="rss feed"
-        title="欢迎订阅我的 RSS，在这里，您可以感受到：骑行、徒步的激情，品味生活哲思，洞悉技术前沿与创业灵感"
+        title="RSS Feed"
       >
         <IconRss
           width={20}
           height={20}
-          class="scale-125 stroke-accent stroke-3 rtl:-rotate-90"
+          class="scale-125 stroke-accent stroke-3"
         />
         <span class="sr-only">RSS Feed</span>
       </a>
 
-      <p>{SITE.desc}</p>
-      <!-- <p class="mt-2">
-        Read the blog posts or check
-        <LinkButton
-          class="underline decoration-dashed underline-offset-4 hover:text-accent"
-     href="https://github.com/satnaing/astro-paper#readme"
-        >
-          README
-        </LinkButton> for more info.     
+      <p>
+        {SITE.desc}
       </p>
       {
-        // only display if at least one social link is enabled
-        SOCIALS.length > 0 && (
+        // only display if at least one social link is enabled and showHeaderSocialLinks is true
+        SOCIALS.length > 0 && SITE.displayOptions.showHeaderSocialLinks && (
           <div class="mt-4 flex flex-col sm:flex-row sm:items-center">
-            <div class="me-2 mb-1 whitespace-nowrap sm:mb-0">Social Links: </div>
+            <div class="mr-2 mb-1 whitespace-nowrap sm:mb-0">Social Links:</div>
             <Socials />
           </div>
         )
-      } -->
-    </section>
-
-    <Hr />
-
+      }
+    </section> -->
     {
       featuredPosts.length > 0 && (
         <>
           <section id="featured" class="pt-6 pb-6">
-            <h2 class="text-2xl font-semibold tracking-wide">Featured</h2>
+            <h2 class="text-2xl font-semibold tracking-wide">
+              {_t.common.featuredPosts}
+            </h2>
             <ul>
               {featuredPosts.map(data => (
-                <Card variant="h3" {...data} />
+                <Card
+                  variant="h3"
+                  {...data}
+                  fallbackDesc={getDescription(data.body || "")}
+                />
               ))}
             </ul>
           </section>
@@ -84,20 +82,29 @@ const recentPosts = sortedPosts.filter(({ data }) => !data.featured);
     {
       recentPosts.length > 0 && (
         <section id="recent-posts">
+          <h2 class="text-2xl font-semibold tracking-wide">
+            {/* {_t.common.recentPosts} */}
+          </h2>
           <ul>
             {recentPosts.map(
               (data, index) =>
-                index < SITE.postPerIndex && <Card variant="h3" {...data} />
+                index < SITE.postPerIndex && (
+                  <Card
+                    variant="h3"
+                    {...data}
+                    fallbackDesc={getDescription(data.body || "")}
+                  />
+                )
             )}
           </ul>
         </section>
       )
     }
 
-    <div class="my-8 text-center">
-      <LinkButton href="/posts/">
-        All Posts
-        <IconArrowRight class="inline-block rtl:rotate-180" />
+    <div class="text-center">
+      <LinkButton href="/posts">
+        {_t.common.allPosts}
+        <IconArrowRight class="inline-block" />
       </LinkButton>
     </div>
   </main>
