@@ -17,6 +17,10 @@ const en = {
     title: "Feeds",
     desc: "All blogs I subscribe to.",
   },
+  guestbook: {
+    title: "Guestbook",
+    desc: "Leave me a message.",
+  },
   tags: {
     title: "Tags",
     desc: "All the tags used in posts.",
@@ -95,6 +99,10 @@ const zhCN: typeof en = {
   feeds: {
     title: "邻居",
     desc: "我的网上邻居",
+  },
+  guestbook: {
+    title: "留言",
+    desc: "留下你的足迹与想法。",
   },
   tags: {
     title: "标签",

@@ -107,6 +107,11 @@ const { leadingTitle, hideSiteTitle, leadingTitleTransition } = Astro.props as P
         </a>
       </li>
       <li>
+        <a href="/guestbook" class:list={{ "active-nav": isActive("/guestbook") }}>
+          {_t.guestbook.title}
+        </a>
+      </li>
+      <li>
         <a href="/about" class:list={{ "active-nav": isActive("/about") }}>
           {_t.about.title}
         </a>

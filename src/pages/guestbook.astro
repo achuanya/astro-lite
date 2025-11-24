@@ -1,0 +1,21 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+import Main from "@/layouts/Main.astro";
+import Artalk from "@/components/Artalk.astro";
+import { SITE } from "@/config";
+import { _t } from "@/i18n/lang";
+---
+
+<Layout title={`${_t.guestbook.title} | ${SITE.title}`}>
+  <Header />
+  <Main pageTitle="" pageDesc={_t.guestbook.desc}>
+    <section class="mx-auto w-full max-w-3xl">
+      <div id="Comments"></div>
+    </section>
+  </Main>
+  <Footer />
+</Layout>
+<Artalk />
+
