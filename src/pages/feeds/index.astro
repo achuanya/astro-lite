@@ -45,7 +45,7 @@ const feedsDataForClient = {
 <div id="feeds-data-json-container" data-json={JSON.stringify(feedsDataForClient)} style="display: none;"></div>
 
 <script>
-  import { initFeeds } from '@/scripts/feeds.js';
+  import { initFeeds } from 'public/feeds';
 
   document.addEventListener('astro:page-load', () => {
     const dataElement = document.getElementById('feeds-data-json-container');

@@ -1,11 +1,21 @@
-# Astro Lhasa
+---
+title: "Introducing Astro Lhasa 1.0"
+subtitle: ""
+date: 2025-11-24T22:11:00+08:00
+featured: false
+draft: false
+tags:
+  - Astro Lhasa
+  - 开源
+categories: ["技术"]
+toc: true
+comments: false
+image: astro-logo.svg
+---
 
-![Astro Lhasa](public/astro-lhasa-v1-thumbnail.svg)
-![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-[![996.icu](https://img.shields.io/badge/link-996.icu-red.svg?style=for-the-badge)](https://996.icu)
-[![Anti 996 License](https://img.shields.io/badge/license-Anti%20996-blue.svg?style=for-the-badge)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
-[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge)](http://commitizen.github.io/cz-cli/)
+import Img from "@/components/Img.astro";
+
+<Img src="astro-lhasa-v1-thumbnail.svg" alt="Astro Lhasa v1 Thumbnail" />
 
 Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 的 Astro 博客主题。
 
@@ -21,17 +31,18 @@ Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 
 - [x] 响应式设计（适配手机到桌面）
 - [x] 本地模糊搜索
 - [x] 草稿文章与置顶
-- [x] 自动生成 sitemap 与 RSS
+- [x] GLightbox 图片灯箱
 - [x] 超链接将会在新标签页打开
+- [x] 自动生成 sitemap 与 RSS
 - [x] Expressive Code 代码高亮
 - [x] 全站懒加载滚动分页、返回顶部按钮
-- [x] GLightbox 图片灯箱
-- [x] 图片美化：EXIF 样式、Alt 标签（长条与角标）
-- [x] 图片懒加载，且 src 只需要输入文件名，编译时自动补全路径
 - [x] 基于时间的明暗模式切换（自动适应系统主题）
 - [x] 深度适配 Artalk 评论系统（布局结构和主题配色）
 - [x] 自动展开和折叠的文章目录（可在文章中配置开关）
-- [x] 为 img 标签自动添加原始宽高，支持缓存（需要绝对地址）
+- [x] 为 img 标签自动添加原始宽高，支持缓存
+- [x] 图片美化：EXIF 样式、Alt 标签（长条与角标）
+- [x] 图片懒加载，且 src 只需要输入文件名，编译时自动补全路径
+
 
 ## Lighthouse 评分
 
@@ -136,13 +147,6 @@ PUBLIC_GOOGLE_SITE_VERIFICATION=your-google-site-verification-value
 
 > 警告！Windows PowerShell 用户可能需要安装 [concurrently](https://www.npmjs.com/package/concurrently)，如果想在开发过程中[运行诊断命令](https://docs.astro.build/en/reference/cli-reference/#astro-check)（例如：astro check --watch & astro dev）
 
-## 反馈与建议
-
-如果你有任何建议或反馈，可以通过博客评论、亦或电子邮件与我联系。或者，如果你发现了错误或者想要请求新功能，欢迎直接提出问题
-
-- Email：[@游钓四方·haibao1027@gmail.com](mailto:haibao1027@gmail.com)
-- GitHub Issues：[Astro Lhasa Issues](https://github.com/achuanya/astro-lhasa/issues)
-
 ## License
 
-本项目采用 Anti 996 License 授权协议发布，详情请查阅 [LICENSE](https://github.com/achuanya/astro-lhasa/blob/main/LICENSE) 文件
+本项目采用 Anti 996 License 授权协议发布，详情请查阅 [LICENSE](https://github.com/achuanya/astro-lhasa/blob/main/LICENSE)

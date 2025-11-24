@@ -1,3 +1,21 @@
 - url: https://cos.lhasa.icu/StylePictures/my-photo.jpg
   width: 1384
   height: 1384
+- url: public/astro-lhasa-v1-thumbnail.svg
+  width: 1920
+  height: 1080
+- url: https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white
+  width: 127
+  height: 28
+- url: https://img.shields.io/badge/link-996.icu-red.svg?style=for-the-badge
+  width: 131
+  height: 28
+- url: https://img.shields.io/badge/license-Anti%20996-blue.svg?style=for-the-badge
+  width: 163
+  height: 28
+- url: https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge
+  width: 257
+  height: 28
+- url: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge
+  width: 194
+  height: 28
