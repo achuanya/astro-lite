@@ -259,16 +259,11 @@ const nextPost =
     >
     </div>
   </aside>
-
-  
-
   <Footer />
 </Layout>
 <Artalk />
 
 <script is:inline data-astro-rerun type="module">
-  
-
   /* Tocbot */
   (function () {
     // If tocbot is not enabled, return early
@@ -295,18 +290,12 @@ const nextPost =
       const script = document.createElement("script");
       script.src =
         "/tocbot/tocbot.min.js";
-      script.integrity =
-        "sha512-+9XzRSJjnUN2OI106uAbbVZ3f+z1ncIRZFOr56hEdaxbQeZ8i1+B7OVjdF8tG4YhgxM/rWP73K2SiG93x6UJoQ==";
       script.crossOrigin = "anonymous";
       script.referrerPolicy = "no-referrer";
       script.onload = initTocbot;
       document.body.appendChild(script);
     }
-
-    
   })();
-
-  
 
   // Astro View Transitions
   document.addEventListener("astro:after-swap", () => {
