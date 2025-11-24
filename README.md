@@ -5,7 +5,6 @@
 [![996.icu](https://img.shields.io/badge/link-996.icu-red.svg?style=for-the-badge)](https://996.icu)
 [![Anti 996 License](https://img.shields.io/badge/license-Anti%20996-blue.svg?style=for-the-badge)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
-[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=for-the-badge)](http://commitizen.github.io/cz-cli/)
 
 Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 的 Astro 博客主题。
 
@@ -107,7 +106,6 @@ docker run -p 4321:80 astropaper
 
 ### Google 网站验证
 
-
 你可以通过环境变量轻松在 Astro Lhasa 中添加 [Google 网站验证 HTML 标签](https://support.google.com/webmasters/answer/9008080?sjid=3020911180724672289-NA)
 ```bash
 # 在你的环境变量文件 (.env) 中
@@ -145,4 +143,4 @@ PUBLIC_GOOGLE_SITE_VERIFICATION=your-google-site-verification-value
 
 ## License
 
-本项目采用 Anti 996 License 授权协议发布，详情请查阅 [LICENSE](https://github.com/achuanya/astro-lhasa/blob/main/LICENSE) 文件
+本项目采用 Anti 996 License 授权协议发布，详情请查阅 [LICENSE](https://github.com/achuanya/astro-lhasa/blob/main/LICENSE) 
