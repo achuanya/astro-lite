@@ -59,7 +59,7 @@ function createFeedCardHTML(item, siteTimezone, fallbackOgImageGlobal) {
   const onerrorHandler = fallbackOgImageGlobal ? `this.onerror=null; this.src='${fallbackOgImageGlobal}';` : '';
 
   const blogName = typeof item.blog_name === 'string' ? item.blog_name.trim() : '';
-  const blogNameDisplay = blogName ? (blogName.startsWith('@') ? blogName : `@${blogName}`) : '';
+  const blogNameDisplay = blogName ? blogName : '';
 
   return `
     <li class="mb-4">
