@@ -6,7 +6,7 @@
 [![Anti 996 License](https://img.shields.io/badge/license-Anti%20996-blue.svg?style=for-the-badge)](https://github.com/996icu/996.ICU/blob/master/LICENSE)
 [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white&style=for-the-badge)](https://conventionalcommits.org)
 
-Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 的 Astro 博客主题。
+Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 的 Astro 博客主题
 
 该主题基于 [Astro Paper](https://github.com/satnaing/astro-paper)，并借鉴了好大哥 [Fooleap](https://blog.fooleap.org/) 博客的布局设计
 
@@ -36,7 +36,7 @@ Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 
 
 <p align="center">
   <a href="https://pagespeed.web.dev/report?url=https%3A%2F%2Fastro-paper.pages.dev%2F&form_factor=desktop">
-    <Img width="710" alt=" " src="astro-lhasa-lighthouse-score.svg" />
+    <Img width="710" alt=" " src="public/astro-lhasa-lighthouse-score.svg" />
   </a>
 </p>
 
