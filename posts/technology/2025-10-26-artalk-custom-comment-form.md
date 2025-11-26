@@ -11,7 +11,7 @@ tags:
 categories: ["技术"]
 toc: true
 comments: false
-image: easyfill128.webp_50
+image: logo.svg
 ---
 ***Artalk-ui*** 是 [Artalk](https://github.com/ArtalkJS/Artalk) `v2.9.1` 的一个分支，主要重构 ui
 
