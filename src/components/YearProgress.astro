@@ -6,15 +6,15 @@
   </div>
   <span
     id="year-progress-cover"
-    class="absolute left-0 top-1/2 -translate-y-1/2 h-[3px] rounded bg-background pointer-events-none opacity-0 transition-opacity duration-200 z-10"
+    class="absolute left-0 top-1/2 -translate-y-1/2 h-[3px] rounded bg-background pointer-events-none opacity-0 transition-opacity duration-[1000ms] ease-out z-10"
   ></span>
   <span
     id="year-progress-label"
-    class="absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs text-accent/70 opacity-0 transition-opacity duration-300 ease-out pointer-events-none z-20 px-2"
+    class="absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs text-accent/70 opacity-0 transition-opacity duration-[1000ms] ease-out pointer-events-none z-20 px-2"
   ></span>
   <div
     id="year-progress-popup"
-    class="absolute left-0 top-0 -translate-y-[calc(100%+8px)] whitespace-nowrap text-xs bg-background text-foreground border border-border rounded px-2 py-1 shadow opacity-0 pointer-events-none z-30"
+    class="absolute left-0 top-0 -translate-y-[calc(100%+8px)] whitespace-nowrap text-xs bg-background text-foreground border border-border rounded px-2 py-1 shadow opacity-0 transition-opacity duration-[1000ms] ease-out pointer-events-none z-30"
   ></div>
 </div>
 
@@ -30,10 +30,23 @@
     const container = document.getElementById('year-progress');
     const popup = document.getElementById('year-progress-popup');
     if (!fill || !label || !container || !cover || !popup) return;
+
+    function show(el) {
+      if (!el) return;
+      el.classList.add('duration-300');
+      el.classList.add('opacity-100');
+    }
+
+    function hide(el) {
+      if (!el) return;
+      el.classList.remove('duration-300');
+      el.classList.remove('opacity-100');
+    }
+
     const finalText = (target * 100).toFixed(1) + '%';
     container.setAttribute('title', finalText);
-    label.classList.add('opacity-100');
-    cover.classList.add('opacity-100');
+    show(label);
+    show(cover);
     const duration = 1200;
     const startTs = performance.now();
     let currentProgress = 0;
@@ -66,8 +79,8 @@
         positionLabel(target);
         currentProgress = target;
         setTimeout(() => {
-          label.classList.remove('opacity-100');
-          cover.classList.remove('opacity-100');
+          hide(label);
+          hide(cover);
         }, 2000);
       }
     }
@@ -78,15 +91,15 @@
           clearTimeout(hoverHideTimer);
           hoverHideTimer = null;
         }
-        label.classList.add('opacity-100');
-        cover.classList.add('opacity-100');
+        show(label);
+        show(cover);
         positionLabel(currentProgress || target);
       });
       container.addEventListener('mouseleave', () => {
         if (hoverHideTimer) clearTimeout(hoverHideTimer);
         hoverHideTimer = setTimeout(() => {
-          label.classList.remove('opacity-100');
-          cover.classList.remove('opacity-100');
+          hide(label);
+          hide(cover);
         }, 1000);
       });
       container.addEventListener('click', () => {
@@ -94,11 +107,11 @@
         const end = new Date(now.getFullYear() + 1, 0, 1);
         const daysLeft = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         popup.textContent = `今年还剩下${daysLeft}天，要珍惜时间啊！`;
-        popup.classList.add('opacity-100');
+        show(popup);
         positionLabel(currentProgress || target);
         if (window.__ypHideTimer) clearTimeout(window.__ypHideTimer);
         window.__ypHideTimer = setTimeout(() => {
-          popup.classList.remove('opacity-100');
+          hide(popup);
         }, 2000);
       });
       container.dataset.bound = '1';
