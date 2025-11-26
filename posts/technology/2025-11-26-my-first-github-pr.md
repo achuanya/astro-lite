@@ -1,7 +1,7 @@
 ---
 title: "我的第一次 GitHub PR"
 subtitle: ""
-date: 2025-11-26T23:15:00+08:00
+date: 2025-11-26T23:23:00+08:00
 featured: false
 draft: false
 tags:
@@ -13,8 +13,6 @@ toc: true
 comments: false
 image: github.svg
 ---
-
-import Img from "@/components/Img.astro";
 
 我一直觉得 Artalk 的 ui 设计的很不协调，特别评论框下方的“ 评论数、通知中心"  
 这并非重要功能，但是官方没有做开关控制。实现后，感觉很实用，可以推一下
