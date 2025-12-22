@@ -14,6 +14,7 @@ toc: false
 comments: false
 image: golang.jpg_50
 ---
+
 之前我写过一篇[《利用Go+Github Actions写个定时RSS爬虫》](https://lhasa.icu/GrabLatestRSS.html)来实现这一目的，主要是用 GitHub Actions + Go 进行持续的 RSS 拉取，再把结果上传到 GitHub Pages 站点
 
 但是遇到一些网络延迟、TLS 超时问题，导致订阅页面访问速度奇慢，抓取的数据也不完整，后来时断时续半个月重构了代码，进一步增强了并发和容错机制

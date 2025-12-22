@@ -12,9 +12,8 @@ toc: false
 comments: false
 image: php.jpg_50
 ---
-本文转自[Laruence](https://www.laruence.com/2020/07/09/6015.html)
 
----
+> 本文转自[Laruence](https://www.laruence.com/2020/07/09/6015.html)
 
 这个本来是之前在微博上有个同学说他经常用来面试别人，大概是说，对于如下代码，你觉得会输出啥:
 

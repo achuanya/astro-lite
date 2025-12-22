@@ -14,6 +14,7 @@ toc: false
 comments: false
 image: manjaro.jpg_50
 ---
+
 ## 1.卸载原有开源驱动
 
 ```shell

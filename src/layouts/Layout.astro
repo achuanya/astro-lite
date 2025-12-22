@@ -241,6 +241,16 @@ function tryLoad() {
     background-color: var(--page-background);
   }
 
+  /* Frame inline padding as CSS variable for image bleed calculations */
+  #site-frame {
+    --frame-pad-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    #site-frame {
+      --frame-pad-inline: 3.75rem;
+    }
+  }
+
   @media (max-width: 639px) {
     .site-outer-bg {
       background-color: var(--color-background);

@@ -11,9 +11,8 @@ toc: false
 comments: false
 image: jiazhi.jpg_50
 ---
-本文转自[Laruence](https://www.laruence.com/2015/01/02/2999.html)
 
----
+> 本文转自[Laruence](https://www.laruence.com/2015/01/02/2999.html)
 
 前天看了TimYang的<[一个技术从业人员眼中的2014][1]> , 有些观点我很是赞同, 于是我也有了想写点什么的冲动…
 

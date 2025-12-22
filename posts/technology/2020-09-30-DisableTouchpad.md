@@ -14,6 +14,7 @@ toc: false
 comments: false
 image: manjaro.jpg_50
 ---
+
 ## 安装
 
 安装必要的函数库和驱动程序

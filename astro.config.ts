@@ -6,7 +6,6 @@ import sitemap, { type SitemapOptions } from "@astrojs/sitemap";
 import mdx from "@astrojs/mdx";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import rehypeFigure from "@microflash/rehype-figure";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import rehypeRewrite, { type RehypeRewriteOptions } from "rehype-rewrite";
@@ -21,6 +20,7 @@ import { pluginLineNumbers } from "@expressive-code/plugin-line-numbers";
 import { pluginCollapsibleSections } from "@expressive-code/plugin-collapsible-sections";
 import compressor from "astro-compressor";
 import { minify } from "@zokki/astro-minify";
+import photosuite from "photosuite";
 
 // Import custom theme
 const themeJsoncString = fs.readFileSync(
@@ -121,6 +121,16 @@ const sitemapOption: SitemapOptions = {
 export default defineConfig({
   site: SITE.website,
   integrations: [
+    photosuite({
+      scope: '#article',
+      imageBase: "https://cos.lhasa.icu/dist/images/",
+      fileDir: true,
+      exif: {
+        enabled: true,
+        fields: ['Model', 'LensModel', 'FocalLength', 'FNumber', 'ExposureTime', 'ISO', 'DateTimeOriginal'],
+        separator: ' · '
+      }
+    }),
     expressiveCode(expressiveCodeOption),
     mdx(),
     sitemap(sitemapOption),
@@ -135,7 +145,6 @@ export default defineConfig({
     remarkPlugins: [remarkMath],
     rehypePlugins: [
       rehypeKatex,
-      rehypeFigure,
       rehypeImgSizeCache,
       rehypeSlug,
       [rehypeAutolinkHeadings, { behavior: "append" }],
@@ -148,6 +157,13 @@ export default defineConfig({
         },
       ],
       [rehypeRewrite, rehypeRewriteOption],
+      [
+        rehypeWrapAll,
+        {
+          selector: "img",
+          wrapper: "figure.image-bleed.not-prose",
+        },
+      ],
     ],
     // Use ExpressiveCode instead of shiki
     syntaxHighlight: false,

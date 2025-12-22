@@ -12,6 +12,7 @@ toc: false
 comments: false
 image: zhihu.png_50
 ---
+
 写博客至今，已经快八年了
 
 从最初的代码笔记，到后来记录生活，我想，有些话可以说说
