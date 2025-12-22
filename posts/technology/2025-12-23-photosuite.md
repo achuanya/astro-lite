@@ -1,7 +1,7 @@
 ---
 title: "Photosuite：一个为博客而生的图片处理方案"
 subtitle: ""
-date: 2025-12-23T06:18:00+08:00
+date: 2025-12-23T07:58:00+08:00
 featured: false
 draft: false
 tags:
@@ -285,7 +285,7 @@ Photosuite 基于 **Vite + TypeScript** 开发，理论上适用于多种架构
 - Photosuite：[https://github.com/achuanya/photosuite](https://github.com/achuanya/photosuite)  
 - npmjs：[https://www.npmjs.com/package/photosuite](https://www.npmjs.com/package/photosuite)  
 - exiftool-vendored.js：[https://github.com/photostructure/exiftool-vendored.js](https://github.com/photostructure/exiftool-vendored.js)  
-- Glightbox：[https://github.com/biati-digital/glightbox](https://github.com/biati-digital/glightbox)
+- Glightbox：[https://github.com/achuanya/glightbox](https://github.com/achuanya/glightbox)
 
 
 
