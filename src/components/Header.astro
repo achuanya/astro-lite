@@ -25,7 +25,7 @@ interface Props {
 }
 const { leadingTitle, hideSiteTitle, leadingTitleTransition } = Astro.props as Props;
 
-let mobileTitle = SITE.title;
+let mobileTitle: string = SITE.title;
 if (isActive("/posts")) mobileTitle = _t.posts.title;
 else if (isActive("/categories")) mobileTitle = _t.categories.title;
 else if (isActive("/tags")) mobileTitle = _t.tags.title;
