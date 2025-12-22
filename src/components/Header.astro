@@ -3,10 +3,10 @@ import IconX from "@/assets/icons/IconX.svg";
 // import IconMoon from "@/assets/icons/IconMoon.svg";
 // import IconSunHigh from "@/assets/icons/IconSunHigh.svg";
 import IconMenuDeep from "@/assets/icons/IconMenuDeep.svg";
+import IconRss from "@/assets/icons/IconRss.svg";
 import { SITE } from "@/config";
 import { _t } from "@/i18n/lang";
 import YearProgress from "./YearProgress.astro";
-
 const { pathname } = Astro.url;
 
 const rawPath = pathname.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
@@ -24,6 +24,16 @@ interface Props {
   leadingTitleTransition?: string;
 }
 const { leadingTitle, hideSiteTitle, leadingTitleTransition } = Astro.props as Props;
+
+let mobileTitle = SITE.title;
+if (isActive("/posts")) mobileTitle = _t.posts.title;
+else if (isActive("/categories")) mobileTitle = _t.categories.title;
+else if (isActive("/tags")) mobileTitle = _t.tags.title;
+else if (isActive("/feeds")) mobileTitle = _t.feeds.title;
+else if (isActive("/guestbook")) mobileTitle = _t.guestbook.title;
+else if (isActive("/about")) mobileTitle = _t.about.title;
+else if (isActive("/archives")) mobileTitle = _t.archives.title;
+else if (isActive("/search")) mobileTitle = _t.search.title;
 ---
 
 <header>
@@ -42,15 +52,36 @@ const { leadingTitle, hideSiteTitle, leadingTitleTransition } = Astro.props as P
       id="top-nav-wrap"
       class="relative flex w-full items-center sm:items-baseline justify-between bg-background pb-2"
     >
-      <a
-        href="/"
-        class="absolute text-lg leading-6 sm:text-xl sm:leading-7 sm:static max-w-[28ch] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-none sm:overflow-visible sm:text-clip"
-      >
-        {leadingTitle && (
-          <span class="mr-2" transition:name={leadingTitleTransition}>{leadingTitle}</span>
-        )}
-        {!hideSiteTitle && SITE.title}
-      </a>
+      <div class="flex items-baseline gap-2">
+        <a
+          href="/"
+          class="text-lg leading-6 sm:text-xl sm:leading-7 max-w-[28ch] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-none sm:overflow-visible sm:text-clip"
+        >
+          {leadingTitle && (
+            <span class="mr-2" transition:name={leadingTitleTransition}>{leadingTitle}</span>
+          )}
+          {!hideSiteTitle && (
+            <>
+              <span class="sm:hidden">{mobileTitle}</span>
+              <span class="hidden sm:inline">{SITE.title}</span>
+            </>
+          )}
+        </a>
+        <a
+          target="_blank"
+          href="/rss.xml"
+          class="inline-block"
+          aria-label="rss feed"
+          title="RSS Feed"
+        >
+          <IconRss
+            width={13}
+            height={13}
+            class="inline-block scale-125 stroke-accent stroke-3"
+          />
+          <span class="sr-only">RSS Feed</span>
+        </a>
+      </div>
       <nav
         id="nav-menu"
         class="flex w-full flex-col items-center sm:ml-2 sm:flex-row sm:justify-end sm:space-x-4 sm:py-0"
