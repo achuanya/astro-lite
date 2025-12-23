@@ -76,17 +76,17 @@ function createFeedCardHTML(item, siteTimezone, fallbackOgImageGlobal) {
           ` : ''}
           <div class="min-w-0 flex-1 ">
             <div class="text-lg font-medium text-accent underline-offset-4 min-w-0">
-              <h3 class="text-base font-medium truncate overflow-hidden whitespace-nowrap min-w-0">
+              <h3 class="text-sm font-medium truncate overflow-hidden whitespace-nowrap min-w-0">
                 <a href="${item.link}" target="_blank" rel="noopener noreferrer" class="hover:underline">${item.title}</a>
               </h3>
             </div>
             <div class="mt-1 flex items-center gap-x-2 opacity-80 text-xs whitespace-nowrap">
               <span class="sr-only">Published:</span>
-              <time class="opacity-80" datetime="${isoTimestamp}">
+              <time class="opacity-80 text-[var(--posts-list-time-color)]" datetime="${isoTimestamp}">
                 ${displayDate}
               </time>
               ${blogName ? `
-                <span class="truncate min-w-0 flex-1 opacity-80 text-xs font-normal">${blogNameDisplay}</span>
+                <span class="text-[var(--posts-list-time-color)] truncate min-w-0 flex-1 opacity-80 text-xs font-normal">${blogNameDisplay}</span>
               ` : ''}
             </div>
           </div>

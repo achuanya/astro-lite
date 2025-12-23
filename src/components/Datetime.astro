@@ -24,6 +24,6 @@ const title = pub.toLocaleString("zh-CN");
 
 <div class:list={["flex items-end space-x-1", className]} title={title}>
   <span class:list={["text-sm", { "sm:text-xs": true }]}>
-    <time datetime={iso}></time>
+    <time class="text-[var(--posts-list-time-color)]" datetime={iso}></time>
   </span>
 </div>

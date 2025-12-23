@@ -52,10 +52,10 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
       id="top-nav-wrap"
       class="relative flex w-full items-center sm:items-baseline justify-between bg-background pb-2"
     >
-      <div class="flex items-baseline gap-2">
+      <div class="flex items-baseline gap-1">
         <a
           href="/"
-          class="text-lg leading-6 sm:text-xl sm:leading-7 max-w-[28ch] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-none sm:overflow-visible sm:text-clip"
+          class="text-sm leading-6 max-w-[28ch] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-none sm:overflow-visible sm:text-clip"
         >
           {leadingTitle && (
             <span class="mr-2" transition:name={leadingTitleTransition}>{leadingTitle}</span>
@@ -63,7 +63,7 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
           {!hideSiteTitle && (
             <>
               <span class="sm:hidden">{mobileTitle}</span>
-              <span class="hidden sm:inline">{SITE.title}</span>
+              <span class="text-base hidden sm:inline">{SITE.title}</span>
             </>
           )}
         </a>
@@ -77,7 +77,7 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
           <IconRss
             width={13}
             height={13}
-            class="inline-block scale-125 stroke-accent stroke-3"
+            class="inline-block stroke-accent stroke-3"
           />
           <span class="sr-only">RSS Feed</span>
         </a>
@@ -110,7 +110,7 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
         "hidden",
         "my-2 flex flex-wrap gap-2",
         "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-0 sm:[&>li>a]:py-1",
-        "[&>li>a]:text-[var(--nav-link)]",
+        "[&>li>a]:text-[var(--nav-link)] [&>li>a]:text-sm",
         "sm:flex sm:gap-x-5 sm:gap-y-0",
       ]}
     >
@@ -192,7 +192,7 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
           <li class="flex items-center">
             <button
               id="theme-btn"
-              class="focus-outline block px-4 py-3 sm:px-0 sm:py-1 hover:text-accent text-[var(--nav-link)] font-medium"
+              class="text-sm focus-outline block px-4 py-3 sm:px-0 sm:py-1 hover:text-accent text-[var(--nav-link)] font-medium"
               title={_t.common.themeBtn}
               aria-label="auto"
               aria-live="polite"

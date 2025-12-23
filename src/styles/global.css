@@ -28,6 +28,7 @@ html[data-theme="light"] {
   --comment-badge-bg: #96d7f5;
   --toc-top-text-color: #ffffff;
   --year-progress-fill: var(--page-background);
+  --posts-list-time-color: #969696;
 }
 
 html[data-theme="dark"] {
@@ -43,6 +44,7 @@ html[data-theme="dark"] {
   --comment-badge-bg: var(--color-accent);
   --toc-top-text-color: var(--foreground);
   --year-progress-fill: var(--accent);
+  --posts-list-time-color: #8b8b8b;
 }
 
 @theme inline {
