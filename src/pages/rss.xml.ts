@@ -4,57 +4,65 @@ import { getPath } from "@/utils/getPath";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
 
-// Function to convert a date to a UTC date that matches the local time in the specified timezone
-// This is used to force RSS feeds to display the "local" time of the post, even though RSS uses GMT.
-const getLocalTimeAsUTC = (date: Date, timezone: string) => {
-  try {
-    const formatter = new Intl.DateTimeFormat("en-US", {
-      timeZone: timezone,
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: false,
-    });
-
-    const parts = formatter.formatToParts(date);
-    const getPart = (type: string) =>
-      parseInt(parts.find(p => p.type === type)?.value || "0", 10);
-
-    return new Date(
-      Date.UTC(
-        getPart("year"),
-        getPart("month") - 1,
-        getPart("day"),
-        getPart("hour"),
-        getPart("minute"),
-        getPart("second")
-      )
-    );
-  } catch (e) {
-    console.error(`Error formatting date for timezone ${timezone}:`, e);
-    return date;
+function toValidDate(v: unknown): Date | null {
+  if (v instanceof Date) return Number.isNaN(v.getTime()) ? null : v;
+  if (typeof v === "string" || typeof v === "number") {
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? null : d;
   }
-};
+  return null;
+}
+
+function formatRfc822Beijing(d: Date) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Shanghai",
+    weekday: "short",
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(d);
+
+  const get = (type: string) => parts.find((p) => p.type === type)?.value;
+
+  const wd = get("weekday"); // Sun
+  const day = get("day"); // 28
+  const mon = get("month"); // Dec
+  const year = get("year"); // 2025
+  const hour = get("hour"); // 14
+  const minute = get("minute"); // 30
+  const second = get("second"); // 00
+
+  // 北京时区固定 +0800
+  return `${wd}, ${day} ${mon} ${year} ${hour}:${minute}:${second} +0800`;
+}
 
 export async function GET() {
   const posts = await getCollection("blog");
   const sortedPosts = getSortedPosts(posts);
+
   return rss({
     title: SITE.title,
     description: SITE.desc,
     site: SITE.website,
     trailingSlash: false,
-    items: sortedPosts.map(({ data, id, filePath }) => ({
-      link: getPath(id, filePath),
-      title: data.title,
-      description: data.description,
-      pubDate: getLocalTimeAsUTC(
-        new Date(data.updated ?? data.date),
-        data.timezone ?? SITE.timezone
-      ),
-    })),
+    items: sortedPosts.map(({ data, id, filePath }) => {
+      const raw = (data as any).updated ?? (data as any).date;
+      const dateObj = toValidDate(raw);
+
+      return {
+        link: getPath(id, filePath),
+        title: data.title,
+        description: data.description,
+        // 关键：不传 pubDate，避免 rss 生成器输出 GMT
+        // pubDate: dateObj ?? undefined,
+
+        // 自己写 pubDate（RSS 里就是 RFC822 格式）
+        customData: dateObj ? `<pubDate>${formatRfc822Beijing(dateObj)}</pubDate>` : "",
+      };
+    }),
   });
 }
