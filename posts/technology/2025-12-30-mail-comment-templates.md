@@ -2,8 +2,8 @@
 title: "给博客评论设计邮件通知模板"
 subtitle: ""
 date: 2025-12-29T05:07:00+08:00
-featured: false
-draft: false
+featured: true
+draft: true
 tags:
   - 开源
   - Mail Comment Templates
