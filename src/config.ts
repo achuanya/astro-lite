@@ -90,4 +90,10 @@ export const SITE = {
       },
     },
   },
+
+  // 分类排序配置
+  categoryOrder: {
+    manual: true, // true: 手动排序, false: 按文章数量自动排序
+    order: ["生活", "技术", "骑行", "摄影", "徒步", "阅读", "跑步", "野钓", "年报", "创业"],
+  },
 } as const;
