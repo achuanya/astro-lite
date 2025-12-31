@@ -5,43 +5,59 @@ import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import getUniqueCategories from "@/utils/getUniqueCategories";
+import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
 import { _t } from "@/i18n/lang";
 import { getCategoryImageUrl } from "@/utils/categoryImages";
 
 const posts = await getCollection("blog");
+const sortedPosts = getSortedPosts(posts);
 
 let categories = getUniqueCategories(posts);
+
+// 获取每个分类的最新文章
+const categoryLatestPost = new Map<string, string>();
+categories.forEach(({ categoryName }) => {
+  const latestPost = sortedPosts.find(post => post.data.categories.includes(categoryName));
+  if (latestPost) {
+    categoryLatestPost.set(categoryName, latestPost.data.title);
+  }
+});
 ---
 
 <Layout title={`${_t.categories.title} | ${SITE.title}`}>
   <Header />
   <Main pageTitle="" pageDesc={_t.categories.desc}>
     <section class="space-y-6">
-      <ul class="grid grid-cols-2 md:grid-cols-3 gap-2" aria-label="分类列表">
+      <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1" aria-label="分类列表">
         {
           categories.map(({ category, categoryName, count }, i) => (
             <li class={`categories-item ${i >= SITE.postPerIndex ? 'hidden' : ''}`}>
-              <a href={`/categories/${category}`} aria-label={`查看 ${categoryName} 分类`} class="group block overflow-hidden rounded-md transition-colors">
-                <div class="w-full overflow-hidden rounded-md" style="aspect-ratio: 16 / 9;">
+              <a href={`/categories/${category}`} aria-label={`查看 ${categoryName} 分类`} class="group block overflow-hidden relative">
+                <div class="w-full overflow-hidden" style="aspect-ratio: 16 / 9;">
                   {
                     (getCategoryImageUrl(category) || getCategoryImageUrl(categoryName)) ? (
                       <img
                         src={getCategoryImageUrl(category) || getCategoryImageUrl(categoryName)}
                         alt={`${categoryName} 封面图`}
                         loading="lazy"
-                        class="w-full h-full object-cover rounded-md"
+                        class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
-                      <div class="w-full h-full bg-foreground/10 rounded-md" />
+                      <div class="w-full h-full bg-foreground/20" />
                     )
                   }
                 </div>
-                <div class="px-3 py-2 flex items-center gap-2">
-                  <span class="text-sm font-medium text-accent group-hover:text-accent group-hover:underline group-hover:underline-offset-4 decoration-2" style={`view-transition-name: ${category}`}>
-                    {categoryName}
+                {/* 渐变遮罩 */}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                {/* 文字内容 */}
+                <div class="absolute bottom-0 left-0 right-0 p-4">
+                  <span class="text-xs text-white/80 block mb-1" style={`view-transition-name: ${category}`}>
+                    {categoryName}（{count}篇）
                   </span>
-                  <span class="text-xs sm:text-xs text-foreground/60">{count}</span>
+                  <h3 class="text-sm text-white leading-tight line-clamp-1">
+                    {categoryLatestPost.get(categoryName) || categoryName}
+                  </h3>
                 </div>
               </a>
             </li>

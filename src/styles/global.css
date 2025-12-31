@@ -231,3 +231,9 @@ header:has(#menu-items:not(.hidden)) #year-progress {
 .expressive-code pre {
   scrollbar-width: thin!important;
 }
+
+/* 自定义 View Transitions 动画时长 */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 800ms;
+}

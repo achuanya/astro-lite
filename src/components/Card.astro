@@ -31,8 +31,12 @@ const {
 } = data;
 
 const headerProps = {
+  class: "truncate overflow-hidden whitespace-nowrap min-w-0",
+};
+
+const linkProps = {
   style: { viewTransitionName: slugifyStr(title) },
-  class: "text-sm font-medium truncate overflow-hidden whitespace-nowrap min-w-0",
+  class: "text-sm font-medium hover:underline focus-visible:no-underline focus-visible:underline-offset-0",
 };
 
 const { showSubtitle, showDescription, showCategories, showTags, showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
@@ -69,11 +73,11 @@ const coverSrc = buildCoverSrc();
           {
             variant === "h2" ? (
               <h2 {...headerProps}>
-                <a href={getPath(id, filePath)} class="text-sm hover:underline focus-visible:no-underline focus-visible:underline-offset-0">{title}</a>
+                <a href={getPath(id, filePath)} {...linkProps}>{title}</a>
               </h2>
             ) : (
               <h3 {...headerProps}>
-                <a href={getPath(id, filePath)} class="text-sm hover:underline focus-visible:no-underline focus-visible:underline-offset-0">{title}</a>
+                <a href={getPath(id, filePath)} {...linkProps}>{title}</a>
               </h3>
             )
           }

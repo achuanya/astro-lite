@@ -58,7 +58,7 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
           class="text-sm leading-6 max-w-[28ch] overflow-hidden text-ellipsis whitespace-nowrap sm:max-w-none sm:overflow-visible sm:text-clip"
         >
           {leadingTitle && (
-            <span class="mr-2" transition:name={leadingTitleTransition}>{leadingTitle}</span>
+            <span class="mr-2 font-medium" transition:name={leadingTitleTransition}>{leadingTitle}</span>
           )}
           {!hideSiteTitle && (
             <>
