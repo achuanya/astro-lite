@@ -1,0 +1,45 @@
+---
+import type { FavoriteItem } from "@/utils/parseFavorites";
+import { SITE } from "@/config";
+
+export interface Props extends FavoriteItem {
+  itemClass?: string;
+  hidden?: boolean;
+}
+
+const { image, title, url, description, itemClass, hidden = false } = Astro.props;
+---
+
+<li class={`mb-4 ${itemClass ?? ''} ${hidden ? 'hidden' : ''}`}>
+  <div class="relative block pr-12">
+    <div class="flex items-center gap-3">
+      {image && (
+        <img
+          src={image}
+          alt={title}
+          loading={SITE.imageConfig.loading.lazy ? "lazy" : "eager"}
+          class="w-[50px] h-[50px] object-cover rounded-md shrink-0"
+        />
+      )}
+      <div class="min-w-0 flex-1">
+        <div class="text-lg font-medium text-accent underline-offset-4 min-w-0">
+          <h2 class="truncate overflow-hidden whitespace-nowrap min-w-0">
+            <a
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-sm font-medium hover:underline focus-visible:no-underline focus-visible:underline-offset-0"
+            >
+              {title}
+            </a>
+          </h2>
+        </div>
+        {description && (
+          <div class="mt-1 flex flex-row flex-nowrap items-center space-x-2 whitespace-nowrap">
+            <span class="text-xs opacity-80">{description}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</li>

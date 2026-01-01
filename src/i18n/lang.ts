@@ -41,6 +41,10 @@ const en = {
   about: {
     title: "About",
   },
+  favorites: {
+    title: "Favorites",
+    desc: "My favorite tools and websites.",
+  },
   search: {
     title: "Search",
     desc: "Search any article ...",
@@ -83,6 +87,7 @@ const en = {
     allPosts: "All Posts",
     featuredPosts: "Featured",
     recentPosts: "Recent Posts",
+    more: "More",
   },
 };
 
@@ -122,6 +127,10 @@ const zhCN: typeof en = {
   },
   about: {
     title: "关于",
+  },
+  favorites: {
+    title: "收藏",
+    desc: "我收藏的工具和网站。",
   },
   search: {
     title: "搜索",
@@ -165,6 +174,7 @@ const zhCN: typeof en = {
     allPosts: "所有日志",
     featuredPosts: "Set Top",
     recentPosts: "New",
+    more: "更多",
   },
 };
 

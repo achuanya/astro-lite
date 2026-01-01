@@ -15,6 +15,10 @@ export const SITE = {
   archivesPerIndex: 2,
   archivesPerPage: 3,
 
+  // 收藏分页
+  favoritesPerIndex: 10,
+  favoritesPerPage: 10,
+
   scheduledPostMargin: 15 * 60 * 1000, // 15 minutes
   genDescriptionMaxLines: 30, // Max number of lines to process
   genDescriptionCount: 200, // If 'more' tag is not found, use this count of characters

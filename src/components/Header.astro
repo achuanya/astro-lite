@@ -34,6 +34,7 @@ else if (isActive("/guestbook")) mobileTitle = _t.guestbook.title;
 else if (isActive("/about")) mobileTitle = _t.about.title;
 else if (isActive("/archives")) mobileTitle = _t.archives.title;
 else if (isActive("/search")) mobileTitle = _t.search.title;
+else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
 ---
 
 <header>
@@ -142,51 +143,6 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
           {_t.guestbook.title}
         </a>
       </li>
-      <li>
-        <a href="/about" class:list={{ "active-nav": isActive("/about") }}>
-          {_t.about.title}
-        </a>
-      </li>
-      {
-        SITE.showArchives && (
-          <li>
-            <a href="/archives" class:list={{ "active-nav": isActive("/archives") }}>
-              {_t.archives.title}
-            </a>
-            {/* <LinkButton
-              href="/archives"
-              class:list={[
-                "focus-outline flex p-3 sm:p-1",
-                {
-                  "active-nav [&>svg]:stroke-accent": isActive("/archives"),
-                },
-              ]}
-              ariaLabel={_t.archives.title}
-              title={_t.archives.title}
-            >
-              <IconArchive class="hidden sm:inline-block" />
-              <span class="sm:sr-only">{_t.archives.title}</span>
-            </LinkButton> */}
-          </li>
-        )
-      }
-      <li class="flex items-center">
-        <a href="/search" class:list={{ "active-nav": isActive("/search") }}>
-          {_t.search.title}
-        </a>
-        <!-- <LinkButton
-          href="/search"
-          class:list={[
-            "focus-outline flex p-3 sm:p-1",
-            { "[&>svg]:stroke-accent": isActive("/search") },
-          ]}
-          ariaLabel={_t.search.title}
-          title={_t.search.title}
-        >
-          <IconSearch />
-          <span class="sr-only">{_t.search.title}</span>
-        </LinkButton> -->
-      </li>
       {
         SITE.lightAndDarkMode && (
           <li class="flex items-center">
@@ -203,6 +159,66 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
           </li>
         )
       }
+      <li class="dropdown-container relative flex items-center">
+        <span
+          class:list={[
+            "dropdown-trigger cursor-pointer block px-4 py-3 text-center font-medium hover:text-accent sm:px-0 sm:py-1 text-[var(--nav-link)] text-sm",
+            { "active-nav": isActive("/about") || isActive("/archives") || isActive("/search") || isActive("/favorites") }
+          ]}
+        >
+          {_t.common.more}
+        </span>
+        <ul class="dropdown-menu flex items-center overflow-hidden transition-all duration-200 ease-out">
+          <li class="dropdown-item">
+            <a
+              href="/favorites"
+              class:list={[
+                "block px-4 py-3 sm:py-1 sm:px-0 sm:ml-5 text-sm text-[var(--nav-link)] hover:text-accent whitespace-nowrap font-medium",
+                { "active-nav": isActive("/favorites") }
+              ]}
+            >
+              {_t.favorites.title}
+            </a>
+          </li>
+          <li class="dropdown-item">
+            <a
+              href="/about"
+              class:list={[
+                "block px-4 py-3 sm:py-1 sm:px-0 sm:ml-5 text-sm text-[var(--nav-link)] hover:text-accent whitespace-nowrap font-medium",
+                { "active-nav": isActive("/about") }
+              ]}
+            >
+              {_t.about.title}
+            </a>
+          </li>
+          {
+            SITE.showArchives && (
+              <li class="dropdown-item">
+                <a
+                  href="/archives"
+                  class:list={[
+                    "block px-4 py-3 sm:py-1 sm:px-0 sm:ml-5 text-sm text-[var(--nav-link)] hover:text-accent whitespace-nowrap font-medium",
+                    { "active-nav": isActive("/archives") }
+                  ]}
+                >
+                  {_t.archives.title}
+                </a>
+              </li>
+            )
+          }
+          <li class="dropdown-item">
+            <a
+              href="/search"
+              class:list={[
+                "block px-4 py-3 sm:py-1 sm:px-0 sm:ml-5 text-sm text-[var(--nav-link)] hover:text-accent whitespace-nowrap font-medium",
+                { "active-nav": isActive("/search") }
+              ]}
+            >
+              {_t.search.title}
+            </a>
+          </li>
+        </ul>
+      </li>
     </ul>
   </nav>
 </header>
@@ -232,3 +248,25 @@ else if (isActive("/search")) mobileTitle = _t.search.title;
   // Runs on view transitions navigation
   document.addEventListener("astro:after-swap", toggleNav);
 </script>
+
+<style>
+  /* 横向展开下拉菜单 - 从左向右 */
+  .dropdown-menu {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  .dropdown-container:hover .dropdown-menu {
+    clip-path: inset(0 0 0 0);
+  }
+
+  /* When hovering dropdown, remove active color from "更多" */
+  .dropdown-container:hover .dropdown-trigger.active-nav {
+    color: var(--nav-link) !important;
+  }
+
+  @media (max-width: 640px) {
+    .dropdown-menu {
+      clip-path: none;
+    }
+  }
+</style>
