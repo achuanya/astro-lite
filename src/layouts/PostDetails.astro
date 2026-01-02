@@ -45,9 +45,6 @@ const {
 
 const { Content } = await render(post);
 
-// Destructure display options from SITE config
-const { showDate } = SITE.displayOptions;
-
 let ogImageUrl: string | undefined;
 
 // Determine OG image source
@@ -108,15 +105,6 @@ const nextPost =
 
 
     <div class="flex items-center gap-4 opacity-65">
-      {showDate && (
-        <Datetime
-          pubDatetime={date}
-          modDatetime={updated}
-          {timezone}
-          size="lg"
-          class="my-2 ml-auto"
-        />
-      )}
       <EditPost class="max-sm:hidden" {hideEditPost} {post} />
     </div>
 

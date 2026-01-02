@@ -40,11 +40,6 @@ export const SITE = {
   // 文章卡片显示选项
   displayOptions: {
     showCommentCount: true, // Show comment count in article cards
-    showHeaderSocialLinks: false, // Show social links in header/main content area
-    showFooterSocialLinks: true, // Show social links in footer
-    showDate: false, // Show date in article pages
-    showCopyright: false, // Show copyright in footer
-    showStatement: false, // Show statement in footer
   },
 
   // 回到顶部按钮
