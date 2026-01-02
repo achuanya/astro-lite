@@ -3,9 +3,6 @@ import { slugifyStr } from "@/utils/slugify";
 import type { CollectionEntry } from "astro:content";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
-// import Tag from "@/components/Tag.astro";
-import IconCategory from "@/assets/icons/IconCategory.svg";
-import IconTag from "@/assets/icons/IconTag.svg";
 import { SITE } from "@/config";
 
 export interface Props extends CollectionEntry<"blog"> {
@@ -22,8 +19,6 @@ const {
   date,
   updated,
   timezone,
-  tags,
-  categories,
   image,
 } = data;
 
@@ -36,7 +31,7 @@ const linkProps = {
   class: "text-sm font-medium hover:underline focus-visible:no-underline focus-visible:underline-offset-0",
 };
 
-const { showCategories, showTags, showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
+const { showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
 const displayCommentCount = typeof showCommentCount === "boolean" ? showCommentCount : defaultShowCommentCount;
 
 const buildCoverSrc = (): string | undefined => {
@@ -89,26 +84,6 @@ const coverSrc = buildCoverSrc();
               class="opacity-80"
             />
           </div>
-          {
-            showCategories && categories.length > 0 && (
-              <div class="mr-1 flex items-center space-x-0.5 opacity-80">
-                <IconCategory class="mt-0.5 h-3 w-3" />
-                <span class="text-xs">{categories}</span>
-              </div>
-            )
-          }
-          {
-            showTags && tags.length > 0 && (
-              <div class="flex items-center space-x-0.5 opacity-80">
-                <IconTag class="mt-0.5 h-3 w-3" />
-                <div class="flex flex-wrap">
-                  {tags.map((tag: string) => (
-                    <p class="mr-2 text-xs">#{tag}</p>
-                  ))}
-                </div>
-              </div>
-            )
-          }
         </div>
       </div>
     </div>

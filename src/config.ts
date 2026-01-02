@@ -39,8 +39,6 @@ export const SITE = {
   
   // 文章卡片显示选项
   displayOptions: {
-    showCategories: false, // Show categories in article cards
-    showTags: false, // Show tags in article cards
     showCommentCount: true, // Show comment count in article cards
     showHeaderSocialLinks: false, // Show social links in header/main content area
     showFooterSocialLinks: true, // Show social links in footer

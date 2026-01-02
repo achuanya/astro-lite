@@ -14,7 +14,6 @@ import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
-import IconCategory from "@/assets/icons/IconCategory.svg";
 import IconTag from "@/assets/icons/IconTag.svg";
 import { SITE } from "@/config";
 // import DisqusComment from "@/components/DisqusComment.astro";
@@ -29,9 +28,6 @@ export interface Props {
 const { slug } = Astro.params;
 const { post, posts } = Astro.props;
 
-// Get display options from config
-const { showCategories } = SITE.displayOptions;
-
 const {
   title,
   author,
@@ -41,7 +37,6 @@ const {
   updated,
   timezone,
   tags,
-  categories,
   hideEditPost,
   toc,
   math,
@@ -154,26 +149,6 @@ const nextPost =
       </button>
     </div> -->
     <ul class="my-1 flex flex-col flex-wrap space-y-2 md:flex-row md:space-y-0">
-      <!-- categories -->
-      {
-        showCategories && categories.length > 0 && (
-          <li class="mr-4 flex items-center space-x-0.5 opacity-80">
-            <IconCategory class="mt-0.5 h-4 w-4" />
-            {categories.map((cat: string) => (
-              <ul>
-                <li>
-                  <a
-                    href={`/categories/${slugifyStr(cat)}`}
-                    class="hover:text-skin-accent text-sm"
-                  >
-                    {cat}
-                  </a>
-                </li>
-              </ul>
-            ))}
-          </li>
-        )
-      }
       <!-- Tags -->
       {
         tags.length > 0 && (
