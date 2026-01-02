@@ -10,17 +10,15 @@ import { SITE } from "@/config";
 
 export interface Props extends CollectionEntry<"blog"> {
   variant?: "h2" | "h3";
-  fallbackDesc?: string;
   itemClass?: string;
   hidden?: boolean;
   showCommentCount?: boolean;
 }
 
-const { variant = "h2", data, id, filePath, fallbackDesc, itemClass, hidden = false, showCommentCount } = Astro.props;
+const { variant = "h2", data, id, filePath, itemClass, hidden = false, showCommentCount } = Astro.props;
 
 const {
   title,
-  description,
   date,
   updated,
   timezone,
@@ -38,7 +36,7 @@ const linkProps = {
   class: "text-sm font-medium hover:underline focus-visible:no-underline focus-visible:underline-offset-0",
 };
 
-const { showDescription, showCategories, showTags, showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
+const { showCategories, showTags, showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
 const displayCommentCount = typeof showCommentCount === "boolean" ? showCommentCount : defaultShowCommentCount;
 
 const buildCoverSrc = (): string | undefined => {
@@ -81,7 +79,6 @@ const coverSrc = buildCoverSrc();
             )
           }
         </div>
-        {showDescription && <p class="mb-1 text-sm">{description || fallbackDesc}</p>}
 
         <div class="mt-1 flex flex-row flex-nowrap items-center space-x-2 whitespace-nowrap">
           <div class="mr-1 flex items-center space-x-0.5">

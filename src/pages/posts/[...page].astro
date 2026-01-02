@@ -9,7 +9,6 @@ import Card from "@/components/Card.astro";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
 import { _t } from "@/i18n/lang";
-import getDescription from "@/utils/getDescription";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const posts = await getCollection("blog", ({ data }) => !data.draft);
@@ -28,7 +27,6 @@ const { page } = Astro.props;
         page.data.map((data, i) => (
           <Card
             {...data}
-            fallbackDesc={getDescription(data.body || "")}
             itemClass="posts-item"
             hidden={i >= SITE.postPerIndex}
             showCommentCount={i < SITE.postPerIndex}

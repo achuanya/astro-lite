@@ -11,7 +11,6 @@ import getUniqueTags from "@/utils/getUniqueTags";
 import getPostsByTag from "@/utils/getPostsByTag";
 import { SITE } from "@/config";
 import { _t } from "@/i18n/lang";
-import getDescription from "@/utils/getDescription";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("blog");
@@ -44,7 +43,7 @@ const { page, tagName } = Astro.props;
     <ul>
       {
         page.data.map(data => (
-          <Card {...data} fallbackDesc={getDescription(data.body || "")} />
+          <Card {...data} />
         ))
       }
     </ul>

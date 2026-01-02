@@ -10,7 +10,6 @@ import getUniqueCategories from "@/utils/getUniqueCategories";
 import getSortedPosts from "@/utils/getSortedPosts";
 import { SITE } from "@/config";
 import { _t } from "@/i18n/lang";
-import getDescription from "@/utils/getDescription";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
   const posts = await getCollection("blog");
@@ -49,7 +48,6 @@ const { page, categoryName } = Astro.props;
         page.data.map((data, i) => (
           <Card
             {...data}
-            fallbackDesc={getDescription(data.body || "")}
             itemClass="category-post-item"
             hidden={i >= SITE.postPerIndex}
             showCommentCount={i < SITE.postPerIndex}

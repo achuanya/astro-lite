@@ -17,7 +17,6 @@ import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import IconCategory from "@/assets/icons/IconCategory.svg";
 import IconTag from "@/assets/icons/IconTag.svg";
 import { SITE } from "@/config";
-import getDescription from "@/utils/getDescription";
 // import DisqusComment from "@/components/DisqusComment.astro";
 import WontonComment from "@/components/WontonComment.astro";
 import "photosuite/dist/photosuite.css";
@@ -36,7 +35,6 @@ const { showCategories } = SITE.displayOptions;
 const {
   title,
   author,
-  description,
   ogImage: initOgImage,
   canonicalURL,
   date,
@@ -77,7 +75,6 @@ const ogImage = ogImageUrl
 const layoutProps = {
   title: `${title} | ${SITE.title}`,
   author,
-  description: description || getDescription(post.body || ""),
   pubDatetime: date,
   modDatetime: updated,
   canonicalURL,
