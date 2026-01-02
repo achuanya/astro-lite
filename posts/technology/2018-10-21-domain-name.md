@@ -1,6 +1,5 @@
 ---
 title: "更换了域名、邮箱并修复了移动端 Bug"
-subtitle: ""
 date: 2018-10-21T15:44:00+08:00
 featured: false
 draft: false

@@ -1,6 +1,5 @@
 ---
 title: "Jekyll 环境搭建 (Windows 10)"
-subtitle: ""
 date: 2019-03-29T09:27:00+08:00
 featured: false
 draft: false

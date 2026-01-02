@@ -1,6 +1,5 @@
 ---
 title: "说说消失这二十多天发生的事情"
-subtitle: ""
 date: 2019-08-25T12:44:00+08:00
 featured: false
 draft: false

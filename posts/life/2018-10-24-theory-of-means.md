@@ -1,6 +1,5 @@
 ---
 title: "(转)论胡编乱造的写作技巧"
-subtitle: ""
 date: 2018-10-24T12:44:00+08:00
 featured: false
 draft: false

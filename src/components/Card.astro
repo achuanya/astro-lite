@@ -20,7 +20,6 @@ const { variant = "h2", data, id, filePath, fallbackDesc, itemClass, hidden = fa
 
 const {
   title,
-  subtitle,
   description,
   date,
   updated,
@@ -39,7 +38,7 @@ const linkProps = {
   class: "text-sm font-medium hover:underline focus-visible:no-underline focus-visible:underline-offset-0",
 };
 
-const { showSubtitle, showDescription, showCategories, showTags, showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
+const { showDescription, showCategories, showTags, showCommentCount: defaultShowCommentCount } = SITE.displayOptions;
 const displayCommentCount = typeof showCommentCount === "boolean" ? showCommentCount : defaultShowCommentCount;
 
 const buildCoverSrc = (): string | undefined => {
@@ -82,7 +81,6 @@ const coverSrc = buildCoverSrc();
             )
           }
         </div>
-        {subtitle && showSubtitle && <h4 class="text-md mb-3">{subtitle}</h4>}
         {showDescription && <p class="mb-1 text-sm">{description || fallbackDesc}</p>}
 
         <div class="mt-1 flex flex-row flex-nowrap items-center space-x-2 whitespace-nowrap">

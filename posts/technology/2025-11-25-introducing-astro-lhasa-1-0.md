@@ -1,6 +1,5 @@
 ---
 title: "Introducing Astro Lhasa 1.0"
-subtitle: ""
 date: 2025-11-25T04:09:00+08:00
 featured: false
 draft: false

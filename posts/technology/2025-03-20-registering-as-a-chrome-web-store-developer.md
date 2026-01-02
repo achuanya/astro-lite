@@ -1,6 +1,5 @@
 ---
 title: "注册 Chrome Web Store 开发者"
-subtitle: ""
 date: 2025-03-20T00:03:00+08:00
 featured: false
 draft: false

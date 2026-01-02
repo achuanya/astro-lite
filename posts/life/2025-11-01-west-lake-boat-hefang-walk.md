@@ -1,6 +1,5 @@
 ---
 title: "船游西湖，徒步河坊街"
-subtitle: ""
 date: 2025-11-01T01:06:00+08:00
 featured: false
 draft: false

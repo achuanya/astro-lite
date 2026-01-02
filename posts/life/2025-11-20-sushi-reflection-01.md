@@ -1,6 +1,5 @@
 ---
 title: "读苏轼有感（1）"
-subtitle: " "
 date: 2025-11-20T00:29:00+08:00
 featured: false
 draft: false

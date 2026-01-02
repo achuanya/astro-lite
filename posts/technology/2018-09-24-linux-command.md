@@ -1,6 +1,5 @@
 ---
 title: "Linux 命令笔记"
-subtitle: ""
 date: 2018-09-24T12:44:00+08:00
 featured: false
 draft: false

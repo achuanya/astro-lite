@@ -1,6 +1,5 @@
 ---
 title: "(转)一个程序员眼中的价值"
-subtitle: ""
 date: 2019-06-04T11:54:00+08:00
 featured: false
 draft: false

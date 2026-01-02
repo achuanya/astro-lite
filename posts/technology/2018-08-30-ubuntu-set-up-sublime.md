@@ -1,6 +1,5 @@
 ---
 title: "Ubuntu 18.04 下安装 Sublime Text3 并解决它的疑难杂症"
-subtitle: ""
 date: 2018-08-30T00:01:00+08:00
 featured: false
 draft: false

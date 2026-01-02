@@ -1,6 +1,5 @@
 ---
 title: "爱上Go语言：变量定义与内建变量类型"
-subtitle: ""
 date: 2020-12-18T11:46:00+08:00
 featured: false
 draft: false

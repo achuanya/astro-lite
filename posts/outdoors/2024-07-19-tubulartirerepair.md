@@ -1,6 +1,5 @@
 ---
 title: "公路车管胎被扎，怎么补胎"
-subtitle: ""
 date: 2024-07-19T14:38:00+08:00
 featured: false
 draft: false

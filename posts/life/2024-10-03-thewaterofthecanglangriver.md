@@ -1,6 +1,5 @@
 ---
 title: "十月份看完的第一本书"
-subtitle: ""
 date: 2024-10-03T20:31:00+08:00
 featured: false
 draft: false

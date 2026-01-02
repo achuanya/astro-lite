@@ -1,6 +1,5 @@
 ---
 title: "喜提新车 Wilier Cento 10SL"
-subtitle: ""
 date: 2024-07-12T22:33:00+08:00
 featured: false
 draft: false

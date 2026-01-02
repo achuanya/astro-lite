@@ -1,6 +1,5 @@
 ---
 title: "2018 小总结"
-subtitle: ""
 date: 2018-12-31T11:44:00+08:00
 featured: false
 draft: false

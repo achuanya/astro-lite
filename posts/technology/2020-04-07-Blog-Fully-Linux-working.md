@@ -1,6 +1,5 @@
 ---
 title: "(转)谈 Linux，Windows 和 Mac"
-subtitle: ""
 date: 2020-04-07T18:10:00+08:00
 featured: false
 draft: false

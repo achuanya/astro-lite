@@ -1,6 +1,5 @@
 ---
 title: "Manjaro KDE 调教日记"
-subtitle: ""
 date: 2020-04-09T11:24:00+08:00
 featured: false
 draft: false

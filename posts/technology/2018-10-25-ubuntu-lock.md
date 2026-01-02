@@ -1,6 +1,5 @@
 ---
 title: "解决ubuntu：E：无法获得锁(11：资源暂时不可用)"
-subtitle: ""
 date: 2018-10-25T16:44:00+08:00
 featured: false
 draft: false

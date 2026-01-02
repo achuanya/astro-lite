@@ -1,6 +1,5 @@
 ---
 title: "面向对象(Object Oriented)学习笔记(一)"
-subtitle: ""
 date: 2018-09-23T11:28:00+08:00
 featured: false
 draft: false

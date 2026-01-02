@@ -1,6 +1,5 @@
 ---
 title: "(转)如何学习开源项目"
-subtitle: ""
 date: 2018-08-31T13:28:00+08:00
 featured: false
 draft: false

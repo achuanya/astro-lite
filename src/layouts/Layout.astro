@@ -8,7 +8,6 @@ const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
 export interface Props {
   title?: string;
-  subtitle?: string;
   author?: string;
   profile?: string;
   description?: string;
@@ -24,7 +23,6 @@ export interface Props {
 
 const {
   title = SITE.title,
-  subtitle,
   author = SITE.author,
   profile = SITE.profile,
   description = SITE.desc,
@@ -38,7 +36,7 @@ const {
   // comments = false,
 } = Astro.props;
 
-const fullDescription = subtitle ? `${subtitle}. ${description}` : description;
+const fullDescription = description;
 const socialImageURL = new URL(ogImage, Astro.url);
 
 const structuredData = {

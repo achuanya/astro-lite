@@ -1,6 +1,5 @@
 ---
 title: "聊聊贾跃亭"
-subtitle: " "
 date: 2025-12-31T23:22:00+08:00
 featured: false
 draft: false

@@ -1,6 +1,5 @@
 ---
 title: "我的第一次 GitHub PR"
-subtitle: ""
 date: 2025-11-26T23:23:00+08:00
 featured: false
 draft: false

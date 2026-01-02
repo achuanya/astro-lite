@@ -1,6 +1,5 @@
 ---
 title: "为什么你写不好一个快速排序? 谈程序员的职业发展"
-subtitle: ""
 date: 2018-08-31T09:44:00+08:00
 featured: false
 draft: false

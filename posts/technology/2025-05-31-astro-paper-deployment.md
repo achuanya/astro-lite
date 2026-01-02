@@ -1,6 +1,5 @@
 ---
 title: "基于 Astro Paper 的个人博客：深度定制和部署实践"
-subtitle: ""
 date: 2025-05-31T03:12:00+08:00
 featured: false
 draft: false

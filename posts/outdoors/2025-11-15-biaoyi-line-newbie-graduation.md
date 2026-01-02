@@ -1,6 +1,5 @@
 ---
 title: "27 公里 1510 米！徒步新手毕业了"
-subtitle: ""
 date: 2025-11-15T18:56:00+08:00
 featured: false
 draft: false

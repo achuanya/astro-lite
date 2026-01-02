@@ -1,6 +1,5 @@
 ---
 title: "第一次校招面试总结"
-subtitle: ""
 date: 2019-02-28T12:15:00+08:00
 featured: false
 draft: false

@@ -1,6 +1,5 @@
 ---
 title: "Manjaro Linux 双显卡切换解决方案"
-subtitle: ""
 date: 2020-10-15T16:41:00+08:00
 featured: false
 draft: false

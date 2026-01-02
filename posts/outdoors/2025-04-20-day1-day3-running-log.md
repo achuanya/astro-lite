@@ -1,6 +1,5 @@
 ---
 title: "记录我的前3次跑步：从陪跑到主动出发"
-subtitle: ""
 date: 2025-04-20T15:25:00+08:00
 featured: false
 draft: false

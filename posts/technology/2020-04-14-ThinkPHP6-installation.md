@@ -1,6 +1,5 @@
 ---
 title: "ThinkPHP 6.0 下载安装与配置"
-subtitle: ""
 date: 2020-04-14T15:28:00+08:00
 featured: false
 draft: false

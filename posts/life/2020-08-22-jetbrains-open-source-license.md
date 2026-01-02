@@ -1,6 +1,5 @@
 ---
 title: "使用开源项目免费申请 JetBrains 开源许可证"
-subtitle: ""
 date: 2020-08-22T08:31:00+08:00
 featured: false
 draft: false

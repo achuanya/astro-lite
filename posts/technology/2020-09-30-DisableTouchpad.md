@@ -1,6 +1,5 @@
 ---
 title: "Manjaro Linux 自动禁用触摸板"
-subtitle: ""
 date: 2020-09-30T12:57:00+08:00
 featured: false
 draft: false

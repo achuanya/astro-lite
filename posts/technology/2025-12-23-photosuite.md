@@ -1,6 +1,5 @@
 ---
 title: "Photosuite：一个为博客而生的图片处理方案"
-subtitle: ""
 date: 2025-12-23T07:58:00+08:00
 featured: false
 draft: false

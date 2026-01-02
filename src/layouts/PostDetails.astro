@@ -35,7 +35,6 @@ const { showCategories } = SITE.displayOptions;
 
 const {
   title,
-  subtitle,
   author,
   description,
   ogImage: initOgImage,
@@ -77,7 +76,6 @@ const ogImage = ogImageUrl
 
 const layoutProps = {
   title: `${title} | ${SITE.title}`,
-  subtitle: subtitle || undefined,
   author,
   description: description || getDescription(post.body || ""),
   pubDatetime: date,
@@ -116,8 +114,6 @@ const nextPost =
     data-pagefind-body
   >
 
-
-    {subtitle && <h2 class="text-xl">{subtitle}</h2>}
 
     <div class="flex items-center gap-4 opacity-65">
       {showDate && (

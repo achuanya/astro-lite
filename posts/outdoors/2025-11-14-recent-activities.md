@@ -1,6 +1,5 @@
 ---
 title: "最近的活动"
-subtitle: ""
 date: 2025-11-14T01:31:00+08:00
 featured: false
 draft: false

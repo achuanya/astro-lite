@@ -1,6 +1,5 @@
 ---
 title: "在 CentOS 下实现 MySQL 数据库定时自动备份"
-subtitle: ""
 date: 2019-09-19T18:44:00+08:00
 featured: false
 draft: false

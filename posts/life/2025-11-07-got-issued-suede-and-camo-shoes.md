@@ -1,6 +1,5 @@
 ---
 title: "喜得配发物资"
-subtitle: ""
 date: 2025-11-07T18:57:00+08:00
 featured: false
 draft: false

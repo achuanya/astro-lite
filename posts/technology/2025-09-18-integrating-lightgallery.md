@@ -1,6 +1,5 @@
 ---
 title: "集成 LightGallery 灯箱"
-subtitle: ""
 date: 2025-09-18T19:33:00+08:00
 featured: false
 draft: false

@@ -1,6 +1,5 @@
 ---
 title: "Ubuntu Server部署日记"
-subtitle: ""
 date: 2021-02-12T12:44:00+08:00
 featured: false
 draft: false

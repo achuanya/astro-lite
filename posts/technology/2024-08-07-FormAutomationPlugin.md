@@ -1,6 +1,5 @@
 ---
 title: "写一个Chrome表单自动化插件"
-subtitle: ""
 date: 2024-08-07T14:26:00+08:00
 featured: false
 draft: false

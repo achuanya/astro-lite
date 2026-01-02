@@ -1,6 +1,5 @@
 ---
 title: "独立开发者创业了"
-subtitle: ""
 date: 2025-06-12T13:07:00+08:00
 featured: false
 draft: false

@@ -1,6 +1,5 @@
 ---
 title: "技术亦福亦是祸"
-subtitle: ""
 date: 2024-02-02T15:50:00+08:00
 featured: false
 draft: false

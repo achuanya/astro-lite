@@ -1,6 +1,5 @@
 ---
 title: "爱上Go语言：常量与枚举"
-subtitle: ""
 date: 2020-12-19T11:26:00+08:00
 featured: false
 draft: false

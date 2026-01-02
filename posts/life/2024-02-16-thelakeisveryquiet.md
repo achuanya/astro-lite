@@ -1,6 +1,5 @@
 ---
 title: "湖畔幽悠"
-subtitle: ""
 date: 2024-02-16T00:45:00+08:00
 featured: false
 draft: false

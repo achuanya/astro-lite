@@ -1,6 +1,5 @@
 ---
 title: "_initialize() 和 __construct() 的区别"
-subtitle: ""
 date: 2019-04-08T10:28:00+08:00
 featured: false
 draft: false

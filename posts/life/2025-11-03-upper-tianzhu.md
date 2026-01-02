@@ -1,6 +1,5 @@
 ---
 title: "上天竺"
-subtitle: ""
 date: 2025-11-03T00:51:00+08:00
 featured: false
 draft: false

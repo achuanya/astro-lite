@@ -1,6 +1,5 @@
 ---
 title: "二零二五 - 六七月读书随笔"
-subtitle: ""
 date: 2025-06-07T16:16:00+08:00
 featured: false
 draft: false

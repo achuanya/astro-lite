@@ -1,6 +1,5 @@
 ---
 title: "坐于顶，闻茶香，听古典，观夕阳"
-subtitle: ""
 date: 2025-11-17T18:29:00+08:00
 featured: false
 draft: false

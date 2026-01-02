@@ -1,6 +1,5 @@
 ---
 title: "第一次校招复试总结"
-subtitle: ""
 date: 2019-03-04T10:28:00+08:00
 featured: false
 draft: false

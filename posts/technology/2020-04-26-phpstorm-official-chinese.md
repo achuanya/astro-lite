@@ -1,6 +1,5 @@
 ---
 title: "JetBrains 官方推中文简体包了"
-subtitle: ""
 date: 2020-04-26T09:25:00+08:00
 featured: false
 draft: false
