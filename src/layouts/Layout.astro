@@ -33,7 +33,6 @@ const {
   scrollSmooth = false,
   toc = false,
   math = false,
-  // comments = false,
 } = Astro.props;
 
 const fullDescription = description;
@@ -64,27 +63,6 @@ const structuredData = {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
-
-    <!-- CSP -->
-    <!-- 'unsafe-inline' is dangerous! but it's difficult to avoid using it at the moment, see also Astro-Shield -->
-    <!-- <meta
-      http-equiv="Content-Security-Policy"
-      content=`
-  default-src 'none';
-  script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com/ajax/libs/tocbot/ https://cdnjs.cloudflare.com/ajax/libs/KaTeX/;
-  style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/ https://cdnjs.cloudflare.com/ajax/libs/tocbot/ https://cdnjs.cloudflare.com/ajax/libs/KaTeX/;
-  font-src 'self' https://fonts.gstatic.com/ https://cdnjs.cloudflare.com/ajax/libs/KaTeX/;
-  img-src 'self' data: https:;
-  connect-src 'self' ${SITE.wontonCommentUrl};
-  form-action 'self';
-  frame-src https://www.youtube.com/ https://www.youtube-nocookie.com/;
-  base-uri 'none';
-  object-src 'none';
-  manifest-src 'self';
-  upgrade-insecure-requests;
-  block-all-mixed-content;
-`
-    /> -->
 
     <!-- General Meta Tags -->
     <title>{title}</title>

@@ -7,7 +7,6 @@ import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
 import EditPost from "@/components/EditPost.astro";
-// import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import Artalk from "@/components/Artalk.astro";
 import { getPath } from "@/utils/getPath";
@@ -16,8 +15,6 @@ import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import IconTag from "@/assets/icons/IconTag.svg";
 import { SITE } from "@/config";
-// import DisqusComment from "@/components/DisqusComment.astro";
-import WontonComment from "@/components/WontonComment.astro";
 import "photosuite/dist/photosuite.css";
 
 export interface Props {
@@ -96,10 +93,7 @@ const nextPost =
   <BackButton />
   <main
     id="main-content"
-    class:list={[
-      "mx-auto w-full max-w-3xl pb-8",
-      // { "mt-8": !SITE.showBackButton },
-    ]}
+    class="mx-auto w-full max-w-3xl pb-8"
     data-pagefind-body
   >
 
@@ -115,27 +109,8 @@ const nextPost =
       <Content />
     </article>
 
-    <!-- <hr class="my-8" /> -->
-
     <EditPost class="sm:hidden" {hideEditPost} {post} />
 
-    <!-- <ul class="mt-4 mb-8 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
-    </ul> -->
-
-    <!-- <div
-      class="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end sm:gap-4"
-    >
-      <ShareLinks />
-
-      <button
-        id="back-to-top"
-        class="focus-outline py-1 whitespace-nowrap hover:opacity-75"
-      >
-        <IconChevronLeft class="inline-block rotate-90" />
-        <span>Back to Top</span>
-      </button>
-    </div> -->
     <ul class="my-1 flex flex-col flex-wrap space-y-2 md:flex-row md:space-y-0">
       <!-- Tags -->
       {
@@ -163,7 +138,6 @@ const nextPost =
           >
             <IconChevronLeft class="inline-block flex-none" />
             <div>
-              {/* <span>Previous Post</span> */}
               <div class="text-sm text-accent/85">{prevPost.title}</div>
             </div>
           </a>
@@ -176,7 +150,6 @@ const nextPost =
             class="flex w-full justify-end gap-1 text-right hover:opacity-75 sm:col-start-2"
           >
             <div>
-              {/* <span>Next Post</span> */}
               <div class="text-sm text-accent/85">{nextPost.title}</div>
             </div>
             <IconChevronRight class="inline-block flex-none" />
@@ -185,20 +158,6 @@ const nextPost =
       }
     </div>
 
-    <!-- Comments -->
-    {
-      comments && SITE.wontonCommentUrl && (
-        <WontonComment post={slug || ""} />
-
-        // <div class="comments my-8">
-        //   {/* <p class="mb-6 text-center text-sm">Additional info</p> */}
-        //   <DisqusComment slug={slug} title={title} />
-        // </div>
-
-        // If you want to use Giscus instead, please refer to
-        // https://astro-paper.pages.dev/posts/how-to-integrate-giscus-comments/
-      )
-    }
     <div id="Comments"></div>
   </main>
 
@@ -257,9 +216,5 @@ const nextPost =
   // Astro View Transitions
   document.addEventListener("astro:after-swap", () => {
     window.scrollTo({ left: 0, top: 0, behavior: "instant" });
-
-    // if (window.tocbot) {
-    //   window.tocbot.refresh();
-    // }
   });
 </script>

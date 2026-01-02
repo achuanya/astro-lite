@@ -34,7 +34,6 @@ export const SITE = {
   lang: "zh-CN", // html lang code. Set this empty and default will be "en"
   langOg: "zh_CN", // Open Graph locale tag, format 'language_TERRITORY' https://ogp.me/#optional
   timezone: "Asia/Taipei", // Default global timezone (IANA format) https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-  wontonCommentUrl: "", // Wonton comment server URL, set to empty string to disable comment
   icp: "豫ICP备2024046152号-1", // Chinese ICP license number
   
   // 文章卡片显示选项
