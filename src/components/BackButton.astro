@@ -1,4 +1,20 @@
 ---
+/**
+ * 返回按钮组件
+ *
+ * @fileoverview 显示返回按钮，用于文章详情页
+ *
+ * 核心逻辑：
+ * 1. 根据 config.ts 配置决定是否显示
+ * 2. 默认返回首页，但支持从 sessionStorage 读取 backUrl
+ * 3. backUrl 由搜索页设置，点击文章后返回搜索结果
+ *
+ * 依赖关系：
+ * - 被文章详情页使用
+ * - 依赖 config.ts 的 showBackButton 配置
+ * - 依赖 LinkButton.astro 生成按钮
+ */
+
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
@@ -20,7 +36,18 @@ import { SITE } from "@/config";
 }
 
 <script>
-  /* Update Search Praam */
+  /**
+   * 更新返回按钮的链接地址
+   *
+   * 逻辑：
+   * 1. 从 sessionStorage 读取 backUrl
+   * 2. 如果存在，更新返回按钮的 href
+   *
+   * 使用场景：
+   * - 用户在搜索页点击文章
+   * - 搜索页将搜索 URL 存入 sessionStorage
+   * - 文章详情页读取并设置返回按钮
+   */
   function updateGoBackUrl() {
     const backButton: HTMLAnchorElement | null =
       document.querySelector("#back-button");
@@ -32,6 +59,8 @@ import { SITE } from "@/config";
     }
   }
 
+  // View Transitions 页面加载后更新
   document.addEventListener("astro:page-load", updateGoBackUrl);
+  // 初始化
   updateGoBackUrl();
 </script>

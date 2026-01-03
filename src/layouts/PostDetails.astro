@@ -1,15 +1,33 @@
 ---
+/**
+ * 文章详情页布局
+ *
+ * @fileoverview 单篇文章的完整页面布局
+ *
+ * 核心逻辑：
+ * 1. 渲染文章内容（使用 render() API）
+ * 2. 生成上一篇/下一篇导航链接
+ * 3. 条件加载：
+ *    - TOC 目录（toc 属性）
+ *    - KaTeX 数学公式（math 属性）
+ *    - Artalk 评论（comments 属性）
+ * 4. View Transitions：标题使用 viewTransitionName
+ * 5. 侧边栏：显示文章目录（桌面端）
+ *
+ * 依赖关系：
+ * - 被 /posts/[...slug]/index.astro 页面使用
+ * - 继承 Layout.astro
+ * - 导入 Header、Footer、Tag 等组件
+ */
+
 import { _t } from "@/i18n/lang";
 import { render, type CollectionEntry } from "astro:content";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
-import Datetime from "@/components/Datetime.astro";
-import EditPost from "@/components/EditPost.astro";
 import BackButton from "@/components/BackButton.astro";
 import Artalk from "@/components/Artalk.astro";
-import { getPath } from "@/utils/getPath";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
@@ -17,57 +35,42 @@ import IconTag from "@/assets/icons/IconTag.svg";
 import { SITE } from "@/config";
 import "photosuite/dist/photosuite.css";
 
+/**
+ * 组件属性接口
+ *
+ * @property post - 当前文章对象
+ * @property posts - 所有文章数组（用于上一篇/下一篇导航）
+ */
 export interface Props {
   post: CollectionEntry<"blog">;
   posts: CollectionEntry<"blog">[];
 }
 
-const { slug } = Astro.params;
 const { post, posts } = Astro.props;
 
+// 解构文章元数据
 const {
   title,
   author,
-  ogImage: initOgImage,
   canonicalURL,
   date,
   updated,
-  timezone,
   tags,
-  hideEditPost,
   toc,
   math,
   comments,
 } = post.data;
 
+// 渲染文章内容
 const { Content } = await render(post);
 
-let ogImageUrl: string | undefined;
-
-// Determine OG image source
-if (typeof initOgImage === "string") {
-  ogImageUrl = initOgImage; // Remote OG image (absolute URL)
-} else if (initOgImage?.src) {
-  ogImageUrl = initOgImage.src; // Local asset
-}
-
-// Use dynamic OG image if enabled and no remote|local ogImage
-if (!ogImageUrl && SITE.dynamicOgImage) {
-  ogImageUrl = `${getPath(post.id, post.filePath)}/index.png`;
-}
-
-// Resolve OG image URL (or fallback to SITE.ogImage / default `og.png`)
-const ogImage = ogImageUrl
-  ? new URL(ogImageUrl, Astro.url.origin).href
-  : undefined;
-
+// 传递给 Layout 的属性
 const layoutProps = {
   title: `${title} | ${SITE.title}`,
   author,
   pubDatetime: date,
   modDatetime: updated,
   canonicalURL,
-  ogImage,
   scrollSmooth: true,
   toc,
   math,
@@ -76,6 +79,14 @@ const layoutProps = {
 
 /* ========== Prev/Next Posts ========== */
 
+/**
+ * 生成上一篇/下一篇导航
+ *
+ * 逻辑：
+ * 1. 提取所有文章的 slug 和 title
+ * 2. 找到当前文章的索引
+ * 3. 获取上一篇（索引-1）和下一篇（索引+1）
+ */
 const allPosts = posts.map(({ data: { title }, id }) => ({
   slug: id,
   title,
@@ -89,19 +100,20 @@ const nextPost =
 ---
 
 <Layout {...layoutProps}>
+  <!-- 页眉：显示文章标题，隐藏站点标题 -->
   <Header leadingTitle={title} leadingTitleTransition={slugifyStr(title)} hideSiteTitle={true} />
+
+  <!-- 返回按钮 -->
   <BackButton />
+
+  <!-- 主内容区 -->
   <main
     id="main-content"
     class="mx-auto w-full max-w-3xl pb-8"
     data-pagefind-body
   >
 
-
-    <div class="flex items-center gap-4 opacity-65">
-      <EditPost class="max-sm:hidden" {hideEditPost} {post} />
-    </div>
-
+    <!-- 文章内容 -->
     <article
       id="article"
       class="js-toc-content mx-auto prose mt-4 mb-12 max-w-3xl"
@@ -109,10 +121,8 @@ const nextPost =
       <Content />
     </article>
 
-    <EditPost class="sm:hidden" {hideEditPost} {post} />
-
+    <!-- 标签列表 -->
     <ul class="my-1 flex flex-col flex-wrap space-y-2 md:flex-row md:space-y-0">
-      <!-- Tags -->
       {
         tags.length > 0 && (
           <li class="flex items-center space-x-0.5">
@@ -130,6 +140,7 @@ const nextPost =
 
     <!-- Previous/Next Post Buttons -->
     <div data-pagefind-ignore class="grid grid-cols-1 gap-6 sm:grid-cols-2 my-6">
+      <!-- 上一篇 -->
       {
         prevPost && (
           <a
@@ -143,6 +154,7 @@ const nextPost =
           </a>
         )
       }
+      <!-- 下一篇 -->
       {
         nextPost && (
           <a
@@ -158,10 +170,11 @@ const nextPost =
       }
     </div>
 
+    <!-- 评论容器 -->
     <div id="Comments"></div>
   </main>
 
-  <!-- Sidebar -->
+  <!-- 侧边栏：显示文章目录 -->
   <aside id="sidebar" class:list={["sidebar", "hidden lg:block", { "no-toc": !toc }]}>
     {
       toc && (
@@ -177,18 +190,29 @@ const nextPost =
   </aside>
   <Footer />
 </Layout>
+
+<!-- Artalk 评论系统 -->
 <Artalk />
 
 <script is:inline data-astro-rerun type="module">
   /* Tocbot */
   (function () {
-    // If tocbot is not enabled, return early
+    // 如果未启用 TOC，直接返回
     if (!document.getElementById("toc-container")) {
       return;
     }
 
     const scrollSmoothOffset = 0;
 
+    /**
+     * 初始化 Tocbot
+     *
+     * 配置：
+     * - tocSelector: 目录容器
+     * - contentSelector: 文章内容容器
+     * - headingSelector: 扫描的标题级别（h2, h3, h4）
+     * - scrollSmoothDuration: 平滑滚动持续时间
+     */
     function initTocbot() {
       window.tocbot.init({
         tocSelector: ".js-toc",
@@ -200,6 +224,7 @@ const nextPost =
       });
     }
 
+    // 加载 Tocbot 库
     if (window.tocbot) {
       initTocbot();
     } else {
@@ -213,7 +238,7 @@ const nextPost =
     }
   })();
 
-  // Astro View Transitions
+  // Astro View Transitions: 滚动到页面顶部
   document.addEventListener("astro:after-swap", () => {
     window.scrollTo({ left: 0, top: 0, behavior: "instant" });
   });

@@ -1,97 +1,264 @@
+/**
+ * 国际化（i18n）语言配置文件
+ *
+ * @fileoverview 定义博客的多语言文本内容，支持页面标题、描述、日期格式等
+ *
+ * 核心逻辑：
+ * - 使用 TypeScript 的 typeof 确保所有语言对象结构一致
+ * - 每个语言对象包含相同的键，确保切换语言时不会出现字段缺失
+ * - 当前启用简体中文（zhCN），其他语言已注释保留
+ *
+ * 依赖关系：
+ * - 被所有页面和布局组件导入使用
+ * - 通过 _t 变量统一导出当前启用的语言配置
+ * - 日期格式化依赖 dayjs 库
+ *
+ * @see https://day.js.org/docs/en/display/format
+ */
+
 import type dayjs from "dayjs";
 
-// Datetime format
-// https://day.js.org/docs/en/display/format
+// ============================================================================
+// 英文配置
+// ============================================================================
 
-// English
+/**
+ * 英文语言配置
+ *
+ * 包含所有页面和组件的英文文本
+ */
 const en = {
+  // ---------- 页面配置 ----------
+  /**
+   * 归档页配置
+   */
   archives: {
+    /** 页面标题 */
     title: "Archives",
+    /** 页面描述 */
     desc: "All the articles I've posted.",
   },
+
+  /**
+   * 文章列表页配置
+   */
   posts: {
     title: "Posts",
     desc: "All the articles I've posted.",
   },
+
+  /**
+   * 订阅页配置（友链/博客列表）
+   */
   feeds: {
     title: "Feeds",
     desc: "All blogs I subscribe to.",
   },
+
+  /**
+   * 留言板页配置
+   */
   guestbook: {
     title: "Guestbook",
     desc: "Leave me a message.",
   },
+
+  /**
+   * 标签索引页配置
+   */
   tags: {
     title: "Tags",
     desc: "All the tags used in posts.",
   },
+
+  /**
+   * 标签详情页配置
+   */
   tag: {
+    /** 标签页标题前缀 */
     title: "Tag: ",
+    /**
+     * 标签页描述生成函数
+     *
+     * @param tag - 当前标签名称
+     * @returns 包含标签名称的描述文本
+     */
     desc: (tag: string) => `All the articles with the tag "${tag}".`,
   },
+
+  /**
+   * 分类索引页配置
+   */
   categories: {
     title: "Categories",
     desc: "All the categories.",
   },
+
+  /**
+   * 分类详情页配置
+   */
   category: {
+    /** 分类页标题前缀 */
     title: "Category: ",
+    /**
+     * 分类页描述生成函数
+     *
+     * @param category - 当前分类名称
+     * @returns 包含分类名称的描述文本
+     */
     desc: (category: string) =>
       `All the articles in the category "${category}".`,
   },
+
+  /**
+   * 关于页配置
+   */
   about: {
     title: "About",
   },
+
+  /**
+   * 收藏页配置
+   */
   favorites: {
     title: "Favorites",
     desc: "My favorite tools and websites.",
   },
+
+  /**
+   * 搜索页配置
+   */
   search: {
     title: "Search",
     desc: "Search any article ...",
   },
+
+  // ---------- 404 页面配置 ----------
+  /**
+   * 404 错误页配置
+   */
   notFoundPage: {
+    /** 页面标题（大字提示） */
     title: "You seem to have come to a wasteland where there is no knowledge.",
+    /** 返回首页按钮文本 */
     toHome: "Go back home",
+    /** 前往搜索页按钮文本 */
     toSearch: "Try searching",
+    /** 404 动图 URL */
     images: "https://cos.lhasa.icu/StylePictures/404.gif",
+    /** 404 静态图 URL（备用） */
     staticImages: "https://cos.lhasa.icu/StylePictures/404.webp",
   },
+
+  // ---------- 日期格式化配置 ----------
+  /**
+   * 日期显示格式配置
+   *
+   * 提供多种日期格式化函数，统一管理站点中的日期显示
+   */
   date: {
+    /**
+     * 短日期格式
+     *
+     * 用于文章列表、卡片等空间有限的场景
+     *
+     * @param datetime - dayjs 日期对象
+     * @returns 格式化后的短日期字符串（如：Jan 1, 2024）
+     */
     shortFormat(datetime: dayjs.Dayjs): string {
       return datetime.format("MMM D, YYYY");
     },
+
+    /**
+     * 完整日期格式
+     *
+     * 用于文章详情页等需要显示完整时间的场景
+     *
+     * @param datetime - dayjs 日期对象
+     * @returns 格式化后的完整日期字符串（如：January 1, 2024 12:00 PM）
+     */
     fullFormat(datetime: dayjs.Dayjs): string {
       return datetime.format("MMMM D, YYYY hh:mm A");
     },
+
+    /**
+     * 发布日期前缀文本
+     *
+     * @param strDate - 已格式化的日期字符串
+     * @returns 带有"Published:"前缀的文本
+     */
     published(strDate: string): string {
       return `Published: ${strDate}`;
     },
+
+    /**
+     * 更新日期前缀文本
+     *
+     * @param strDate - 已格式化的日期字符串
+     * @returns 带有"Updated:"前缀的文本
+     */
     updated(strDate: string): string {
       return `Updated: ${strDate}`;
     },
   },
+
+  // ---------- 分页配置 ----------
+  /**
+   * 分页按钮文本配置
+   */
   pagination: {
+    /** 下一页按钮 */
     next: "Next",
+    /** 上一页按钮 */
     previous: "Prev",
   },
+
+  // ---------- 版权信息配置 ----------
+  /**
+   * 版权和许可信息配置
+   */
   license: {
+    /** 版权声明前缀 */
     copyright: "Copyright",
+    /** 版权声明内容 */
     statement: "All rights reserved",
+    /** ICP 备案号（中国大陆特有） */
     icp: "",
   },
+
+  // ---------- 通用文本配置 ----------
+  /**
+   * 全站通用文本配置
+   */
   common: {
+    /** 返回顶部按钮文本 */
     backToTop: "Back to Top",
+    /** 主题切换按钮的 title 属性 */
     themeBtn: "Toggle light & dark mode",
+    /** 浅色模式名称 */
     light: "Light",
+    /** 深色模式名称 */
     dark: "Dark",
+    /** "所有文章"筛选按钮 */
     allPosts: "All Posts",
+    /** "精选文章"筛选按钮 */
     featuredPosts: "Featured",
+    /** "最新文章"筛选按钮 */
     recentPosts: "Recent Posts",
+    /** "更多"按钮/链接 */
     more: "More",
   },
 };
 
-// 简体中文
+// ============================================================================
+// 简体中文配置
+// ============================================================================
+
+/**
+ * 简体中文语言配置
+ *
+ * 类型与 en 保持一致，确保所有字段完整
+ */
 const zhCN: typeof en = {
   archives: {
     title: "归档",
@@ -177,6 +344,10 @@ const zhCN: typeof en = {
     more: "更多",
   },
 };
+
+// ============================================================================
+// 其他语言配置（已注释保留）
+// ============================================================================
 
 // 繁體中文
 /*
@@ -394,6 +565,19 @@ const es: typeof en = {
 */
 // cspell:enable
 
-// Select the language you want to use
+// ============================================================================
+// 语言选择导出
+// ============================================================================
+
+/**
+ * 当前启用的语言配置
+ *
+ * 切换语言时，修改此导出即可
+ * - zhCN: 简体中文（当前启用）
+ * - zhHant: 繁体中文（已注释）
+ * - en: 英文（已注释）
+ * - ja: 日语（已注释）
+ * - es: 西班牙语（已注释）
+ */
 // export const _t = zhHant;
 export const _t = zhCN;

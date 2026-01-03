@@ -1,4 +1,30 @@
 ---
+/**
+ * 关于页布局
+ *
+ * @fileoverview 关于页的特殊布局，包含博客统计动画
+ *
+ * 核心逻辑：
+ * 1. 获取博客统计数据（运行天数、文章数、字数）
+ * 2. 通过 data 属性传递统计值给客户端脚本
+ * 3. 客户端实现数字增长动画
+ * 4. 支持渲染时间轴（从 JSON 数据）
+ *
+ * 动画规格：
+ * - 起始日期：1000ms
+ * - 起始月份：800ms
+ * - 起始日期：600ms
+ * - 运行天数：2000ms
+ * - 文章总数：1500ms
+ * - 总字数：2500ms
+ *
+ * 依赖关系：
+ * - 被 /about.astro 页面使用
+ * - 继承 Layout.astro
+ * - 导入 Header、Footer 组件
+ * - 使用 getBlogMetrics 获取统计数据
+ */
+
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 // import Breadcrumb from "@/components/Breadcrumb.astro";
@@ -6,6 +32,11 @@ import Layout from "./Layout.astro";
 import { SITE } from "@/config";
 import { getBlogMetrics } from "@/utils/getBlogMetrics";
 
+/**
+ * 组件属性接口
+ *
+ * @property frontmatter - 页面 frontmatter 数据
+ */
 export interface Props {
   frontmatter: {
     title: string;
@@ -14,6 +45,7 @@ export interface Props {
 }
 
 const { frontmatter } = Astro.props;
+// 获取博客统计数据
 const blogStats = await getBlogMetrics();
 ---
 
@@ -21,10 +53,12 @@ const blogStats = await getBlogMetrics();
   <Header />
   <!-- <Breadcrumb /> -->
   <main id="main-content">
+    <!-- 关于页内容区 -->
     <section id="about" class="prose mb-28 max-w-3xl prose-img:border-0 prose-img:block prose-img:-mx-4 prose-img:w-[calc(100%+2rem)] prose-img:max-w-[calc(100%+2rem)] sm:prose-img:-mx-[3.75rem] sm:prose-img:w-[calc(100%+7.5rem)] sm:prose-img:max-w-[calc(100%+7.5rem)]">
       <h1 class="mt-6 text-2xl tracking-wider sm:text-3xl">
-        <!-- {frontmatter.title} -->
-        <div id="blog-stats-data" 
+        <!-- 统计数据容器（隐藏） -->
+        <!-- 通过 data 属性传递值给客户端脚本 -->
+        <div id="blog-stats-data"
            data-running-days={blogStats.runningDays}
            data-total-posts={blogStats.totalPosts}
            data-total-words={blogStats.totalWordsInWan}
@@ -34,6 +68,7 @@ const blogStats = await getBlogMetrics();
            style="display: none;">
         </div>
       </h1>
+      <!-- 插槽：页面内容 -->
       <slot />
     </section>
   </main>
@@ -41,26 +76,36 @@ const blogStats = await getBlogMetrics();
 </Layout>
 
 <script>
+  /**
+   * 数字增长动画
+   *
+   * @param element - 目标元素
+   * @param targetValue - 目标值
+   * @param duration - 动画持续时间（ms）
+   * @param isDecimal - 是否为小数
+   */
   function animateNumber(element: HTMLElement, targetValue: number, duration: number = 2000, isDecimal: boolean = false) {
     const startValue = 0;
     const startTime = performance.now();
-    
+
     function updateNumber(currentTime: number) {
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      
+
+      // 使用 easeOutQuart 缓动函数
       const easeOutQuart = 1 - Math.pow(1 - progress, 4);
       const currentValue = startValue + (targetValue - startValue) * easeOutQuart;
-      
+
       if (isDecimal) {
         element.textContent = currentValue.toFixed(1);
       } else {
         element.textContent = Math.floor(currentValue).toString();
       }
-      
+
       if (progress < 1) {
         requestAnimationFrame(updateNumber);
       } else {
+        // 动画结束，设置最终值
         if (isDecimal) {
           element.textContent = targetValue.toFixed(1);
         } else {
@@ -68,21 +113,26 @@ const blogStats = await getBlogMetrics();
         }
       }
     }
-    
+
     requestAnimationFrame(updateNumber);
   }
 
+  /**
+   * 启动所有数字动画
+   */
   function startAnimations() {
     const statsData = document.getElementById('blog-stats-data');
     if (!statsData) return;
-    
+
+    // 读取 data 属性中的统计值
     const runningDays = parseInt(statsData.dataset.runningDays || '0');
     const totalPosts = parseInt(statsData.dataset.totalPosts || '0');
     const totalWords = parseFloat(statsData.dataset.totalWords || '0');
     const startYear = parseInt(statsData.dataset.startYear || '2018');
     const startMonth = parseInt(statsData.dataset.startMonth || '8');
     const startDay = parseInt(statsData.dataset.startDay || '31');
-    
+
+    // 动画配置：每个元素的持续时间和是否为小数
     const elements = [
       { id: 'start-year', value: startYear, duration: 1000 },
       { id: 'start-month', value: startMonth, duration: 800 },
@@ -91,7 +141,7 @@ const blogStats = await getBlogMetrics();
       { id: 'total-posts', value: totalPosts, duration: 1500 },
       { id: 'total-words', value: totalWords, duration: 2500, isDecimal: true }
     ];
-    
+
     // 预占位：根据最终字符串长度设置最小宽度，避免初始 0 导致布局抖动
     const setMinWidth = (el: HTMLElement, len: number) => {
       el.style.display = 'inline-block';
@@ -113,7 +163,7 @@ const blogStats = await getBlogMetrics();
     if (elPosts) setMinWidth(elPosts, String(totalPosts).length);
     if (elWords) setMinWidth(elWords, (totalWords.toFixed(1)).length);
 
-    // 启动数字动画
+    // 启动数字动画（每个延迟 200ms）
     elements.forEach((item, index) => {
       const element = document.getElementById(item.id);
       if (element) {
@@ -124,7 +174,12 @@ const blogStats = await getBlogMetrics();
     });
   }
 
-  // 渲染博客进程时间轴
+  /**
+   * 渲染博客进程时间轴
+   *
+   * 从 #blog-timeline-data 读取 JSON 数据
+   * 生成时间轴列表项
+   */
   function renderTimeline() {
     const timeline = document.getElementById('blog-timeline');
     const dataEl = document.getElementById('blog-timeline-data');
@@ -140,6 +195,7 @@ const blogStats = await getBlogMetrics();
         const li = document.createElement('li');
         li.className = 'flex items-center gap-2 leading-6';
 
+        // 解析日期（格式：YYYY-MM-DD 或自定义）
         const parts = (evt.date || '').split('-');
         const ymd = parts.length === 3 ? `${parts[0]}-${parts[1]}-${parts[2]}` : (evt.date || '');
 
@@ -166,6 +222,9 @@ const blogStats = await getBlogMetrics();
     }
   }
 
+  /**
+   * 初始化所有动画
+   */
   function initializeAnimations() {
     setTimeout(() => {
       startAnimations();
@@ -173,10 +232,12 @@ const blogStats = await getBlogMetrics();
     }, 300);
   }
 
+  // View Transitions 导航后初始化
   document.addEventListener('astro:page-load', () => {
     initializeAnimations();
   });
 
+  // 初始加载时初始化
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initializeAnimations);
   } else {

@@ -1,4 +1,29 @@
 ---
+/**
+ * 邻居页（友链/博客列表）
+ *
+ * @fileoverview 显示作者订阅的其他博客
+ *
+ * 核心逻辑：
+ * 1. 从外部 JSON 数据源加载博客列表
+ * 2. 初始显示前 N 项（INITIAL_ITEMS_TO_SHOW = 4）
+ * 3. 滚动到底部自动加载更多（每次 12 项）
+ * 4. 显示加载状态、错误提示、无内容提示
+ * 5. 使用 initFeeds 函数初始化（定义在 public/feeds.ts）
+ *
+ * 数据源配置：
+ * - JSON URL: https://cos.lhasa.icu/lhasaRSS/data.json
+ * - 初始数量: 4
+ * - 每页数量: 12
+ * - 时区: SITE.timezone
+ * - 默认头像: FALLBACK_OG_IMAGE
+ *
+ * 依赖关系：
+ * - 被 /feeds 路径访问
+ * - 使用 Artalk 组件显示评论
+ * - 依赖 public/feeds.ts 的 initFeeds 函数
+ */
+
 import Layout from "@/layouts/Layout.astro";
 import Main from "@/layouts/Main.astro";
 import Header from "@/components/Header.astro";
@@ -7,9 +32,16 @@ import { SITE } from "@/config";
 import { _t } from "@/i18n/lang";
 import Artalk from "@/components/Artalk.astro";
 
+// 初始显示数量
 const INITIAL_ITEMS_TO_SHOW = 4;
+// 默认头像图片（未设置时使用）
 const FALLBACK_OG_IMAGE = "https://cos.lhasa.icu/dist/avatar/default.png";
 
+/**
+ * 客户端数据配置
+ *
+ * 通过 data 属性传递给客户端脚本
+ */
 const feedsDataForClient = {
   siteTimezone: SITE.timezone,
   fallbackOgImage: FALLBACK_OG_IMAGE,
@@ -23,30 +55,45 @@ const feedsDataForClient = {
   <Header />
     <Main pageTitle="" pageDesc={_t.feeds.desc}>
       <section id="feeds-list-section" class="px-0">
+        <!-- 加载提示 -->
         <div id="feeds-loading" class="my-6 text-center">
           <p>正在加载 Feeds...</p>
         </div>
+        <!-- 错误提示 -->
         <div id="feeds-error" class="my-6 text-center text-red-700 hidden">
           <p>加载 Feeds 失败，请稍后重试或检查网络连接。</p>
         </div>
+        <!-- 无内容提示 -->
         <div id="feeds-no-content" class="my-6 text-center hidden">
           <p>暂无内容。</p>
         </div>
+        <!-- Feeds 列表容器 -->
         <ul id="feeds-list" class="list-none mb-10">
         </ul>
+        <!-- 加载更多触发器 -->
         <div id="load-more-trigger" class="h-10" style="display: none;"></div>
       </section>
+      <!-- 评论容器 -->
       <div id="Comments"></div>
     </Main>
   <Footer />
 </Layout>
+<!-- Artalk 评论系统 -->
 <Artalk />
 
+<!-- 客户端数据容器 -->
 <div id="feeds-data-json-container" data-json={JSON.stringify(feedsDataForClient)} style="display: none;"></div>
 
 <script>
   import { initFeeds } from 'public/feeds';
 
+  /**
+   * 初始化 Feeds 功能
+   *
+   * 1. 解析客户端配置
+   * 2. 调用 initFeeds 函数
+   * 3. 错误处理：显示错误提示
+   */
   document.addEventListener('astro:page-load', () => {
     const dataElement = document.getElementById('feeds-data-json-container');
 
@@ -62,6 +109,7 @@ const feedsDataForClient = {
         );
       } catch (e) {
         console.error("Failed to parse feeds client data or initialize feeds:", e);
+        // 显示错误提示
         const errorContainer = document.getElementById('feeds-error');
         const loadingContainer = document.getElementById('feeds-loading');
         if (errorContainer) errorContainer.classList.remove('hidden');
@@ -70,7 +118,6 @@ const feedsDataForClient = {
     }
   });
 </script>
-
 
 <style>
   #feeds-list-section {

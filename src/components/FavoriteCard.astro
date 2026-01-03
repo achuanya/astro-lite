@@ -1,7 +1,31 @@
 ---
+/**
+ * 收藏卡片组件
+ *
+ * @fileoverview 显示单个收藏项的缩略信息
+ *
+ * 核心逻辑：
+ * 1. 与 Card.astro 结构类似，但用于收藏内容
+ * 2. 显示图片、标题、描述
+ * 3. 外部链接：新窗口打开
+ * 4. 支持隐藏（用于筛选功能）
+ *
+ * 依赖关系：
+ * - 被收藏页使用
+ * - 数据来自 parseFavorites 工具函数
+ */
+
 import type { FavoriteItem } from "@/utils/parseFavorites";
 import { SITE } from "@/config";
 
+/**
+ * 组件属性接口
+ *
+ * 扩展自 FavoriteItem，包含收藏项的所有信息
+ *
+ * @property itemClass - 额外的 CSS 类名
+ * @property hidden - 是否隐藏此卡片
+ */
 export interface Props extends FavoriteItem {
   itemClass?: string;
   hidden?: boolean;
@@ -13,6 +37,7 @@ const { image, title, url, description, itemClass, hidden = false } = Astro.prop
 <li class={`mb-4 ${itemClass ?? ''} ${hidden ? 'hidden' : ''}`}>
   <div class="relative block pr-12">
     <div class="flex items-center gap-3">
+      <!-- 收藏项图片 -->
       {image && (
         <img
           src={image}
@@ -21,7 +46,9 @@ const { image, title, url, description, itemClass, hidden = false } = Astro.prop
           class="w-[50px] h-[50px] object-cover rounded-md shrink-0"
         />
       )}
+      <!-- 收藏项信息区 -->
       <div class="min-w-0 flex-1">
+        <!-- 收藏项标题 -->
         <div class="text-lg font-medium text-accent underline-offset-4 min-w-0">
           <h2 class="truncate overflow-hidden whitespace-nowrap min-w-0">
             <a
@@ -34,6 +61,7 @@ const { image, title, url, description, itemClass, hidden = false } = Astro.prop
             </a>
           </h2>
         </div>
+        <!-- 收藏项描述 -->
         {description && (
           <div class="mt-1 flex flex-row flex-nowrap items-center space-x-2 whitespace-nowrap">
             <span class="text-xs opacity-80">{description}</span>

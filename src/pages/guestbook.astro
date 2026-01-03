@@ -1,4 +1,19 @@
 ---
+/**
+ * 留言板页
+ *
+ * @fileoverview 显示留言评论区域
+ *
+ * 核心逻辑：
+ * 1. 使用 Artalk 组件提供评论功能
+ * 2. 页面只包含评论容器，无其他内容
+ * 3. 评论的 pageKey 自动设为当前路径
+ *
+ * 依赖关系：
+ * - 被 /guestbook 路径访问
+ * - 使用 Artalk 组件
+ */
+
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
