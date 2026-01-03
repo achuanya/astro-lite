@@ -9,6 +9,7 @@
  * 2. 显示图片、标题、描述
  * 3. 外部链接：新窗口打开
  * 4. 支持隐藏（用于筛选功能）
+ * 5. 使用 unpic-img 实现懒加载和低质量图像占位
  *
  * 依赖关系：
  * - 被收藏页使用
@@ -16,7 +17,7 @@
  */
 
 import type { FavoriteItem } from "@/utils/parseFavorites";
-import { SITE } from "@/config";
+import { Image } from "@unpic/astro";
 
 /**
  * 组件属性接口
@@ -39,10 +40,13 @@ const { image, title, url, description, itemClass, hidden = false } = Astro.prop
     <div class="flex items-center gap-3">
       <!-- 收藏项图片 -->
       {image && (
-        <img
+        <Image
           src={image}
           alt={title}
-          loading={SITE.imageConfig.loading.lazy ? "lazy" : "eager"}
+          width={50}
+          height={50}
+          layout="fixed"
+          placeholder="dominantColor"
           class="w-[50px] h-[50px] object-cover rounded-md shrink-0"
         />
       )}

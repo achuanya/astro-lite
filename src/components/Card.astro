@@ -11,6 +11,7 @@
  * 4. 可选显示评论数（Artalk）
  * 5. 支持 View Transitions 动画
  * 6. 支持隐藏卡片（用于筛选功能）
+ * 7. 使用 unpic-img 实现懒加载和低质量图像占位
  *
  * 依赖关系：
  * - 被首页、归档页、分类页、标签页等列表页面使用
@@ -24,6 +25,7 @@ import type { CollectionEntry } from "astro:content";
 import { getPath } from "@/utils/getPath";
 import Datetime from "./Datetime.astro";
 import { SITE } from "@/config";
+import { Image } from "@unpic/astro";
 
 /**
  * 组件属性接口
@@ -100,10 +102,13 @@ const coverSrc = buildCoverSrc();
     <div class="flex items-center gap-3">
       <!-- 封面图 -->
       {coverSrc && (
-        <img
+        <Image
           src={coverSrc}
           alt={title}
-          loading={SITE.imageConfig.loading.lazy ? "lazy" : "eager"}
+          width={50}
+          height={50}
+          layout="fixed"
+          placeholder="dominantColor"
           class="w-[50px] h-[50px] object-cover rounded-md shrink-0"
         />
       )}

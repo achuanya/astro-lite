@@ -22,6 +22,7 @@
  */
 
 import { getCollection } from "astro:content";
+import { Image } from "@unpic/astro";
 import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
@@ -60,17 +61,22 @@ categories.forEach(({ categoryName }) => {
       <!-- 分类网格列表 -->
       <ul class="grid grid-cols-1 sm:grid-cols-2 gap-1" aria-label="分类列表">
         {
-          categories.map(({ category, categoryName, count }, i) => (
+          categories.map(({ category, categoryName, count }, i) => {
+            const imageUrl = getCategoryImageUrl(category) || getCategoryImageUrl(categoryName);
+            return (
             <li class={`categories-item ${i >= SITE.postPerIndex ? 'hidden' : ''}`}>
               <a href={`/categories/${category}`} aria-label={`查看 ${categoryName} 分类`} class="group block overflow-hidden relative">
                 <!-- 封面图容器（16:9 比例） -->
                 <div class="w-full overflow-hidden" style="aspect-ratio: 16 / 9;">
                   {
-                    (getCategoryImageUrl(category) || getCategoryImageUrl(categoryName)) ? (
-                      <img
-                        src={getCategoryImageUrl(category) || getCategoryImageUrl(categoryName)}
+                    imageUrl ? (
+                      <Image
+                        src={imageUrl}
                         alt={`${categoryName} 封面图`}
-                        loading="lazy"
+                        width={640}
+                        height={360}
+                        layout="constrained"
+                        placeholder="dominantColor"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
@@ -94,7 +100,7 @@ categories.forEach(({ categoryName }) => {
                 </div>
               </a>
             </li>
-          ))
+          )})
         }
       </ul>
       <!-- 懒加载哨兵元素 -->

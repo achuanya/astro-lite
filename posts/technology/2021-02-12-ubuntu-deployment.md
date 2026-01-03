@@ -248,8 +248,6 @@ $ sudo vi /etc/php/5.6/apache2/php.ini
 ```
 输入我的公网ip查看一下  
 
-![php5.6安装成功](phpinfo.png)
-
 ## 安装mysql
 
 ```bash

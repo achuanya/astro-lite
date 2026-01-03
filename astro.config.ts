@@ -11,7 +11,6 @@ import rehypeSlug from "rehype-slug";
 import rehypeRewrite, { type RehypeRewriteOptions } from "rehype-rewrite";
 import rehypeWrapAll from "rehype-wrap-all";
 import rehypeExternalLinks from "rehype-external-links";
-import rehypeImgSizeCache from "@ziteh/rehype-img-size-cache";
 import expressiveCode, {
   ExpressiveCodeTheme,
   type AstroExpressiveCodeOptions,
@@ -145,7 +144,6 @@ export default defineConfig({
     remarkPlugins: [remarkMath],
     rehypePlugins: [
       rehypeKatex,
-      rehypeImgSizeCache,
       rehypeSlug,
       [rehypeAutolinkHeadings, { behavior: "append" }],
       [rehypeExternalLinks, { target: "_blank", rel: "noopener noreferrer" }],
@@ -186,6 +184,14 @@ export default defineConfig({
   compressHTML: true,
   prefetch: {
     prefetchAll: true,
+  },
+  image: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "*.lhasa.icu",
+      },
+    ],
   },
   // image: {
   //   // Used for all Markdown images; not configurable per-image
