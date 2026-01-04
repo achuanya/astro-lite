@@ -28,7 +28,6 @@
     "@microflash/rehype-figure": "^2.1.4",
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.1.8",
-    "@unpic/astro": "^1.0.2",
     "@zokki/astro-minify": "^1.1.0",
     "astro": "^5.8.1",
     "astro-compressor": "^1.0.0",

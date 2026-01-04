@@ -200,14 +200,6 @@ export default defineConfig({
   prefetch: {
     prefetchAll: true,
   },
-  image: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "*.lhasa.icu",
-      },
-    ],
-  },
   // image: {
   //   // Used for all Markdown images; not configurable per-image
   //   // Used for all `<Image />` and `<Picture />` components unless overridden with a prop
