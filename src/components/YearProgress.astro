@@ -49,9 +49,8 @@
 <script is:inline>
   /**
    * 渲染年度进度条
-   * @param {boolean} animate - 是否播放动画（仅首次加载时为 true）
    */
-  function renderYearProgress(animate) {
+  function renderYearProgress() {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 1); // 当年 1 月 1 日
     const end = new Date(now.getFullYear() + 1, 0, 1); // 次年 1 月 1 日
@@ -81,13 +80,18 @@
     // 最终百分比文本
     const finalText = (target * 100).toFixed(1) + '%';
     container.setAttribute('title', finalText);
+    show(label);
+    show(cover);
 
-    // 保存当前进度到全局变量（供事件监听器使用）
-    window.__yearProgressTarget = target;
+    // 动画配置
+    const duration = 1200;
+    const startTs = performance.now();
+    let currentProgress = 0;
+    let hoverHideTimer = null;
 
     /**
      * 定位标签位置
-     * 标签默认显示在进度条右侧，只有快到尽头放不下时才往左移动
+     * 使标签跟随进度条，同时防止超出边界
      */
     function positionLabel(progress) {
       const cw = container.getBoundingClientRect().width;
@@ -106,15 +110,6 @@
       popup.style.left = xPopup + 'px';
     }
 
-    // 如果需要播放动画
-    if (animate) {
-      show(label);
-      show(cover);
-
-      // 动画配置
-      const duration = 1200;
-      const startTs = performance.now();
-
       /**
        * 动画步骤函数
        * 使用 requestAnimationFrame 实现平滑动画
@@ -122,7 +117,7 @@
       function step(ts) {
         const t = Math.min(1, (ts - startTs) / duration);
         const current = target * t;
-        window.__yearProgressCurrent = current;
+        currentProgress = current;
         fill.style.width = (current * 100).toFixed(3) + '%';
         label.textContent = (current * 100).toFixed(1) + '%';
         positionLabel(current);
@@ -131,7 +126,7 @@
         } else {
           label.textContent = finalText;
           positionLabel(target);
-          window.__yearProgressCurrent = target;
+          currentProgress = target;
           // 动画结束后 2 秒隐藏标签
           setTimeout(() => {
             hide(label);
@@ -140,30 +135,23 @@
         }
       }
       requestAnimationFrame(step);
-    } else {
-      // 不播放动画，直接设置最终状态
-      fill.style.width = (target * 100).toFixed(3) + '%';
-      label.textContent = finalText;
-      window.__yearProgressCurrent = target;
-      positionLabel(target);
-    }
 
-    // 事件监听器绑定（每次 DOM 更新后都需要检查）
+    // 事件监听器绑定（单次）
     if (!container.dataset.bound) {
       // 悬停显示标签
       container.addEventListener('mouseenter', () => {
-        if (window.__ypHoverTimer) {
-          clearTimeout(window.__ypHoverTimer);
-          window.__ypHoverTimer = null;
+        if (hoverHideTimer) {
+          clearTimeout(hoverHideTimer);
+          hoverHideTimer = null;
         }
         show(label);
         show(cover);
-        positionLabel(window.__yearProgressCurrent || window.__yearProgressTarget);
+        positionLabel(currentProgress || target);
       });
       // 离开隐藏标签（延迟 1 秒）
       container.addEventListener('mouseleave', () => {
-        if (window.__ypHoverTimer) clearTimeout(window.__ypHoverTimer);
-        window.__ypHoverTimer = setTimeout(() => {
+        if (hoverHideTimer) clearTimeout(hoverHideTimer);
+        hoverHideTimer = setTimeout(() => {
           hide(label);
           hide(cover);
         }, 1000);
@@ -175,7 +163,7 @@
         const daysLeft = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         popup.textContent = `今年还剩下${daysLeft}天，要珍惜时间啊！`;
         show(popup);
-        positionLabel(window.__yearProgressCurrent || window.__yearProgressTarget);
+        positionLabel(currentProgress || target);
         if (window.__ypHideTimer) clearTimeout(window.__ypHideTimer);
         window.__ypHideTimer = setTimeout(() => {
           hide(popup);
@@ -185,13 +173,8 @@
     }
   }
 
-  // 初始化：首次加载时播放动画
-  if (!window.__yearProgressAnimated) {
-    window.__yearProgressAnimated = true;
-    renderYearProgress(true);
-  }
-  // Astro 页面切换后：不播放动画，直接显示最终状态
-  document.addEventListener('astro:after-swap', () => renderYearProgress(false));
-  // 窗口调整大小：仅重新定位，不播放动画
-  window.addEventListener('resize', () => renderYearProgress(false));
+  // 初始化和事件监听
+  renderYearProgress();
+  document.addEventListener('astro:after-swap', renderYearProgress);
+  window.addEventListener('resize', renderYearProgress);
 </script>
