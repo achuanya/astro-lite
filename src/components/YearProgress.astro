@@ -6,16 +6,11 @@
  *
  * 核心逻辑：
  * 1. 计算当前时间在全年中的百分比
- * 2. 动画效果：从 0% 平滑增长到实际进度
+ * 2. 动画效果：仅首次访问/刷新时执行，页面切换时直接显示
  * 3. 交互功能：
  *    - 悬停显示百分比标签
  *    - 点击显示剩余天数提示
  * 4. 自动隐藏：动画结束后 2 秒隐藏标签
- *
- * 动画规格：
- * - 持续时间：1200ms
- * - 标签跟随进度条位置
- * - 点击显示："今年还剩 X 天，要珍惜时间啊！"
  *
  * 依赖关系：
  * - 被 Header.astro 导入，在导航栏下方显示
@@ -47,134 +42,159 @@
 </div>
 
 <script is:inline>
-  /**
-   * 渲染年度进度条
-   */
-  function renderYearProgress() {
-    const now = new Date();
-    const start = new Date(now.getFullYear(), 0, 1); // 当年 1 月 1 日
-    const end = new Date(now.getFullYear() + 1, 0, 1); // 次年 1 月 1 日
-    // 计算进度（0-1 之间）
-    const target = Math.min(1, Math.max(0, (now.getTime() - start.getTime()) / (end.getTime() - start.getTime())));
-    const fill = document.getElementById('year-progress-fill');
-    const label = document.getElementById('year-progress-label');
-    const cover = document.getElementById('year-progress-cover');
-    const container = document.getElementById('year-progress');
-    const popup = document.getElementById('year-progress-popup');
-    if (!fill || !label || !container || !cover || !popup) return;
+  (function () {
+    const ANIMATION_DURATION = 1200;
+    const LABEL_HIDE_DELAY = 2000;
+    const HOVER_HIDE_DELAY = 1000;
 
-    // 显示元素函数
+    // 计算年度进度（0-1）
+    function calcProgress() {
+      const now = new Date();
+      const start = new Date(now.getFullYear(), 0, 1);
+      const end = new Date(now.getFullYear() + 1, 0, 1);
+      return Math.min(1, Math.max(0, (now - start) / (end - start)));
+    }
+
+    // 获取 DOM 元素
+    function getElements() {
+      return {
+        container: document.getElementById('year-progress'),
+        fill: document.getElementById('year-progress-fill'),
+        label: document.getElementById('year-progress-label'),
+        cover: document.getElementById('year-progress-cover'),
+        popup: document.getElementById('year-progress-popup'),
+      };
+    }
+
+    // 显示/隐藏元素
     function show(el) {
       if (!el) return;
-      el.classList.add('duration-300');
-      el.classList.add('opacity-100');
+      el.classList.add('duration-300', 'opacity-100');
     }
-
-    // 隐藏元素函数
     function hide(el) {
       if (!el) return;
-      el.classList.remove('duration-300');
-      el.classList.remove('opacity-100');
+      el.classList.remove('duration-300', 'opacity-100');
     }
 
-    // 最终百分比文本
-    const finalText = (target * 100).toFixed(1) + '%';
-    container.setAttribute('title', finalText);
-    show(label);
-    show(cover);
-
-    // 动画配置
-    const duration = 1200;
-    const startTs = performance.now();
-    let currentProgress = 0;
-    let hoverHideTimer = null;
-
-    /**
-     * 定位标签位置
-     * 使标签跟随进度条，同时防止超出边界
-     */
-    function positionLabel(progress) {
-      const cw = container.getBoundingClientRect().width;
-      const lw = label.getBoundingClientRect().width || 0;
-      const gap = 3; // 标签与进度条的间距
-      // 标签放在进度位置右侧，只有超出边界时才往左移动
-      const xLabel = Math.min(cw * progress + gap, cw - lw);
-      label.style.left = xLabel + 'px';
-      const cover = document.getElementById('year-progress-cover');
-      if (cover) {
-        cover.style.left = xLabel + 'px';
-        cover.style.width = Math.max(lw, 0) + 'px';
-      }
-      const pw = popup.getBoundingClientRect().width || 0;
-      const xPopup = Math.min(cw * progress + gap, cw - pw);
-      popup.style.left = xPopup + 'px';
+    // 定位标签和弹窗
+    function positionLabel(els, progress) {
+      const cw = els.container.getBoundingClientRect().width;
+      const lw = els.label.getBoundingClientRect().width || 0;
+      const pw = els.popup.getBoundingClientRect().width || 0;
+      const gap = 3;
+      els.label.style.left = Math.min(cw * progress + gap, cw - lw) + 'px';
+      els.cover.style.left = els.label.style.left;
+      els.cover.style.width = lw + 'px';
+      els.popup.style.left = Math.min(cw * progress + gap, cw - pw) + 'px';
     }
 
-      /**
-       * 动画步骤函数
-       * 使用 requestAnimationFrame 实现平滑动画
-       */
+    // 设置进度（无动画）
+    function setProgress(els, progress) {
+      const text = (progress * 100).toFixed(1) + '%';
+      els.fill.style.width = text;
+      els.label.textContent = text;
+      els.container.setAttribute('title', text);
+      positionLabel(els, progress);
+    }
+
+    // 执行动画
+    function animateProgress(els, target, onComplete) {
+      const startTs = performance.now();
       function step(ts) {
-        const t = Math.min(1, (ts - startTs) / duration);
+        const t = Math.min(1, (ts - startTs) / ANIMATION_DURATION);
         const current = target * t;
-        currentProgress = current;
-        fill.style.width = (current * 100).toFixed(3) + '%';
-        label.textContent = (current * 100).toFixed(1) + '%';
-        positionLabel(current);
+        els.fill.style.width = (current * 100).toFixed(3) + '%';
+        els.label.textContent = (current * 100).toFixed(1) + '%';
+        positionLabel(els, current);
         if (t < 1) {
           requestAnimationFrame(step);
         } else {
-          label.textContent = finalText;
-          positionLabel(target);
-          currentProgress = target;
-          // 动画结束后 2 秒隐藏标签
-          setTimeout(() => {
-            hide(label);
-            hide(cover);
-          }, 2000);
+          setProgress(els, target);
+          onComplete && onComplete();
         }
       }
       requestAnimationFrame(step);
+    }
 
-    // 事件监听器绑定（单次）
-    if (!container.dataset.bound) {
-      // 悬停显示标签
-      container.addEventListener('mouseenter', () => {
-        if (hoverHideTimer) {
-          clearTimeout(hoverHideTimer);
-          hoverHideTimer = null;
-        }
-        show(label);
-        show(cover);
-        positionLabel(currentProgress || target);
+    // 绑定事件（仅一次）
+    function bindEvents(els, getProgress) {
+      if (els.container.dataset.bound) return;
+      let hoverTimer = null;
+
+      els.container.addEventListener('mouseenter', () => {
+        if (hoverTimer) clearTimeout(hoverTimer);
+        show(els.label);
+        show(els.cover);
+        positionLabel(els, getProgress());
       });
-      // 离开隐藏标签（延迟 1 秒）
-      container.addEventListener('mouseleave', () => {
-        if (hoverHideTimer) clearTimeout(hoverHideTimer);
-        hoverHideTimer = setTimeout(() => {
-          hide(label);
-          hide(cover);
-        }, 1000);
+
+      els.container.addEventListener('mouseleave', () => {
+        if (hoverTimer) clearTimeout(hoverTimer);
+        hoverTimer = setTimeout(() => {
+          hide(els.label);
+          hide(els.cover);
+        }, HOVER_HIDE_DELAY);
       });
-      // 点击显示剩余天数
-      container.addEventListener('click', () => {
+
+      els.container.addEventListener('click', () => {
         const now = new Date();
         const end = new Date(now.getFullYear() + 1, 0, 1);
-        const daysLeft = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
-        popup.textContent = `今年还剩下${daysLeft}天，要珍惜时间啊！`;
-        show(popup);
-        positionLabel(currentProgress || target);
+        const daysLeft = Math.ceil((end - now) / 86400000);
+        els.popup.textContent = `今年还剩下${daysLeft}天，要珍惜时间啊！`;
+        show(els.popup);
+        positionLabel(els, getProgress());
         if (window.__ypHideTimer) clearTimeout(window.__ypHideTimer);
-        window.__ypHideTimer = setTimeout(() => {
-          hide(popup);
-        }, 2000);
+        window.__ypHideTimer = setTimeout(() => hide(els.popup), LABEL_HIDE_DELAY);
       });
-      container.dataset.bound = '1';
-    }
-  }
 
-  // 初始化和事件监听
-  renderYearProgress();
-  document.addEventListener('astro:after-swap', renderYearProgress);
-  window.addEventListener('resize', renderYearProgress);
+      els.container.dataset.bound = '1';
+    }
+
+    // 初始化（带动画）
+    function init() {
+      const els = getElements();
+      if (!els.container || !els.fill || !els.label || !els.cover || !els.popup) return;
+
+      const target = calcProgress();
+      let currentProgress = 0;
+
+      show(els.label);
+      show(els.cover);
+
+      animateProgress(els, target, () => {
+        currentProgress = target;
+        setTimeout(() => {
+          hide(els.label);
+          hide(els.cover);
+        }, LABEL_HIDE_DELAY);
+      });
+
+      // 动画过程中更新 currentProgress
+      const updateProgress = () => {
+        const startTs = performance.now();
+        const interval = setInterval(() => {
+          const t = Math.min(1, (performance.now() - startTs) / ANIMATION_DURATION);
+          currentProgress = target * t;
+          if (t >= 1) clearInterval(interval);
+        }, 16);
+      };
+      updateProgress();
+
+      bindEvents(els, () => currentProgress || target);
+    }
+
+    // 页面切换时更新（无动画）
+    function update() {
+      const els = getElements();
+      if (!els.container || !els.fill || !els.label || !els.cover || !els.popup) return;
+
+      const target = calcProgress();
+      setProgress(els, target);
+      bindEvents(els, () => target);
+    }
+
+    // 首次加载执行动画，页面切换不执行动画
+    init();
+    document.addEventListener('astro:after-swap', update);
+  })();
 </script>
