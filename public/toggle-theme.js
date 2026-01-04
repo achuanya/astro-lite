@@ -6,6 +6,10 @@
 
 const primaryColorScheme = "";
 
+// 自动切换时间配置 (24小时制)
+const DARK_START_HOUR = 14; // 晚上 14 点开始
+const DARK_END_HOUR = 7;    // 早上 7 点结束
+
 // 调试模式配置
 const DEBUG_THEME = false;
 
@@ -61,12 +65,12 @@ function shouldUseDarkThemeByTime() {
     const now = new Date();
     const shanghaiTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
     const hour = shanghaiTime.getHours();
-    return hour >= 18 || hour < 7;
+    return hour >= DARK_START_HOUR || hour < DARK_END_HOUR;
   } catch (error) {
     console.warn("时区转换失败，使用本地时间:", error);
     const now = new Date();
     const hour = now.getHours();
-    return hour >= 18 || hour < 7;
+    return hour >= DARK_START_HOUR || hour < DARK_END_HOUR;
   }
 }
 
