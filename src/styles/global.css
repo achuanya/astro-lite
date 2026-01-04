@@ -1,10 +1,11 @@
 @import "tailwindcss";
+@import "./fonts.css";
 @import "./typography.css";
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
 :root {
-  --font-sans: "Noto Sans SC", "Noto Sans", sans-serif;
+  --font-sans: "Noto Sans SC", "Noto Sans", "Fallback Sans", sans-serif;
   --font-mono: "Roboto Mono", "Noto Sans SC", monospace;
   --font-emoji: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji";
 }
