@@ -67,16 +67,6 @@ export const SITE = {
    */
   archivesPerPage: 3,
 
-  /**
-   * 收藏页首页每页显示数量
-   */
-  favoritesPerIndex: 10,
-
-  /**
-   * 收藏页翻页时每页显示数量
-   */
-  favoritesPerPage: 10,
-
   // ========== 内容生成配置 ==========
   /**
    * 定时文章发布的时间容差（毫秒）
