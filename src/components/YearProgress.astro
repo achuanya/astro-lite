@@ -37,7 +37,7 @@
   <!-- 百分比标签 -->
   <span
     id="year-progress-label"
-    class="absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs text-accent/70 opacity-0 transition-opacity duration-[1000ms] ease-out pointer-events-none z-20 px-2"
+    class="absolute left-0 top-1/2 -translate-y-1/2 whitespace-nowrap text-xs text-accent/70 opacity-0 transition-opacity duration-[1000ms] ease-out pointer-events-none z-20"
   ></span>
   <!-- 点击弹窗（剩余天数） -->
   <div
@@ -49,8 +49,9 @@
 <script is:inline>
   /**
    * 渲染年度进度条
+   * @param {boolean} animate - 是否播放动画（仅首次加载时为 true）
    */
-  function renderYearProgress() {
+  function renderYearProgress(animate) {
     const now = new Date();
     const start = new Date(now.getFullYear(), 0, 1); // 当年 1 月 1 日
     const end = new Date(now.getFullYear() + 1, 0, 1); // 次年 1 月 1 日
@@ -80,24 +81,20 @@
     // 最终百分比文本
     const finalText = (target * 100).toFixed(1) + '%';
     container.setAttribute('title', finalText);
-    show(label);
-    show(cover);
 
-    // 动画配置
-    const duration = 1200;
-    const startTs = performance.now();
-    let currentProgress = 0;
-    let hoverHideTimer = null;
+    // 保存当前进度到全局变量（供事件监听器使用）
+    window.__yearProgressTarget = target;
 
     /**
      * 定位标签位置
-     * 使标签跟随进度条，同时防止超出边界
+     * 标签默认显示在进度条右侧，只有快到尽头放不下时才往左移动
      */
     function positionLabel(progress) {
       const cw = container.getBoundingClientRect().width;
       const lw = label.getBoundingClientRect().width || 0;
-      // 计算标签位置（确保不超出边界）
-      const xLabel = Math.min(Math.max(cw * progress - lw / 2, 0), cw - lw);
+      const gap = 3; // 标签与进度条的间距
+      // 标签放在进度位置右侧，只有超出边界时才往左移动
+      const xLabel = Math.min(cw * progress + gap, cw - lw);
       label.style.left = xLabel + 'px';
       const cover = document.getElementById('year-progress-cover');
       if (cover) {
@@ -105,52 +102,68 @@
         cover.style.width = Math.max(lw, 0) + 'px';
       }
       const pw = popup.getBoundingClientRect().width || 0;
-      const xPopup = Math.min(Math.max(cw * progress - pw / 2, 0), cw - pw);
+      const xPopup = Math.min(cw * progress + gap, cw - pw);
       popup.style.left = xPopup + 'px';
     }
 
-    /**
-     * 动画步骤函数
-     * 使用 requestAnimationFrame 实现平滑动画
-     */
-    function step(ts) {
-      const t = Math.min(1, (ts - startTs) / duration);
-      const current = target * t;
-      currentProgress = current;
-      fill.style.width = (current * 100).toFixed(3) + '%';
-      label.textContent = (current * 100).toFixed(1) + '%';
-      positionLabel(current);
-      if (t < 1) {
-        requestAnimationFrame(step);
-      } else {
-        label.textContent = finalText;
-        positionLabel(target);
-        currentProgress = target;
-        // 动画结束后 2 秒隐藏标签
-        setTimeout(() => {
-          hide(label);
-          hide(cover);
-        }, 2000);
-      }
-    }
-    requestAnimationFrame(step);
+    // 如果需要播放动画
+    if (animate) {
+      show(label);
+      show(cover);
 
-    // 事件监听器绑定（单次）
+      // 动画配置
+      const duration = 1200;
+      const startTs = performance.now();
+
+      /**
+       * 动画步骤函数
+       * 使用 requestAnimationFrame 实现平滑动画
+       */
+      function step(ts) {
+        const t = Math.min(1, (ts - startTs) / duration);
+        const current = target * t;
+        window.__yearProgressCurrent = current;
+        fill.style.width = (current * 100).toFixed(3) + '%';
+        label.textContent = (current * 100).toFixed(1) + '%';
+        positionLabel(current);
+        if (t < 1) {
+          requestAnimationFrame(step);
+        } else {
+          label.textContent = finalText;
+          positionLabel(target);
+          window.__yearProgressCurrent = target;
+          // 动画结束后 2 秒隐藏标签
+          setTimeout(() => {
+            hide(label);
+            hide(cover);
+          }, 2000);
+        }
+      }
+      requestAnimationFrame(step);
+    } else {
+      // 不播放动画，直接设置最终状态
+      fill.style.width = (target * 100).toFixed(3) + '%';
+      label.textContent = finalText;
+      window.__yearProgressCurrent = target;
+      positionLabel(target);
+    }
+
+    // 事件监听器绑定（每次 DOM 更新后都需要检查）
     if (!container.dataset.bound) {
       // 悬停显示标签
       container.addEventListener('mouseenter', () => {
-        if (hoverHideTimer) {
-          clearTimeout(hoverHideTimer);
-          hoverHideTimer = null;
+        if (window.__ypHoverTimer) {
+          clearTimeout(window.__ypHoverTimer);
+          window.__ypHoverTimer = null;
         }
         show(label);
         show(cover);
-        positionLabel(currentProgress || target);
+        positionLabel(window.__yearProgressCurrent || window.__yearProgressTarget);
       });
       // 离开隐藏标签（延迟 1 秒）
       container.addEventListener('mouseleave', () => {
-        if (hoverHideTimer) clearTimeout(hoverHideTimer);
-        hoverHideTimer = setTimeout(() => {
+        if (window.__ypHoverTimer) clearTimeout(window.__ypHoverTimer);
+        window.__ypHoverTimer = setTimeout(() => {
           hide(label);
           hide(cover);
         }, 1000);
@@ -162,7 +175,7 @@
         const daysLeft = Math.ceil((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
         popup.textContent = `今年还剩下${daysLeft}天，要珍惜时间啊！`;
         show(popup);
-        positionLabel(currentProgress || target);
+        positionLabel(window.__yearProgressCurrent || window.__yearProgressTarget);
         if (window.__ypHideTimer) clearTimeout(window.__ypHideTimer);
         window.__ypHideTimer = setTimeout(() => {
           hide(popup);
@@ -172,8 +185,13 @@
     }
   }
 
-  // 初始化和事件监听
-  renderYearProgress();
-  document.addEventListener('astro:after-swap', renderYearProgress);
-  window.addEventListener('resize', renderYearProgress);
+  // 初始化：首次加载时播放动画
+  if (!window.__yearProgressAnimated) {
+    window.__yearProgressAnimated = true;
+    renderYearProgress(true);
+  }
+  // Astro 页面切换后：不播放动画，直接显示最终状态
+  document.addEventListener('astro:after-swap', () => renderYearProgress(false));
+  // 窗口调整大小：仅重新定位，不播放动画
+  window.addEventListener('resize', () => renderYearProgress(false));
 </script>

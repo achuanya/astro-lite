@@ -47,11 +47,35 @@ const latest = mod && mod.getTime() > pub.getTime() ? mod : pub;
 const iso = latest.toISOString();
 // 中文格式（用于 title 提示）
 const title = pub.toLocaleString("zh-CN");
+
+// 计算相对时间（构建时计算，客户端 JS 会更新为最新）
+function formatRelativeTime(date: Date): string {
+  const now = Date.now();
+  let diff = Math.floor((now - date.getTime()) / 1000);
+  if (diff < 0) diff = 0;
+  if (diff < 60) return "几秒前";
+  const m = Math.floor(diff / 60);
+  if (m < 2) return "1 分钟前";
+  if (m < 60) return `${m} 分钟前`;
+  const h = Math.floor(m / 60);
+  if (h < 2) return "1 小时前";
+  if (h < 24) return `${h} 小时前`;
+  const d = Math.floor(h / 24);
+  if (d < 2) return "1 天前";
+  if (d < 30) return `${d} 天前`;
+  const mo = Math.floor(d / 30);
+  if (mo < 2) return "1 个月前";
+  if (mo < 12) return `${mo} 个月前`;
+  const y = Math.floor(d / 365);
+  if (y < 2) return "1 年前";
+  return `${y} 年前`;
+}
+
+const relativeTime = formatRelativeTime(latest);
 ---
 
 <div class:list={["flex items-end space-x-1", className]} title={title}>
   <span class:list={["text-sm", { "sm:text-xs": true }]}>
-    <!-- 时间内容由客户端 JS 填充 -->
-    <time class="text-[var(--posts-list-time-color)]" datetime={iso}></time>
+    <time class="text-[var(--posts-list-time-color)]" datetime={iso}>{relativeTime}</time>
   </span>
 </div>
