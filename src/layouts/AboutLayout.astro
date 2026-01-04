@@ -55,19 +55,17 @@ const blogStats = await getBlogMetrics();
   <main id="main-content">
     <!-- 关于页内容区 -->
     <section id="about" class="prose mb-28 max-w-3xl prose-img:border-0 prose-img:block prose-img:-mx-4 prose-img:w-[calc(100%+2rem)] prose-img:max-w-[calc(100%+2rem)] sm:prose-img:-mx-[3.75rem] sm:prose-img:w-[calc(100%+7.5rem)] sm:prose-img:max-w-[calc(100%+7.5rem)]">
-      <h1 class="mt-6 text-2xl tracking-wider sm:text-3xl">
-        <!-- 统计数据容器（隐藏） -->
-        <!-- 通过 data 属性传递值给客户端脚本 -->
-        <div id="blog-stats-data"
-           data-running-days={blogStats.runningDays}
-           data-total-posts={blogStats.totalPosts}
-           data-total-words={blogStats.totalWordsInWan}
-           data-start-year="2018"
-           data-start-month="8"
-           data-start-day="31"
-           style="display: none;">
-        </div>
-      </h1>
+      <!-- 统计数据容器（隐藏） -->
+      <!-- 通过 data 属性传递值给客户端脚本 -->
+      <div id="blog-stats-data"
+          data-running-days={blogStats.runningDays}
+          data-total-posts={blogStats.totalPosts}
+          data-total-words={blogStats.totalWordsInWan}
+          data-start-year="2018"
+          data-start-month="8"
+          data-start-day="31"
+          style="display: none;">
+      </div>
       <!-- 插槽：页面内容 -->
       <slot />
     </section>
