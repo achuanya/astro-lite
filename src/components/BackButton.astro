@@ -70,10 +70,10 @@ import { SITE } from "@/config";
     const rightOffset = window.innerWidth - frameRect.right;
     const btnWidth = btn.offsetWidth;
 
-    if (rightOffset < btnWidth + 16) {
+    if (rightOffset < btnWidth + 32) {
       btn.style.right = "1rem";
     } else {
-      btn.style.right = `${rightOffset - btnWidth - 8}px`;
+      btn.style.right = `${rightOffset - btnWidth - 16}px`;
     }
   }
 

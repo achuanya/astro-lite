@@ -69,12 +69,12 @@ const { class: className } = Astro.props;
     const btnWidth = btn.offsetWidth;
 
     // 检查容器右侧空间是否足够放下按钮
-    if (rightOffset < btnWidth + 16) {
+    if (rightOffset < btnWidth + 32) {
       // 空间不够，固定在右侧
       btn.style.right = "1rem";
     } else {
-      // 空间够，放在容器外部，距离容器边缘 8px
-      btn.style.right = `${rightOffset - btnWidth - 8}px`;
+      // 空间够，放在容器外部，距离容器边缘 16px
+      btn.style.right = `${rightOffset - btnWidth - 16}px`;
     }
   }
 
