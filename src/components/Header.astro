@@ -95,6 +95,12 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
     Skip to content
   </a>
 
+  <!-- 移动端导航遮罩层 -->
+  <div
+    id="mobile-nav-overlay"
+    class="mobile-nav-overlay sm:!hidden"
+  ></div>
+
   <!-- 导航容器 -->
   <div
     id="nav-container"
@@ -148,7 +154,7 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
       >
         <button
           id="menu-btn"
-          class="focus-outline self-end p-2 sm:hidden"
+          class="focus-outline self-end p-2 sm:hidden relative z-[60]"
           aria-label="Open Menu"
           aria-expanded="false"
           aria-controls="menu-items"
@@ -164,7 +170,7 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
   <YearProgress />
 
   <!-- 主导航菜单 -->
-  <nav aria-label="Primary" class="mx-auto w-full max-w-3xl">
+  <nav aria-label="Primary" class="mx-auto w-full max-w-3xl sm:relative">
     <ul
       id="menu-items"
       class:list={[
@@ -173,6 +179,8 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
         "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-0 sm:[&>li>a]:py-1",
         "[&>li>a]:text-[var(--nav-link)] [&>li>a]:text-sm",
         "sm:flex sm:gap-x-5 sm:gap-y-0", // 桌面端横向展开
+        // 移动端全屏居中垂直排列
+        "max-sm:fixed max-sm:inset-0 max-sm:z-50 max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:gap-1 max-sm:my-0 max-sm:mx-0",
       ]}
     >
       <!-- 文章 -->
@@ -226,10 +234,12 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
         )
       }
       <!-- 下拉菜单：更多 -->
-      <li class="dropdown-container relative flex items-center">
+      <li class="dropdown-container relative flex items-center max-sm:contents">
         <span
           class:list={[
             "dropdown-trigger cursor-pointer block px-4 py-3 text-center font-medium hover:text-accent sm:px-0 sm:py-1 text-[var(--nav-link)] text-sm",
+            // 移动端隐藏"更多"触发器
+            "max-sm:hidden",
             // 当下拉菜单中的任一项激活时，高亮"更多"
             { "active-nav": isActive("/about") || isActive("/archives") || isActive("/tags") || isActive("/search") || isActive("/favorites") }
           ]}
@@ -237,7 +247,7 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
           {_t.common.more}
         </span>
         <!-- 下拉菜单内容 -->
-        <ul class="dropdown-menu flex items-center overflow-hidden transition-all duration-200 ease-out">
+        <ul class="dropdown-menu flex items-center overflow-hidden transition-all duration-200 ease-out max-sm:contents">
           <!-- 收藏 -->
           <li class="dropdown-item">
             <a
@@ -316,27 +326,62 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
    * 1. 点击菜单按钮切换显示/隐藏菜单项
    * 2. 切换图标状态（菜单/关闭）
    * 3. 更新 ARIA 属性以支持无障碍访问
+   * 4. 显示/隐藏磨砂玻璃遮罩层（带动画）
+   * 5. 点击空白区域或导航项关闭菜单
    */
   function toggleNav() {
     const menuBtn = document.querySelector("#menu-btn");
-    const menuItems = document.querySelector("#menu-items");
+    const menuItems = document.querySelector("#menu-items") as HTMLElement | null;
     const menuIcon = document.querySelector("#menu-icon");
     const closeIcon = document.querySelector("#close-icon");
+    const overlay = document.querySelector("#mobile-nav-overlay");
 
-    if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
+    if (!menuBtn || !menuItems || !menuIcon || !closeIcon || !overlay) return;
+
+    // 关闭菜单的函数
+    const closeMenu = () => {
+      menuBtn.setAttribute("aria-expanded", "false");
+      menuBtn.setAttribute("aria-label", "Open Menu");
+      menuItems.classList.add("hidden");
+      menuIcon.classList.remove("hidden");
+      closeIcon.classList.add("hidden");
+      overlay.classList.remove("active");
+      document.body.style.overflow = "";
+    };
+
+    // 打开菜单的函数
+    const openMenu = () => {
+      menuBtn.setAttribute("aria-expanded", "true");
+      menuBtn.setAttribute("aria-label", "Close Menu");
+      menuItems.classList.remove("hidden");
+      menuIcon.classList.add("hidden");
+      closeIcon.classList.remove("hidden");
+      overlay.classList.add("active");
+      document.body.style.overflow = "hidden";
+    };
 
     menuBtn.addEventListener("click", () => {
-      // 获取当前菜单状态
-      const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
-      // 切换状态
-      menuBtn.setAttribute("aria-expanded", openMenu ? "false" : "true");
-      menuBtn.setAttribute("aria-label", openMenu ? "Open Menu" : "Close Menu");
+      const isOpen = menuBtn.getAttribute("aria-expanded") === "true";
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
 
-      // 切换菜单显示
-      menuItems.classList.toggle("hidden");
-      // 切换图标显示
-      menuIcon.classList.toggle("hidden");
-      closeIcon.classList.toggle("hidden");
+    // 点击遮罩层关闭菜单
+    overlay.addEventListener("click", closeMenu);
+
+    // 点击导航菜单空白区域关闭（点击 ul 本身而非子元素）
+    menuItems.addEventListener("click", (e) => {
+      if (e.target === menuItems) {
+        closeMenu();
+      }
+    });
+
+    // 点击导航链接后关闭菜单
+    menuItems.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", closeMenu);
     });
   }
 
@@ -347,8 +392,27 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
   document.addEventListener("astro:after-swap", toggleNav);
 </script>
 
-<!-- 样式：下拉菜单动画 -->
+<!-- 样式：下拉菜单动画 + 移动端导航 -->
 <style>
+  /* 移动端磨砂玻璃遮罩层 */
+  .mobile-nav-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* 动画：与页面切换动画时长一致 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  .mobile-nav-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
   /* 横向展开下拉菜单 - 从左向右 */
   .dropdown-menu {
     clip-path: inset(0 100% 0 0);
@@ -367,6 +431,17 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
   @media (max-width: 640px) {
     .dropdown-menu {
       clip-path: none;
+    }
+
+    /* 移动端菜单导航文字颜色固定为深色模式配色 */
+    #menu-items a,
+    #menu-items button {
+      color: #d19a66 !important;
+    }
+
+    /* 移动端菜单激活状态颜色 */
+    #menu-items a.active-nav {
+      color: #eaedf3 !important;
     }
   }
 </style>

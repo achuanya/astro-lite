@@ -174,11 +174,6 @@ html[data-theme="dark"] {
   }
 }
 
-/* 菜单展开时移除年度进度条底部间距（纯 CSS，通过 :has 检测可见菜单） */
-header:has(#menu-items:not(.hidden)) #year-progress {
-  margin-bottom: 0 !important;
-}
-
 /* ===== Ultra-thin scrollbar enhancement (no color change) ===== */
 
 /* Firefox */
