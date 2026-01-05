@@ -231,7 +231,7 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
           class:list={[
             "dropdown-trigger cursor-pointer block px-4 py-3 text-center font-medium hover:text-accent sm:px-0 sm:py-1 text-[var(--nav-link)] text-sm",
             // 当下拉菜单中的任一项激活时，高亮"更多"
-            { "active-nav": isActive("/about") || isActive("/archives") || isActive("/search") || isActive("/favorites") }
+            { "active-nav": isActive("/about") || isActive("/archives") || isActive("/tags") || isActive("/search") || isActive("/favorites") }
           ]}
         >
           {_t.common.more}
@@ -278,6 +278,18 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
               </li>
             )
           }
+          <!-- 标签 -->
+          <li class="dropdown-item">
+            <a
+              href="/tags"
+              class:list={[
+                "block px-4 py-3 sm:py-1 sm:px-0 sm:ml-5 text-sm text-[var(--nav-link)] hover:text-accent whitespace-nowrap font-medium",
+                { "active-nav": isActive("/tags") }
+              ]}
+            >
+              {_t.tags.title}
+            </a>
+          </li>
           <!-- 搜索 -->
           <li class="dropdown-item">
             <a

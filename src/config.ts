@@ -101,7 +101,7 @@ export const SITE = {
    * 是否在文章详情页显示"返回"按钮
    * false 表示使用浏览器默认后退行为
    */
-  showBackButton: false,
+  showBackButton: true,
 
   /**
    * 是否在文章详情页显示页面描述

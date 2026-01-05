@@ -38,14 +38,13 @@ const { class: className } = Astro.props;
 <button
   id="back-to-top"
   aria-label="Back To Top"
-  class={`fixed right-4 sm:right-6 md:right-8 lg:right-12 xl:right-30 bottom-6 md:bottom-8 z-50 focus-outline px-3 py-1 whitespace-nowrap rounded-md bg-foreground/40 backdrop-blur-sm border border-foreground/20 text-background shadow-sm hover:bg-foreground/50 hover:opacity-100 transition duration-300 ease-in-out translate-y-8 opacity-0 pointer-events-none text-xs sm:text-sm flex items-center justify-center gap-1 ${className || ""}`}
+  class={`fixed bottom-6 md:bottom-8 z-50 focus-outline w-10 h-10 whitespace-nowrap rounded-md bg-foreground/40 backdrop-blur-sm border border-foreground/20 text-background shadow-sm hover:bg-foreground/50 hover:opacity-100 transition duration-300 ease-in-out translate-y-8 opacity-0 pointer-events-none text-xs sm:text-sm flex items-center justify-center gap-1 ${className || ""}`}
   data-mobile-width={SITE.backToTop.mobileBreakpoint}
   data-show-after-ratio={SITE.backToTop.showAfterRatio}
   data-min-overflow={SITE.backToTop.minOverflowPx}
   data-min-scroll-top={SITE.backToTop.minScrollTopPx}
 >
   <IconChevronUp class="h-4 w-4" />
-  <span>Back To Top</span>
 </button>
 
 <script is:inline data-astro-rerun type="module">
@@ -56,6 +55,28 @@ const { class: className } = Astro.props;
   const minOverflow = Number(el?.dataset.minOverflow);
   const minScrollTop = Number(el?.dataset.minScrollTop);
   const isMobileDevice = () => window.innerWidth < mobileWidth;
+
+  /**
+   * 更新按钮位置，使其紧贴 site-frame 容器右边缘
+   */
+  function updatePosition() {
+    const btn = document.getElementById("back-to-top");
+    const frame = document.getElementById("site-frame");
+    if (!btn || !frame) return;
+
+    const frameRect = frame.getBoundingClientRect();
+    const rightOffset = window.innerWidth - frameRect.right;
+    const btnWidth = btn.offsetWidth;
+
+    // 检查容器右侧空间是否足够放下按钮
+    if (rightOffset < btnWidth + 16) {
+      // 空间不够，固定在右侧
+      btn.style.right = "1rem";
+    } else {
+      // 空间够，放在容器外部，距离容器边缘 8px
+      btn.style.right = `${rightOffset - btnWidth - 8}px`;
+    }
+  }
 
   /**
    * 更新按钮显示状态
@@ -73,6 +94,7 @@ const { class: className } = Astro.props;
     const hasEnoughOverflow = overflow >= minOverflow;
     const ratio = overflow > 0 ? scrollTop / overflow : 0;
     const show = hasEnoughOverflow && (ratio >= showAfterRatio || scrollTop >= minScrollTop);
+    const wasVisible = !el.classList.contains("opacity-0");
     if (show) {
       el.classList.remove("translate-y-8", "opacity-0", "pointer-events-none");
       el.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
@@ -80,15 +102,22 @@ const { class: className } = Astro.props;
       el.classList.add("translate-y-8", "opacity-0", "pointer-events-none");
       el.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
     }
+    // 通知 BackButton 位置变化
+    if (show !== wasVisible) {
+      window.dispatchEvent(new CustomEvent("backToTopVisibilityChange", { detail: { visible: show } }));
+    }
   }
 
   // 监听滚动事件
   window.addEventListener("scroll", updateVisibility, { passive: true });
+  // 监听窗口大小变化，更新按钮位置
+  window.addEventListener("resize", updatePosition, { passive: true });
   // View Transitions 页面加载后更新
-  document.addEventListener("astro:page-load", updateVisibility);
-  document.addEventListener("astro:after-swap", updateVisibility);
+  document.addEventListener("astro:page-load", () => { updateVisibility(); updatePosition(); });
+  document.addEventListener("astro:after-swap", () => { updateVisibility(); updatePosition(); });
   // 初始化
   updateVisibility();
+  updatePosition();
 
   /**
    * 点击处理

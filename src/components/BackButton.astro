@@ -2,65 +2,131 @@
 /**
  * 返回按钮组件
  *
- * @fileoverview 显示返回按钮，用于文章详情页
+ * @fileoverview 固定在右下角的返回按钮，位于返回顶部按钮上方
  *
- * 核心逻辑：
- * 1. 根据 config.ts 配置决定是否显示
- * 2. 默认返回首页，但支持从 sessionStorage 读取 backUrl
- * 3. backUrl 由搜索页设置，点击文章后返回搜索结果
+ * 显示规则：
+ * - 文章页面 /posts/xxx：显示，返回首页或 sessionStorage 中的 backUrl
+ * - 分类详情页 /categories/xxx：显示，返回 /categories
+ * - 标签详情页 /tags/xxx：显示，返回 /tags
+ * - 其他页面：隐藏
  *
  * 依赖关系：
- * - 被文章详情页使用
+ * - 被 Layout.astro 导入，全局使用
  * - 依赖 config.ts 的 showBackButton 配置
- * - 依赖 LinkButton.astro 生成按钮
  */
 
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
-import LinkButton from "./LinkButton.astro";
 import { SITE } from "@/config";
 ---
 
 {
   SITE.showBackButton && (
-    <div class="mx-auto flex w-full max-w-3xl items-center justify-start px-2">
-      <LinkButton
-        id="back-button"
-        href="/"
-        class="focus-outline mt-8 mb-2 flex hover:text-foreground/75"
-      >
-        <IconChevronLeft class="inline-block size-6" />
-        <span>Go back</span>
-      </LinkButton>
-    </div>
+    <a
+      id="back-button"
+      href="/"
+      aria-label="Go back"
+      class="fixed bottom-6 md:bottom-8 z-50 focus-outline w-10 h-10 rounded-md bg-foreground/40 backdrop-blur-sm border border-foreground/20 text-background shadow-sm hover:bg-foreground/50 transition-all duration-300 ease-in-out hidden items-center justify-center"
+    >
+      <IconChevronLeft class="h-4 w-4" />
+    </a>
   )
 }
 
-<script>
+<script is:inline data-astro-rerun type="module">
   /**
-   * 更新返回按钮的链接地址
-   *
-   * 逻辑：
-   * 1. 从 sessionStorage 读取 backUrl
-   * 2. 如果存在，更新返回按钮的 href
-   *
-   * 使用场景：
-   * - 用户在搜索页点击文章
-   * - 搜索页将搜索 URL 存入 sessionStorage
-   * - 文章详情页读取并设置返回按钮
+   * 判断当前页面是否需要显示返回按钮，并设置返回链接
    */
-  function updateGoBackUrl() {
-    const backButton: HTMLAnchorElement | null =
-      document.querySelector("#back-button");
+  function getBackInfo() {
+    const path = window.location.pathname;
 
-    const backUrl = sessionStorage.getItem("backUrl");
+    // 文章页面 /posts/xxx
+    if (/^\/posts\/[^/]+/.test(path)) {
+      const backUrl = sessionStorage.getItem("backUrl");
+      return { show: true, href: backUrl || "/" };
+    }
 
-    if (backUrl && backButton) {
-      backButton.href = backUrl;
+    // 分类详情页 /categories/xxx
+    if (/^\/categories\/[^/]+/.test(path)) {
+      return { show: true, href: "/categories" };
+    }
+
+    // 标签详情页 /tags/xxx
+    if (/^\/tags\/[^/]+/.test(path)) {
+      return { show: true, href: "/tags" };
+    }
+
+    return { show: false, href: "/" };
+  }
+
+  /**
+   * 更新返回按钮位置，与 BackToTop 保持一致
+   */
+  function updatePosition() {
+    const btn = document.getElementById("back-button");
+    const frame = document.getElementById("site-frame");
+    if (!btn || !frame) return;
+
+    const frameRect = frame.getBoundingClientRect();
+    const rightOffset = window.innerWidth - frameRect.right;
+    const btnWidth = btn.offsetWidth;
+
+    if (rightOffset < btnWidth + 16) {
+      btn.style.right = "1rem";
+    } else {
+      btn.style.right = `${rightOffset - btnWidth - 8}px`;
     }
   }
 
+  /**
+   * 更新返回按钮的显示状态和链接
+   */
+  function updateBackButton() {
+    const btn = document.getElementById("back-button");
+    if (!btn) return;
+
+    const { show, href } = getBackInfo();
+
+    if (show) {
+      btn.href = href;
+      btn.classList.remove("hidden");
+      btn.classList.add("flex");
+      updatePosition();
+      // 检查 BackToTop 当前状态并调整位置
+      const backToTop = document.getElementById("back-to-top");
+      const isBackToTopVisible = backToTop && !backToTop.classList.contains("opacity-0");
+      updateVerticalPosition(isBackToTopVisible);
+    } else {
+      btn.classList.add("hidden");
+      btn.classList.remove("flex");
+    }
+  }
+
+  /**
+   * 更新返回按钮的垂直位置
+   * @param {boolean} shiftUp - 是否向上移动让开位置
+   */
+  function updateVerticalPosition(shiftUp) {
+    const btn = document.getElementById("back-button");
+    if (!btn) return;
+
+    const isMobile = window.innerWidth < 768;
+    if (shiftUp) {
+      btn.style.bottom = isMobile ? "4.5rem" : "5rem";
+    } else {
+      btn.style.bottom = isMobile ? "1.5rem" : "2rem";
+    }
+  }
+
+  // 监听 BackToTop 可见性变化
+  window.addEventListener("backToTopVisibilityChange", (e) => {
+    updateVerticalPosition(e.detail.visible);
+  });
+
+  // 监听窗口大小变化
+  window.addEventListener("resize", updatePosition, { passive: true });
   // View Transitions 页面加载后更新
-  document.addEventListener("astro:page-load", updateGoBackUrl);
+  document.addEventListener("astro:page-load", updateBackButton);
+  document.addEventListener("astro:after-swap", updateBackButton);
   // 初始化
-  updateGoBackUrl();
+  updateBackButton();
 </script>

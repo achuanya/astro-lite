@@ -24,6 +24,7 @@ import { ClientRouter } from "astro:transitions";
 import { SITE } from "@/config";
 import "@/styles/global.css";
 import BackToTop from "@/components/BackToTop.astro";
+import BackButton from "@/components/BackButton.astro";
 
 // Google 站点验证码（环境变量）
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
@@ -250,6 +251,8 @@ const structuredData = {
       <!-- 插槽：子布局内容 -->
       <slot />
     </div>
+    <!-- 返回按钮 -->
+    <BackButton />
     <!-- 返回顶部按钮 -->
     <BackToTop />
   </body>
