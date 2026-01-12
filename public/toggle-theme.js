@@ -63,7 +63,7 @@ function getUserSetThemeDate() {
 function shouldUseDarkThemeByTime() {
   try {
     const now = new Date();
-    const shanghaiTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
+    const shanghaiTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Shanghai" }));
     const hour = shanghaiTime.getHours();
     return hour >= DARK_START_HOUR || hour < DARK_END_HOUR;
   } catch (error) {
@@ -77,46 +77,46 @@ function shouldUseDarkThemeByTime() {
 function getTodayDateString() {
   try {
     const now = new Date();
-    const shanghaiTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Shanghai"}));
-    return shanghaiTime.getFullYear() + '-' + 
-           String(shanghaiTime.getMonth() + 1).padStart(2, '0') + '-' + 
-           String(shanghaiTime.getDate()).padStart(2, '0');
+    const shanghaiTime = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Shanghai" }));
+    return shanghaiTime.getFullYear() + '-' +
+      String(shanghaiTime.getMonth() + 1).padStart(2, '0') + '-' +
+      String(shanghaiTime.getDate()).padStart(2, '0');
   } catch (error) {
     console.warn("时区转换失败，使用本地时间:", error);
     const today = new Date();
-    return today.getFullYear() + '-' + 
-           String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-           String(today.getDate()).padStart(2, '0');
+    return today.getFullYear() + '-' +
+      String(today.getMonth() + 1).padStart(2, '0') + '-' +
+      String(today.getDate()).padStart(2, '0');
   }
 }
 
 function isUserPreferenceValidToday() {
   if (!getUserManuallySetTheme()) return false;
-  
+
   const today = getTodayDateString();
   const setDate = getUserSetThemeDate();
-  
+
   if (setDate !== today) {
     safeRemove("userSetTheme");
     safeRemove("userSetThemeDate");
     console.log("用户主题设置已过期，重新启用自动切换");
     return false;
   }
-  
+
   return true;
 }
 
 function getPreferTheme() {
   try {
     const currentTheme = getCurrentThemeFromStorage();
-    
+
     debugLog("获取主题偏好", {
       currentTheme,
       isValidToday: isUserPreferenceValidToday(),
       shouldUseDark: shouldUseDarkThemeByTime(),
       primaryScheme: primaryColorScheme
     });
-    
+
     if (isUserPreferenceValidToday() && currentTheme) {
       debugLog("使用用户手动设置:", currentTheme);
       return currentTheme;
@@ -155,7 +155,7 @@ function setPreference(userManualSet = false) {
     } else {
       debugLog("自动设置主题", { theme: themeValue });
     }
-    
+
     reflectPreference();
   } catch (error) {
     handleThemeError(error, "setPreference");
@@ -180,7 +180,7 @@ function cleanupAutoTheme() {
     clearInterval(autoThemeTimer);
     autoThemeTimer = null;
   }
-  
+
   if (systemThemeMql && systemThemeListener) {
     if (typeof systemThemeMql.removeEventListener === "function") {
       systemThemeMql.removeEventListener("change", systemThemeListener);
@@ -197,17 +197,17 @@ function cleanupAutoTheme() {
 
 function setupAutoTheme() {
   cleanupAutoTheme();
-  
+
   if (!isUserPreferenceValidToday()) {
     const autoThemeChecker = () => {
       themeValue = getPreferTheme();
       reflectPreference();
     };
-    
+
     autoThemeChecker();
-    
+
     autoThemeTimer = setInterval(autoThemeChecker, 60000);
-    
+
     systemThemeMql = window.matchMedia("(prefers-color-scheme: dark)");
     systemThemeListener = ({ matches: isDark }) => {
       if (!isUserPreferenceValidToday() && !shouldUseDarkThemeByTime()) {
@@ -215,7 +215,7 @@ function setupAutoTheme() {
         setPreference(false);
       }
     };
-    
+
     if (typeof systemThemeMql.addEventListener === "function") {
       systemThemeMql.addEventListener("change", systemThemeListener);
     } else {
@@ -238,11 +238,56 @@ window.onload = () => {
       existingBtn.removeEventListener("click", existingBtn._themeClickHandler);
     }
 
-    const themeClickHandler = () => {
-      themeValue = themeValue === "light" ? "dark" : "light";
-      setPreference(true);
-      
-      setupAutoTheme();
+    const themeClickHandler = (event) => {
+      // 检查 View Transitions 支持和减弱动画设置
+      if (
+        !document.startViewTransition ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      ) {
+        themeValue = themeValue === "light" ? "dark" : "light";
+        setPreference(true);
+        setupAutoTheme();
+        return;
+      }
+
+      const transition = document.startViewTransition(() => {
+        themeValue = themeValue === "light" ? "dark" : "light";
+        setPreference(true);
+        setupAutoTheme();
+      });
+
+      transition.ready.then(() => {
+        const clipPath = [
+          'inset(0 0 100% 0)', // 从上往下，初始状态底部被完全裁剪
+          'inset(0 0 0 0)',    // 结束状态完全显示
+        ];
+
+        // 注入临时样式以禁用默认动画
+        const style = document.createElement('style');
+        style.innerHTML = `
+          ::view-transition-old(root),
+          ::view-transition-new(root) {
+            animation: none;
+            mix-blend-mode: normal;
+          }
+        `;
+        document.head.appendChild(style);
+
+        document.documentElement.animate(
+          {
+            clipPath: clipPath,
+          },
+          {
+            duration: 1000,
+            easing: "ease-out",
+            pseudoElement: "::view-transition-new(root)",
+          }
+        );
+
+        transition.finished.finally(() => {
+          style.remove();
+        });
+      });
     };
 
     const themeBtn = document.querySelector("#theme-btn");
@@ -265,7 +310,7 @@ window.onload = () => {
       .querySelector("meta[name='theme-color']")
       ?.setAttribute("content", bgColor);
   });
-  
+
   setupAutoTheme();
 };
 

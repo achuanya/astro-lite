@@ -38,7 +38,7 @@ const { class: className } = Astro.props;
 <button
   id="back-to-top"
   aria-label="Back To Top"
-  class={`fixed bottom-6 md:bottom-8 z-50 focus-outline w-10 h-10 whitespace-nowrap rounded-md bg-foreground/40 backdrop-blur-sm border border-foreground/20 text-background shadow-sm hover:bg-foreground/50 hover:opacity-100 transition duration-300 ease-in-out translate-y-8 opacity-0 pointer-events-none text-xs sm:text-sm flex items-center justify-center gap-1 ${className || ""}`}
+  class={`fixed bottom-6 md:bottom-8 z-50 focus-outline w-10 h-10 whitespace-nowrap rounded-md bg-white/40 dark:bg-gray-900/40 backdrop-blur-md border border-white/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-200 shadow-sm hover:bg-white/70 dark:hover:bg-gray-800/70 hover:scale-110 hover:shadow-lg hover:opacity-100 transition-all duration-300 ease-out translate-y-8 opacity-0 pointer-events-none text-xs sm:text-sm flex items-center justify-center gap-1 ${className || ""}`}
   data-mobile-width={SITE.backToTop.mobileBreakpoint}
   data-show-after-ratio={SITE.backToTop.showAfterRatio}
   data-min-overflow={SITE.backToTop.minOverflowPx}
@@ -93,18 +93,28 @@ const { class: className } = Astro.props;
     const overflow = doc.scrollHeight - doc.clientHeight;
     const hasEnoughOverflow = overflow >= minOverflow;
     const ratio = overflow > 0 ? scrollTop / overflow : 0;
-    const show = hasEnoughOverflow && (ratio >= showAfterRatio || scrollTop >= minScrollTop);
+    const show =
+      hasEnoughOverflow &&
+      (ratio >= showAfterRatio || scrollTop >= minScrollTop);
     const wasVisible = !el.classList.contains("opacity-0");
     if (show) {
       el.classList.remove("translate-y-8", "opacity-0", "pointer-events-none");
       el.classList.add("translate-y-0", "opacity-100", "pointer-events-auto");
     } else {
       el.classList.add("translate-y-8", "opacity-0", "pointer-events-none");
-      el.classList.remove("translate-y-0", "opacity-100", "pointer-events-auto");
+      el.classList.remove(
+        "translate-y-0",
+        "opacity-100",
+        "pointer-events-auto"
+      );
     }
     // 通知 BackButton 位置变化
     if (show !== wasVisible) {
-      window.dispatchEvent(new CustomEvent("backToTopVisibilityChange", { detail: { visible: show } }));
+      window.dispatchEvent(
+        new CustomEvent("backToTopVisibilityChange", {
+          detail: { visible: show },
+        })
+      );
     }
   }
 
@@ -113,8 +123,14 @@ const { class: className } = Astro.props;
   // 监听窗口大小变化，更新按钮位置
   window.addEventListener("resize", updatePosition, { passive: true });
   // View Transitions 页面加载后更新
-  document.addEventListener("astro:page-load", () => { updateVisibility(); updatePosition(); });
-  document.addEventListener("astro:after-swap", () => { updateVisibility(); updatePosition(); });
+  document.addEventListener("astro:page-load", () => {
+    updateVisibility();
+    updatePosition();
+  });
+  document.addEventListener("astro:after-swap", () => {
+    updateVisibility();
+    updatePosition();
+  });
   // 初始化
   updateVisibility();
   updatePosition();
