@@ -204,6 +204,7 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       color: var(--accent);
       outline-offset: 1px;
       outline-color: var(--accent);
+      font-size: 0.875rem;
     }
 
     /* 标题/摘录字体规范化 */
@@ -219,6 +220,11 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
     .pagefind-ui__search-clear:focus-visible {
       text-decoration-line: none;
       outline-width: 2px;
+    }
+
+    /* 列表项垂直间距 */
+    .pagefind-ui__result {
+      padding: 15px 0 !important;
     }
 
     /* 移除最后一项的边框 */
