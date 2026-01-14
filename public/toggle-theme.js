@@ -238,7 +238,7 @@ window.onload = () => {
       existingBtn.removeEventListener("click", existingBtn._themeClickHandler);
     }
 
-    const themeClickHandler = (event) => {
+    const themeClickHandler = () => {
       // 检查 View Transitions 支持和减弱动画设置
       if (
         !document.startViewTransition ||

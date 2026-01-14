@@ -88,18 +88,41 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
         showImages: false,
         // 移除 URL 中的 .html 后缀
         processResult: function (result: any) {
-          result.url = result.url.replace(/\.html(?=[?#]|$)/, "");
+          const cleanUrl = (url: string) =>
+            url
+              .replace(/\.html$/, "")
+              .replace(/\.html[?#]/, (match: string) => match.substring(5)); // Explicitly handle end of string or query/hash
+
+          result.url = cleanUrl(result.url);
+
+          // 处理嵌套结果 (Sub-results)
+          if (result.sub_results && Array.isArray(result.sub_results)) {
+            result.sub_results.forEach((sub: any) => {
+              sub.url = cleanUrl(sub.url);
+            });
+          }
+
           return result;
         },
         // 处理搜索关键词：更新 URL 和存储返回 URL
         processTerm: function (term: string) {
-          params.set("q", term); // 更新 URL 参数
-          history.replaceState(history.state, "", "?" + params.toString()); // 更新 URL（不刷新）
+          // 避免重复包含
+          const trimmed = term.trim();
+          if (!trimmed) return term;
+
+          // 更新 URL 参数（存储原始关键词）
+          params.set("q", term);
+          history.replaceState(history.state, "", "?" + params.toString());
 
           // 存储搜索 URL 到 sessionStorage（返回按钮使用）
           const backUrl = pageFindSearch?.dataset?.backurl;
           sessionStorage.setItem("backUrl", backUrl + "?" + params.toString());
 
+          // 强制全字匹配（Exact Match）
+          // 如果用户没有使用引号，自动添加引号
+          if (!trimmed.startsWith('"') || !trimmed.endsWith('"')) {
+            return `"${trimmed}"`;
+          }
           return term;
         },
       });
