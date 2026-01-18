@@ -73,27 +73,6 @@ const rehypeRewriteOption: RehypeRewriteOptions = {
         // fetchpriority: "auto",
       };
     }
-    // Use rehype-external-links instead
-    // if (
-    //   node.type === "element" &&
-    //   node.tagName === "a" &&
-    //   node.properties?.href
-    // ) {
-    //   const href = node.properties.href;
-    //   if (
-    //     typeof href === "string" &&
-    //     !href.startsWith("/") &&
-    //     !href.startsWith(SITE.website)
-    //   ) {
-    //     // Add target="_blank" (open in new tab)
-    //     // and rel="noopener noreferrer" (security and privacy)
-    //     node.properties = {
-    //       ...node.properties,
-    //       target: "_blank",
-    //       rel: "noopener noreferrer",
-    //     };
-    //   }
-    // }
   },
 };
 
@@ -124,6 +103,7 @@ export default defineConfig({
       scope: '#article',
       imageBase: "https://cos.lhasa.icu/dist/images/",
       fileDir: true,
+      
       exif: {
         enabled: true,
         fields: ['Model', 'LensModel', 'FocalLength', 'FNumber', 'ExposureTime', 'ISO', 'DateTimeOriginal'],
@@ -155,13 +135,6 @@ export default defineConfig({
         },
       ],
       [rehypeRewrite, rehypeRewriteOption],
-      [
-        rehypeWrapAll,
-        {
-          selector: "img",
-          wrapper: "figure.image-bleed.not-prose",
-        },
-      ],
     ],
     // Use ExpressiveCode instead of shiki
     syntaxHighlight: false,

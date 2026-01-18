@@ -25,6 +25,8 @@ html[data-theme="light"] {
   --toc-top-text-color: #ffffff;
   --year-progress-fill: var(--page-background);
   --posts-list-time-color: #969696;
+  --skeleton: #e5e7eb;
+  --error: #b91c1c;
 }
 
 html[data-theme="dark"] {
@@ -34,13 +36,15 @@ html[data-theme="dark"] {
   --accent: #d19a66;
   --muted: #343f60bf;
   --border: #4d4844;
-  --strong-font-weight: 800; /* Compensating visual weight */
+  --strong-font-weight: 800;
   --nav-link: var(--foreground);
   --nav-link-active: var(--accent);
   --comment-badge-bg: var(--color-accent);
   --toc-top-text-color: var(--foreground);
   --year-progress-fill: var(--accent);
   --posts-list-time-color: #8b8b8b;
+  --skeleton: #374151;
+  --error: #f87171;
 }
 
 @theme inline {
@@ -49,6 +53,8 @@ html[data-theme="dark"] {
   --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-skeleton: var(--skeleton);
+  --color-error: var(--error);
 }
 
 @layer base {

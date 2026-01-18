@@ -67,6 +67,16 @@ export const SITE = {
    */
   archivesPerPage: 3,
 
+  /**
+   * Feeds 列表（邻居页）初始显示数量
+   */
+  feedsPerIndex: 12,
+
+  /**
+   * Feeds 列表加载更多时每页显示数量
+   */
+  feedsPerPage: 12,
+
   // ========== 内容生成配置 ==========
   /**
    * 定时文章发布的时间容差（毫秒）
