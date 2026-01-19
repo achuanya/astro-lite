@@ -12,18 +12,18 @@ comments: false
 image: cover.svg
 ---
 
-![ ](westlake-passenger-boat-1.png)
-![ ](westlake-passenger-boat-2.png)
+![ ](westlake-passenger-boat-1.jpg)
+![ ](westlake-passenger-boat-2.jpg)
 
-![ ](westlake-passenger-boat-3.png)
-![ ](westlake-passenger-boat-4.png)
-![ ](westlake-passenger-boat-5.png)
+![ ](westlake-passenger-boat-3.jpg)
+![ ](westlake-passenger-boat-4.jpg)
+![ ](westlake-passenger-boat-5.jpg)
 
-![ ](westlake-passenger-boat-6.png)
-![ ](westlake-passenger-boat-7.png)
+![ ](westlake-passenger-boat-6.jpg)
+![ ](westlake-passenger-boat-7.jpg)
 
-![ ](westlake-passenger-boat-8.png)
-![ ](westlake-passenger-boat-9.png)
-![ ](westlake-passenger-boat-10.png)
+![ ](westlake-passenger-boat-8.jpg)
+![ ](westlake-passenger-boat-9.jpg)
+![ ](westlake-passenger-boat-10.jpg)
 
-![ ](westlake-passenger-boat-11.png)
+![ ](westlake-passenger-boat-11.jpg)
