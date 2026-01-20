@@ -103,12 +103,6 @@ export default defineConfig({
       scope: '#article',
       imageBase: "https://cos.lhasa.icu/dist/images/",
       fileDir: true,
-      
-      exif: {
-        enabled: true,
-        fields: ['Model', 'LensModel', 'FocalLength', 'FNumber', 'ExposureTime', 'ISO', 'DateTimeOriginal'],
-        separator: ' · '
-      }
     }),
     expressiveCode(expressiveCodeOption),
     mdx(),
