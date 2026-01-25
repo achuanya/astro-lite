@@ -1,18 +1,16 @@
 ---
-title: "腾讯CDN流量被恶意盗刷"
-date: 2024-07-25T00:44:00+08:00
+title: 腾讯CDN流量被恶意盗刷
+date: 2024-07-25 00:44:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - PCDN
-categories: ["技术"]
+- PCDN
+categories:
+- 技术
 toc: false
 comments: false
 image: 1721836926102.jpg_50
----
-
-![来自腾讯云的邮件](1721837126591.jpg)
+---![来自腾讯云的邮件](1721837126591.jpg)
 
 看到这张图的时候，我很震惊。这个CDN流量包是我昨天凌晨刚买的，直到此刻才发现我的CDN流量被恶意盗刷了。
 

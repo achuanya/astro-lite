@@ -1,17 +1,15 @@
 ---
-title: "(转)一个程序员眼中的价值"
-date: 2019-06-04T11:54:00+08:00
+title: (转)一个程序员眼中的价值
+date: 2019-06-04 11:54:00+08:00
 featured: false
 draft: false
-tags:
-  - 生活
-categories: ["生活"]
+tags: []
+categories:
+- 生活
 toc: false
 comments: false
 image: jiazhi.jpg_50
----
-
-> 本文转自[Laruence](https://www.laruence.com/2015/01/02/2999.html)
+---> 本文转自[Laruence](https://www.laruence.com/2015/01/02/2999.html)
 
 前天看了TimYang的<[一个技术从业人员眼中的2014][1]> , 有些观点我很是赞同, 于是我也有了想写点什么的冲动…
 

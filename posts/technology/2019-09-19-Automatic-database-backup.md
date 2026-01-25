@@ -1,18 +1,16 @@
 ---
-title: "在 CentOS 下实现 MySQL 数据库定时自动备份"
-date: 2019-09-19T18:44:00+08:00
+title: 在 CentOS 下实现 MySQL 数据库定时自动备份
+date: 2019-09-19 18:44:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - CentOS
-categories: ["技术"]
+- CentOS
+categories:
+- 技术
 toc: false
 comments: false
 image: centos.jpg_50
----
-
-前几次系统数据老是出问题，前几天经理让我给写个数据库自动备份，Shell能力有限，周六日再改改...
+---前几次系统数据老是出问题，前几天经理让我给写个数据库自动备份，Shell能力有限，周六日再改改...
 
 ## 编写 Shell
 ```shell

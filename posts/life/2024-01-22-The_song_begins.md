@@ -1,17 +1,15 @@
 ---
-title: "我回来了"
-date: 2024-01-22T12:36:00+08:00
+title: 我回来了
+date: 2024-01-22 12:36:00+08:00
 featured: false
 draft: false
-tags:
-  - 生活
-categories: ["生活"]
+tags: []
+categories:
+- 生活
 toc: false
 comments: false
 image: huilai.jpg_50
----
-
-一晃几年过去了，一切都物是人非，说起来有点哽咽...哎...
+---一晃几年过去了，一切都物是人非，说起来有点哽咽...哎...
 
 最重要的域名也在今年搞丢了，续费保护期也过了，曾经二三百的域名，现在要二万块...先拿github的用用，以后再说吧
 

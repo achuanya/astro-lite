@@ -1,20 +1,19 @@
 ---
-title: "优化了一下博客的交互细节"
-date: 2026-01-13T00:39:00+08:00
+title: 优化了一下博客的交互细节
+date: 2026-01-13 00:39:00+08:00
 featured: false
 draft: false
 tags:
-  - Astro
-  - View Transitions
-  - 交互设计
-  - 前端
-categories: ["技术"]
+- Astro
+- CSS
+- 交互设计
+- 前端
+categories:
+- 技术
 toc: false
 comments: true
 image: cover.svg
----
-
-晚上刷 1900 的博客，我忽然想起了 **主题配色切换动画**
+---晚上刷 1900 的博客，我忽然想起了 **主题配色切换动画**
 
 随手输入关键字 “**主题**” 一搜，果然找到了那篇：[给博客主题切换加个动画](https://1900.live/gei-bo-ke-zhu-ti-qie-huan-jia-ge-dong-hua/)
 

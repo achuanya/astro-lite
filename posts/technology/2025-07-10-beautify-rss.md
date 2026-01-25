@@ -1,18 +1,16 @@
 ---
-title: "这个 RSS 有意思"
-date: 2025-07-10T02:26:00+08:00
+title: 这个 RSS 有意思
+date: 2025-07-10 02:26:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - RSS
-categories: ["技术"]
+- RSS
+categories:
+- 技术
 toc: false
 comments: false
 image: beautify-rss.png
----
-
-晚上逛 #UNTAG 发现一个有意思的项目 —— **RSS.Beauty**
+---晚上逛 #UNTAG 发现一个有意思的项目 —— **RSS.Beauty**
 
 一款开源 RSS 美化工具。支持 RSS 2.0 和 Atom 1.0 格式，可将原始订阅源转换加以渲染。
 

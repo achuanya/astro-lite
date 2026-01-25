@@ -1,18 +1,16 @@
 ---
-title: "爱上Go语言：变量定义与内建变量类型"
-date: 2020-12-18T11:46:00+08:00
+title: 爱上Go语言：变量定义与内建变量类型
+date: 2020-12-18 11:46:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Go
-categories: ["技术"]
+- Go
+categories:
+- 技术
 toc: false
 comments: false
 image: golang.jpg_50
----
-
-## 变量的定义
+---## 变量的定义
 
 ```go
 package main

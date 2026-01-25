@@ -1,19 +1,17 @@
 ---
-title: "Strava Riding Api 上线"
-date: 2025-04-10T00:23:00+08:00
+title: Strava Riding Api 上线
+date: 2025-04-10 00:23:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 开源
-  - Strava
-categories: ["技术"]
+- Strava
+- 开源
+categories:
+- 技术
 toc: false
 comments: false
 image: strava_logo.webp_50
----
-
-该脚本基于 Strava API v3 获取指定用户当年的所有骑行活动数据，并将其保存为JSON格式
+---该脚本基于 Strava API v3 获取指定用户当年的所有骑行活动数据，并将其保存为JSON格式
 
 ## 功能特性
 

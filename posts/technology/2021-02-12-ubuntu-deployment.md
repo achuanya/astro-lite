@@ -1,18 +1,16 @@
 ---
-title: "Ubuntu Server部署日记"
-date: 2021-02-12T12:44:00+08:00
+title: Ubuntu Server部署日记
+date: 2021-02-12 12:44:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Ubuntu
-categories: ["技术"]
+- Linux
+categories:
+- 技术
 toc: false
 comments: false
 image: ubuntu.jpg_50
----
-
-出于挂一些签到软件的原因我一直在用Windows Server2012，因为服务器配置较低图形界面操作卡的要死，干脆直接上纯命令操作系统的linux
+---出于挂一些签到软件的原因我一直在用Windows Server2012，因为服务器配置较低图形界面操作卡的要死，干脆直接上纯命令操作系统的linux
 
 关于linux发行版我几乎都玩过。在选择linux服务器这块也没有太犹豫，我个人比较痴情Ubuntu，
 

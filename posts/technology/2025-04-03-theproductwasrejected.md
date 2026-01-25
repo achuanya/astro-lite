@@ -1,19 +1,17 @@
 ---
-title: "产品被拒"
-date: 2025-04-03T00:05:00+08:00
+title: 产品被拒
+date: 2025-04-03 00:05:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 扩展
-  - 开源
-categories: ["技术"]
+- 开源
+- 浏览器扩展
+categories:
+- 技术
 toc: false
 comments: false
 image: easyfill128.webp_50
----
-
-晚上下了班打开电脑刚坐下就看到了一封 Google 邮件，首先看到了发件人 "Chrome Web Store"，当时就心想提交审核一个多星期了，终于看到一点音信了。点开后，还没等我高兴，便看到了：
+---晚上下了班打开电脑刚坐下就看到了一封 Google 邮件，首先看到了发件人 "Chrome Web Store"，当时就心想提交审核一个多星期了，终于看到一点音信了。点开后，还没等我高兴，便看到了：
 
 ![ ](easyfillrejectionnotice.webp)
 

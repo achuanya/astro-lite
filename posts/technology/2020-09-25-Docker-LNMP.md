@@ -1,19 +1,17 @@
 ---
-title: "Docker Compose 快速构建 LNMP 笔记"
-date: 2020-09-25T09:41:00+08:00
+title: Docker Compose 快速构建 LNMP 笔记
+date: 2020-09-25 09:41:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Docker
-  - LNMP
-categories: ["技术"]
+- Docker
+- LNMP
+categories:
+- 技术
 toc: false
 comments: false
 image: xihu.jpg_50
----
-
-## 目录结构
+---## 目录结构
 
 ```shell
 /

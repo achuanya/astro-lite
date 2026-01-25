@@ -1,20 +1,18 @@
 ---
-title: "晨跑，破六"
-date: 2026-01-07T20:12:00+08:00
+title: 晨跑，破六
+date: 2026-01-07 20:12:00+08:00
 featured: false
 draft: false
 tags:
-  - 杭州
-  - 跑步
-  - 晨跑
-  - 雨跑
-categories: ["跑步"]
+- 杭州
+- 跑步
+- 雨跑
+categories:
+- 跑步
 toc: false
 comments: false
 image: cover.svg
----
-
-熟悉我的朋友都知道，我是一个懒人。懒得说话，懒得吃饭
+---熟悉我的朋友都知道，我是一个懒人。懒得说话，懒得吃饭
 
 所以像我这样的人，按理说对运动是没什么兴趣的
 

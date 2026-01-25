@@ -1,18 +1,16 @@
 ---
-title: "腾讯云COS文件跨域"
-date: 2024-03-10T15:51:00+08:00
+title: 腾讯云COS文件跨域
+date: 2024-03-10 15:51:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 跨域
-categories: ["技术"]
+- 跨域
+categories:
+- 技术
 toc: false
 comments: false
 image: tencent-cloud-cos-file-cross-domains.png_50
----
-
-今天换博客主要文字了，"仓耳今楷",字体更美观更适合阅读。但是过程中遇到点问题
+---今天换博客主要文字了，"仓耳今楷",字体更美观更适合阅读。但是过程中遇到点问题
 
 ```css
 @font-face {

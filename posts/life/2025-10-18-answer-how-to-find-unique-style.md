@@ -1,18 +1,16 @@
 ---
-title: "知乎答疑：个人博客内容常陷入同质化，如何找到独特风格？"
-date: 2025-10-18T19:04:00+08:00
+title: 知乎答疑：个人博客内容常陷入同质化，如何找到独特风格？
+date: 2025-10-18 19:04:00+08:00
 featured: false
 draft: false
 tags:
-  - 生活
-  - 知乎
-categories: ["生活"]
+- 知乎
+categories:
+- 生活
 toc: false
 comments: false
 image: zhihu.png_50
----
-
-写博客至今，已经快八年了
+---写博客至今，已经快八年了
 
 从最初的代码笔记，到后来记录生活，我想，有些话可以说说
 

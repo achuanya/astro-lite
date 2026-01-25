@@ -1,19 +1,17 @@
 ---
-title: "解决Jekyll时区数据源问题"
-date: 2024-02-11T23:07:00+08:00
+title: 解决Jekyll时区数据源问题
+date: 2024-02-11 23:07:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Jekyll
-  - Bug
-categories: ["技术"]
+- Jekyll
+- 故障排查
+categories:
+- 技术
 toc: false
 comments: false
 image: jekylltzinfodata.png_50
----
-
-由于Jekyll默认使用UTC时区，导致博客更新时间不准确。这里需要写入上海时间：timezone: Asia/Shanghai，但是我在本地调试时需要在配置内注释掉，不然就会报错
+---由于Jekyll默认使用UTC时区，导致博客更新时间不准确。这里需要写入上海时间：timezone: Asia/Shanghai，但是我在本地调试时需要在配置内注释掉，不然就会报错
 
 * jekyll 3.9.3 | Error:  No source of timezone data could be found.
 Please refer to https://tzinfo.github.io/datasourcenotfound for help resolving this error.

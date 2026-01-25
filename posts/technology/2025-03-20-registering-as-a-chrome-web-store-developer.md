@@ -1,19 +1,17 @@
 ---
-title: "注册 Chrome Web Store 开发者"
-date: 2025-03-20T00:03:00+08:00
+title: 注册 Chrome Web Store 开发者
+date: 2025-03-20 00:03:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Chrome
-  - 注册
-categories: ["技术"]
+- Chrome
+- 注册
+categories:
+- 技术
 toc: false
 comments: false
 image: chromewebstore.webp_50
----
-
-年前曾尝试过 Chrome 扩展开发，《写一个Chrome表单自动化插件》，但是由于没有注册 Chrome Web Store 开发者，无法上传到 Chrome 应用商店。
+---年前曾尝试过 Chrome 扩展开发，《写一个Chrome表单自动化插件》，但是由于没有注册 Chrome Web Store 开发者，无法上传到 Chrome 应用商店。
 
 ## 注册 WildCard
 

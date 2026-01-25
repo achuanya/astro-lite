@@ -1,21 +1,19 @@
 ---
-title: "(转)谈 Linux，Windows 和 Mac"
-date: 2020-04-07T18:10:00+08:00
+title: (转)谈 Linux，Windows 和 Mac
+date: 2020-04-07 18:10:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Linux
-  - Windows
-  - Mac
-  - 王垠
-categories: ["技术"]
+- Linux
+- Mac
+- Windows
+- 王垠
+categories:
+- 技术
 toc: false
 comments: false
 image: linux.jpg_50
----
-
-> 本文转自[当然我在扯淡](https://www.yinwang.org/blog-cn/2013/03/07/linux-windows-mac)
+---> 本文转自[当然我在扯淡](https://www.yinwang.org/blog-cn/2013/03/07/linux-windows-mac)
 
 这段时间受到很多人的来信。他们看了我很早以前写的推崇 Linux 的文章，想知道如何“抛弃 Windows，学习 Linux”。天知道他们在哪里找到那么老的文章，真是好事不出门…… 我觉得我有责任消除我以前的文章对人的误导，洗清我这个“Linux 狂热分子”的恶名。我觉得我已经写过一些澄清的文章了，可是怎么还是有人来信问 Linux 的问题。也许因为感觉到“舆论压力”，我把文章都删了。
 

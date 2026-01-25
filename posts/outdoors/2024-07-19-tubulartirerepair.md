@@ -1,21 +1,19 @@
 ---
-title: "公路车管胎被扎，怎么补胎"
-date: 2024-07-19T14:38:00+08:00
+title: 公路车管胎被扎，怎么补胎
+date: 2024-07-19 14:38:00+08:00
 featured: false
 draft: false
 tags:
-  - 骑行
-  - 淮阳
-  - 管胎
-  - 爆胎
-  - 补胎
-categories: ["骑行"]
+- 淮阳
+- 管胎
+- 补胎
+- 骑行
+categories:
+- 骑行
 toc: false
 comments: false
 image: tubulartirerepair.jpg_50
----
-
-管胎被扎了，还是后轮，我心如刀绞啊，太贵了，换不起，大多数技师都不会修的
+---管胎被扎了，还是后轮，我心如刀绞啊，太贵了，换不起，大多数技师都不会修的
 
 ![先拆后轮](20240718143947.jpg)
 

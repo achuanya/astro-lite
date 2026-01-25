@@ -1,18 +1,16 @@
 ---
-title: "爱上Go语言：常量与枚举"
-date: 2020-12-19T11:26:00+08:00
+title: 爱上Go语言：常量与枚举
+date: 2020-12-19 11:26:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Go
-categories: ["技术"]
+- Go
+categories:
+- 技术
 toc: false
 comments: false
 image: golang.jpg_50
----
-
-## 常量
+---## 常量
 
 常量，一经定义不可改变的量，当出现不需要被更改的数据时，应该使用常量进行储存，从语法角度看，使用常量可以保证数据，在整个运行期间内，不会被更改
 

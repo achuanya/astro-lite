@@ -1,19 +1,17 @@
 ---
-title: "上天竺"
-date: 2025-11-03T00:51:00+08:00
+title: 上天竺
+date: 2025-11-03 00:51:00+08:00
 featured: false
 draft: false
 tags:
-  - 生活
-  - 杭州
-  - 法喜寺
-categories: ["生活"]
+- 杭州
+- 法喜寺
+categories:
+- 生活
 toc: false
 comments: false
 image: 20251102221042_605_266.jpg_50
----
-
-杭州寺庙非常多
+---杭州寺庙非常多
 
 据官方统计有 271 座，早些年甚至多达 500 座，号称："东南佛国"
 

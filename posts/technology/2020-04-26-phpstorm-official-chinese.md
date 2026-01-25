@@ -1,19 +1,17 @@
 ---
-title: "JetBrains 官方推中文简体包了"
-date: 2020-04-26T09:25:00+08:00
+title: JetBrains 官方推中文简体包了
+date: 2020-04-26 09:25:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - JetBrains
-  - PHP
-categories: ["技术"]
+- JetBrains
+- PHP
+categories:
+- 技术
 toc: false
 comments: false
 image: jetbrains.jpg_50
----
-
-今天我在 Github [TranslatorX](https://github.com/pingfangx/TranslatorX) 这个 IDE 汉化项目的 Issues 下看到有个 JetBrains 员工说关于中文包的事：
+---今天我在 Github [TranslatorX](https://github.com/pingfangx/TranslatorX) 这个 IDE 汉化项目的 Issues 下看到有个 JetBrains 员工说关于中文包的事：
 
 Hi, I'm a JetBrains employee, and we're working on initial support for the Chinese language pack. If you're interested in, feel free to contact me: [ignatov@jetbrains.com](mailto:ignatov@jetbrains.com)
 

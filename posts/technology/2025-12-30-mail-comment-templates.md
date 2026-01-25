@@ -1,19 +1,18 @@
 ---
-title: "给博客评论设计邮件通知模板"
-date: 2025-12-29T05:07:00+08:00
+title: 给博客评论设计邮件通知模板
+date: 2025-12-29 05:07:00+08:00
 featured: true
 draft: true
 tags:
-  - 开源
-  - Mail Comment Templates
-  - Maizzle
-categories: ["技术"]
+- Maizzle
+- 开源
+- 开源项目
+categories:
+- 技术
 toc: true
 comments: false
 image: photosuite.svg
----
-
-## 安装
+---## 安装
 
 Mail Comment Templates 已发布至 npm，可直接安装：
 

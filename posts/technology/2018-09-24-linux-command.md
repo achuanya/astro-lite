@@ -1,18 +1,16 @@
 ---
-title: "Linux 命令笔记"
-date: 2018-09-24T12:44:00+08:00
+title: Linux 命令笔记
+date: 2018-09-24 12:44:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Linux
-categories: ["技术"]
+- Linux
+categories:
+- 技术
 toc: false
 comments: false
 image: linux.jpg_50
----
-
-今天在写一些刚最近学到[linux][1]命令，看到笔记本上记得有点乱重写整理了一下。接触了linux也有近大半年了，越来越离不开它了，windows也是偶尔开一下虚拟机，接触linux这段时间也是受益匪浅。
+---今天在写一些刚最近学到[linux][1]命令，看到笔记本上记得有点乱重写整理了一下。接触了linux也有近大半年了，越来越离不开它了，windows也是偶尔开一下虚拟机，接触linux这段时间也是受益匪浅。
 
 使用windows的时候虽然控制的住网瘾，但是偶尔也想打一把，自从独装了linux直接一棒子打死...挺好的...我也非常喜欢linux命令，它提升了我一些单词量。还让我接触了开源的概念、它的历史,这些我都非常喜欢。
 

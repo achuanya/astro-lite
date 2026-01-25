@@ -1,20 +1,17 @@
 ---
-title: "初一大吉，博客上上新"
-date: 2024-02-11T23:07:00+08:00
+title: 初一大吉，博客上上新
+date: 2024-02-11 23:07:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 新年
-  - 初一
-  - 分包
-categories: ["技术"]
+- 分包
+- 春节
+categories:
+- 技术
 toc: false
 comments: false
 image: update.jpg_50
----
-
-## 图片预览
+---## 图片预览
 
 ```javascript
 var preview = document.getElementById("preview");

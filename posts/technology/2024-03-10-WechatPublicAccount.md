@@ -1,18 +1,16 @@
 ---
-title: "搞个公众号"
-date: 2024-03-10T15:51:00+08:00
+title: 搞个公众号
+date: 2024-03-10 15:51:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 公众号
-categories: ["技术"]
+- 公众号
+categories:
+- 技术
 toc: false
 comments: false
 image: wechatpublicaccount.png_50
----
-
-改名记录：
+---改名记录：
 - 2024年02月08日 “阿川的博客”改名“游钓四方的博客”
 - 2019年05月28日 “阿川的个人博客”改名“阿川的博客”
 - 2018年10月26日 注册“阿川的个人博客”

@@ -1,19 +1,18 @@
 ---
-title: "Photosuite：一个为博客而生的图片处理方案"
-date: 2025-12-23T07:58:00+08:00
+title: Photosuite：一个为博客而生的图片处理方案
+date: 2025-12-23 07:58:00+08:00
 featured: false
 draft: false
 tags:
-  - 开源
-  - Photosuite
-  - TypeScript
-categories: ["技术"]
+- TypeScript
+- 开源
+- 开源项目
+categories:
+- 技术
 toc: true
 comments: false
 image: photosuite.svg
----
-
-每次给博客搞拆迁，最让人割舍不下的，往往不是瓦片和墙皮，而是那些被我用到形成肌肉记忆的家具。由于Jekyll 和 Astro 说着不同方言，导致家具根本拿不到“异地安置指标”，我只能含泪签字
+---每次给博客搞拆迁，最让人割舍不下的，往往不是瓦片和墙皮，而是那些被我用到形成肌肉记忆的家具。由于Jekyll 和 Astro 说着不同方言，导致家具根本拿不到“异地安置指标”，我只能含泪签字
 
 **Photosuite** 正是在这样的背景下诞生的  
 

@@ -1,20 +1,17 @@
 ---
-title: "Manjaro Linux 自动禁用触摸板"
-date: 2020-09-30T12:57:00+08:00
+title: Manjaro Linux 自动禁用触摸板
+date: 2020-09-30 12:57:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Manjaro
-  - Linux
-  - Bug
-categories: ["技术"]
+- Linux
+- 故障排查
+categories:
+- 技术
 toc: false
 comments: false
 image: manjaro.jpg_50
----
-
-## 安装
+---## 安装
 
 安装必要的函数库和驱动程序
 

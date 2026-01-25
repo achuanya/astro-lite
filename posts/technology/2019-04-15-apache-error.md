@@ -1,19 +1,17 @@
 ---
-title: "快速定位 Apache 错误"
-date: 2019-04-15T16:15:00+08:00
+title: 快速定位 Apache 错误
+date: 2019-04-15 16:15:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Apache
-  - Bug
-categories: ["技术"]
+- Apache
+- 故障排查
+categories:
+- 技术
 toc: false
 comments: false
 image: apache.jpg_50
----
-
-今天给项目配置权限的时候又遇到了Apache错误，这种事情早习惯了，排错了...要说启动吧，您看这让人难受错误提示...
+---今天给项目配置权限的时候又遇到了Apache错误，这种事情早习惯了，排错了...要说启动吧，您看这让人难受错误提示...
 
     Windows 不能在 本地计算机 启动 apache24。有关更多信息，查阅系统事件日志。如果这是非 Microsoft 服务，请与服务厂商联系，并参考特定服务错误代码 1
 

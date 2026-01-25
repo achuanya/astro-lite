@@ -1,19 +1,17 @@
 ---
-title: "打造全新 Artalk 评论界面"
-date: 2025-10-26T23:57:00+08:00
+title: 打造全新 Artalk 评论界面
+date: 2025-10-26 23:57:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 开源
-  - Artalk
-categories: ["技术"]
+- 开源
+- 开源项目
+categories:
+- 技术
 toc: true
 comments: false
 image: logo.svg
----
-
-***Artalk-ui*** 是 [Artalk](https://github.com/ArtalkJS/Artalk) `v2.9.1` 的一个分支，主要重构 ui
+---***Artalk-ui*** 是 [Artalk](https://github.com/ArtalkJS/Artalk) `v2.9.1` 的一个分支，主要重构 ui
 
 本次更新的主要功能如下：
 

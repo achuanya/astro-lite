@@ -1,18 +1,17 @@
 ---
-title: "尼康 z30 开箱小记"
-date: 2025-12-02T01:40:00+08:00
+title: 尼康 z30 开箱小记
+date: 2025-12-02 01:40:00+08:00
 featured: false
 draft: false
 tags:
-  - 器材
-  - Nikon
-categories: ["摄影"]
+- Nikon
+- 装备
+categories:
+- 摄影
 toc: false
 comments: false
 image: logo.svg
----
-
-有些年头没摸相机了。上一部相机还是 2019 年买的“佳能 EOS 200D”，那时 Fooleap 还没有退网，我还在做程序员 
+---有些年头没摸相机了。上一部相机还是 2019 年买的“佳能 EOS 200D”，那时 Fooleap 还没有退网，我还在做程序员 
 [《我的第一部单反相机》](https://blog.lhasa.icu/posts/life/2019-04-20-one-single-lens)
 
 一晃眼，六年过去了。一切都变了，我刚入圈时，Fooleap 还在为哄女朋友而苦恼，现在孩子都会打酱油了。当初认识的博友大多已停更，中间我也曾断过更。不过后来因为喜

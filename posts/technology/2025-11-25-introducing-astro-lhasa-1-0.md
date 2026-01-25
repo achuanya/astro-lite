@@ -1,18 +1,17 @@
 ---
-title: "Introducing Astro Lhasa 1.0"
-date: 2025-11-25T04:09:00+08:00
+title: Introducing Astro Lhasa 1.0
+date: 2025-11-25 04:09:00+08:00
 featured: false
 draft: false
 tags:
-  - 开源
-  - Astro Lhasa
-categories: ["技术"]
+- Astro
+- 开源
+categories:
+- 技术
 toc: true
 comments: false
 image: astro-logo.svg
----
-
-![ ](astro-lhasa-v1-thumbnail.svg)
+---![ ](astro-lhasa-v1-thumbnail.svg)
 
 Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 的 Astro 博客主题
 

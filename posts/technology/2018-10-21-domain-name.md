@@ -1,19 +1,17 @@
 ---
-title: "更换了域名、邮箱并修复了移动端 Bug"
-date: 2018-10-21T15:44:00+08:00
+title: 更换了域名、邮箱并修复了移动端 Bug
+date: 2018-10-21 15:44:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Bug
-  - 更新
-categories: ["技术"]
+- 故障排查
+- 日志
+categories:
+- 技术
 toc: false
 comments: false
 image: update.jpg_50
----
-
-更换域名这件事我想了好久，原使用[Github][1]的三级域名但它太长，本来想换achuan[.com][2]不过早就被注册了，
+---更换域名这件事我想了好久，原使用[Github][1]的三级域名但它太长，本来想换achuan[.com][2]不过早就被注册了，
 
 卖方叫价太高了，没有5000谈判都碰不着。ahuan[.cn][3]也是早已注册，人家买了域名都不解析挂着玩，也联系过人家，不过人家不回消息。[.net][4] [.me][5] 都没了。
 

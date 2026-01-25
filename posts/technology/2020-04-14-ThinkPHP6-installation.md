@@ -1,19 +1,16 @@
 ---
-title: "ThinkPHP 6.0 下载安装与配置"
-date: 2020-04-14T15:28:00+08:00
+title: ThinkPHP 6.0 下载安装与配置
+date: 2020-04-14 15:28:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - ThinkPHP
-  - PHP
-categories: ["技术"]
+- PHP
+categories:
+- 技术
 toc: false
 comments: false
 image: thinkphp.jpg_50
----
-
-- ThinkPHP `6.0` 要求 PHP >= `7.1.0`
+---- ThinkPHP `6.0` 要求 PHP >= `7.1.0`
 - `6.0`版本开始，必须通过`Composer`方式安装和更新，无法使用Git下载安装。
 
 ## 安装Composer

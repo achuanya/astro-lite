@@ -1,19 +1,16 @@
 ---
-title: "Manjaro KDE 调教日记"
-date: 2020-04-09T11:24:00+08:00
+title: Manjaro KDE 调教日记
+date: 2020-04-09 11:24:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Manjaro
-  - Linux
-categories: ["技术"]
+- Linux
+categories:
+- 技术
 toc: false
 comments: false
 image: manjaro.jpg_50
----
-
-## 更换源
+---## 更换源
 
 ```bash
 # 更新数据源

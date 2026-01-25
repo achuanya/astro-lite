@@ -1,18 +1,17 @@
 ---
-title: "民族劣根性"
-date: 2026-01-23T10:05:00+08:00
+title: 民族劣根性
+date: 2026-01-23 10:05:00+08:00
 featured: false
 draft: false
 tags:
-  - 人性
-  - 杂谈
-categories: ["生活"]
+- 人性
+- 随笔
+categories:
+- 生活
 toc: false
 comments: false
 image: cover.svg
----
-
-今天聊聊所谓的“劣根性”，这是碰都不能碰的滑梯
+---今天聊聊所谓的“劣根性”，这是碰都不能碰的滑梯
 
 自西贝事件以来，某些“二流报纸”先后两次下场定调，蹭流量的自媒体紧跟实事充当“叼盘”
 

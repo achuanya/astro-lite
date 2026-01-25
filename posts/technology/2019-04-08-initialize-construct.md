@@ -1,19 +1,17 @@
 ---
-title: "_initialize() 和 __construct() 的区别"
-date: 2019-04-08T10:28:00+08:00
+title: _initialize() 和 __construct() 的区别
+date: 2019-04-08 10:28:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - PHP
-  - OOP
-categories: ["技术"]
+- PHP
+- 编程思想
+categories:
+- 技术
 toc: false
 comments: false
 image: php.jpg_50
----
-
-今天项目经理让我做个一个功能页面，在查阅往常相同项目源码时遇到一个没有见过的函数 `_initialize()`Google一下知道了它是Thinkphp内置函数，查阅了一番资料写了几遍总结一下。  
+---今天项目经理让我做个一个功能页面，在查阅往常相同项目源码时遇到一个没有见过的函数 `_initialize()`Google一下知道了它是Thinkphp内置函数，查阅了一番资料写了几遍总结一下。  
 
 _initialize()函数是在任何函数之前，都要执行的，当然也包括__construct()也就是构造函数。也就是说如果_initialize()函数存在，调用对象的任何方法都会导致_initialize()函数的自动调用，而_construct()函数仅仅在创建一次，跟其它方法调用没有关系。  
 

@@ -1,19 +1,17 @@
 ---
-title: "利用Go+Github Actions写个定时RSS爬虫"
-date: 2024-07-27T09:50:00+08:00
+title: 利用Go+Github Actions写个定时RSS爬虫
+date: 2024-07-27 09:50:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Go
-  - Github Actions
-categories: ["技术"]
+- Github Actions
+- Go
+categories:
+- 技术
 toc: false
 comments: false
 image: 1722043714404.jpg_50
----
-
-说起这事，还是受一位博友的启发<a href="https://1900.live/links" target="_blank">“1900”</a>他的左邻右舍页面很棒，决定模仿一下
+---说起这事，还是受一位博友的启发<a href="https://1900.live/links" target="_blank">“1900”</a>他的左邻右舍页面很棒，决定模仿一下
 
 起初，我打算使用 COS 和 GitHub Actions，但在测试过程中发现 GitHub 的延迟非常高，验证和文件写入速度极慢，频频失败。干脆直接上 GitHub 自产自销。
 

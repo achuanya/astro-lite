@@ -1,23 +1,18 @@
 ---
-title: "大年初一，徒步西湖"
-date: 2021-02-12T12:44:00+08:00
+title: 大年初一，徒步西湖
+date: 2021-02-12 12:44:00+08:00
 featured: false
 draft: false
 tags:
-  - 生活
-  - 杭州
-  - 新年
-  - 西湖
-  - 河坊街
-  - 初一
-
-categories: ["生活"]
+- 春节
+- 杭州
+- 西湖
+categories:
+- 生活
 toc: false
 comments: false
 image: xihu.jpg_50
----
-
-早上八点从滨康路地铁口出发，从候潮门出来就一直在走
+---早上八点从滨康路地铁口出发，从候潮门出来就一直在走
 
 ![徒步中](tubuzhong.jpeg)
 

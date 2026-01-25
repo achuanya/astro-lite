@@ -1,19 +1,17 @@
 ---
-title: "让博客的代码块更有表现力"
-date: 2025-11-03T23:59:00+08:00
+title: 让博客的代码块更有表现力
+date: 2025-11-03 23:59:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 代码高亮
-  - Expressive Code
-categories: ["技术"]
+- Expressive Code
+- 代码高亮
+categories:
+- 技术
 toc: false
 comments: false
 image: logo.png_50
----
-
-我最初用的代码高亮插件是[Shiki](https://shiki.style/)，由 [Astro Paper](https://github.com/satnaing/astro-paper) 自带，时间久了，就感觉平平无奇的。它无法像 Git diff 那样，把增删的代码做出差异化表达
+---我最初用的代码高亮插件是[Shiki](https://shiki.style/)，由 [Astro Paper](https://github.com/satnaing/astro-paper) 自带，时间久了，就感觉平平无奇的。它无法像 Git diff 那样，把增删的代码做出差异化表达
 
 直到偶然遇见 [Expressive Code](https://github.com/expressive-code/expressive-code)，我才发现代码高亮还能这样玩
 

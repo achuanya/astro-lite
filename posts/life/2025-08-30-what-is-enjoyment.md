@@ -1,18 +1,16 @@
 ---
-title: "何为享受"
-date: 2025-08-30T17:05:00+08:00
+title: 何为享受
+date: 2025-08-30 17:05:00+08:00
 featured: false
 draft: false
 tags:
-  - 生活
-  - 随笔
-categories: ["生活"]
+- 随笔
+categories:
+- 生活
 toc: false
 comments: false
 image: what-is-enjoyment.png_50
----
-
-在初入职场时，我以为权力带来的快感才是享受
+---在初入职场时，我以为权力带来的快感才是享受
 
 在挣到小钱时，我以为挥霍物质才是享受
 

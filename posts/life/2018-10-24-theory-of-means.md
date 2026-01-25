@@ -1,17 +1,15 @@
 ---
-title: "(转)论胡编乱造的写作技巧"
-date: 2018-10-24T12:44:00+08:00
+title: (转)论胡编乱造的写作技巧
+date: 2018-10-24 12:44:00+08:00
 featured: false
 draft: false
-tags:
-  - 生活
-categories: ["生活"]
+tags: []
+categories:
+- 生活
 toc: false
 comments: false
 image: xihu.jpg_50
----
-
-> 本文转自[廖雪峰的博客](https://www.liaoxuefeng.com/article/1087739344711968)
+---> 本文转自[廖雪峰的博客](https://www.liaoxuefeng.com/article/1087739344711968)
 
 ![ ](theory-of-maens.jpeg)
 

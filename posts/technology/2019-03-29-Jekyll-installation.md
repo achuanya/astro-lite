@@ -1,18 +1,16 @@
 ---
-title: "Jekyll 环境搭建 (Windows 10)"
-date: 2019-03-29T09:27:00+08:00
+title: Jekyll 环境搭建 (Windows 10)
+date: 2019-03-29 09:27:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Jekyll
-categories: ["技术"]
+- Jekyll
+categories:
+- 技术
 toc: false
 comments: false
 image: jekyll.png_50
----
-
-最近想把想博客改版需要在本地用到Jekyll，不过搭建的过程真的心累...过程中真的是各种问题谷歌百度各种乱七八糟的文章一点都不靠谱，折腾一天给重要给搭建成功了...  
+---最近想把想博客改版需要在本地用到Jekyll，不过搭建的过程真的心累...过程中真的是各种问题谷歌百度各种乱七八糟的文章一点都不靠谱，折腾一天给重要给搭建成功了...  
 整个搭建过程需要用到的软件/安装依赖我先列下
  * Rubyinstaller-2.3.3-x64
  * DevKit-mingw64-64-4.7.2

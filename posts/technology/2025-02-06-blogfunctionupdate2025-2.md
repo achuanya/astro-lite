@@ -1,18 +1,16 @@
 ---
-title: "博客功能更新 2025 (2)"
-date: 2025-02-06T13:03:00+08:00
+title: 博客功能更新 2025 (2)
+date: 2025-02-06 13:03:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - 更新
-categories: ["技术"]
+- 日志
+categories:
+- 技术
 toc: false
 comments: false
 image: update.jpg_50
----
-
-## Update details
+---## Update details
 
 - **移除红灯笼**
 - **新增 `sitemap.xml` 和 `sitemap.txt`，自动生成，不再手动更新！**

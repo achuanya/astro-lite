@@ -1,20 +1,17 @@
 ---
-title: "Manjaro Linux 双显卡切换解决方案"
-date: 2020-10-15T16:41:00+08:00
+title: Manjaro Linux 双显卡切换解决方案
+date: 2020-10-15 16:41:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - Manjaro
-  - Linux
-  - Bug
-categories: ["技术"]
+- Linux
+- 故障排查
+categories:
+- 技术
 toc: false
 comments: false
 image: manjaro.jpg_50
----
-
-## 1.卸载原有开源驱动
+---## 1.卸载原有开源驱动
 
 ```shell
 # 查看安装了哪些显卡驱动，全部删除

@@ -1,18 +1,16 @@
 ---
-title: "(转)一个关于if else容易迷惑的问题"
-date: 2020-08-23T17:05:00+08:00
+title: (转)一个关于if else容易迷惑的问题
+date: 2020-08-23 17:05:00+08:00
 featured: false
 draft: false
 tags:
-  - 技术
-  - PHP
-categories: ["技术"]
+- PHP
+categories:
+- 技术
 toc: false
 comments: false
 image: php.jpg_50
----
-
-> 本文转自[Laruence](https://www.laruence.com/2020/07/09/6015.html)
+---> 本文转自[Laruence](https://www.laruence.com/2020/07/09/6015.html)
 
 这个本来是之前在微博上有个同学说他经常用来面试别人，大概是说，对于如下代码，你觉得会输出啥:
 
