@@ -12,7 +12,8 @@ categories:
 toc: true
 comments: false
 image: github.svg
----我一直觉得 Artalk 的 ui 设计的很不协调，特别评论框下方的“ 评论数、通知中心"  
+---
+我一直觉得 Artalk 的 ui 设计的很不协调，特别评论框下方的“ 评论数、通知中心"  
 这并非重要功能，但是官方没有做开关控制。实现后，感觉很实用，可以推一下
 
 #### 确定上游

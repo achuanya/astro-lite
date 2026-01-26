@@ -10,7 +10,8 @@ categories:
 toc: false
 comments: false
 image: ubuntu.jpg_50
----最近学习用到了[php手册][1]，平常我都是在网页查看，图个方便于是就下载了[KchmViewer][2]（开源的CHM 阅读器）不过效果不太理想，今天想卸载了它，结果出段小插曲......  
+---
+最近学习用到了[php手册][1]，平常我都是在网页查看，图个方便于是就下载了[KchmViewer][2]（开源的CHM 阅读器）不过效果不太理想，今天想卸载了它，结果出段小插曲......  
 
 ![ ](ubuntu-lock1.png)
 

@@ -10,7 +10,8 @@ categories:
 toc: false
 comments: false
 image: what-is-enjoyment.png_50
----在初入职场时，我以为权力带来的快感才是享受
+---
+在初入职场时，我以为权力带来的快感才是享受
 
 在挣到小钱时，我以为挥霍物质才是享受
 

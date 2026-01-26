@@ -10,7 +10,8 @@ categories:
 toc: false
 comments: false
 image: opensource.jpg_50
----> 本文转自[华为章宇的博客](https://yizhaolingyan.net/)
+---
+> 本文转自[华为章宇的博客](https://yizhaolingyan.net/)
 
 学习各种开源项目，已经成为很多朋友不可回避的工作内容了。笔者本人也是如此。在接触并学习了若干个开源项目之后，笔者试图对自己工作过程中的若干体会加以总结，以期对一些希望借鉴的朋友有所裨益。
 

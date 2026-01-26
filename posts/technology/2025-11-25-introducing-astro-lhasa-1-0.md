@@ -11,7 +11,8 @@ categories:
 toc: true
 comments: false
 image: astro-logo.svg
----![ ](astro-lhasa-v1-thumbnail.svg)
+---
+![ ](astro-lhasa-v1-thumbnail.svg)
 
 Astro Lhasa 是一款简洁、响应式、无障碍友好、并具备良好 SEO 的 Astro 博客主题
 

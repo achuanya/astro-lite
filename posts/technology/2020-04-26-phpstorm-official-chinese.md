@@ -11,7 +11,8 @@ categories:
 toc: false
 comments: false
 image: jetbrains.jpg_50
----今天我在 Github [TranslatorX](https://github.com/pingfangx/TranslatorX) 这个 IDE 汉化项目的 Issues 下看到有个 JetBrains 员工说关于中文包的事：
+---
+今天我在 Github [TranslatorX](https://github.com/pingfangx/TranslatorX) 这个 IDE 汉化项目的 Issues 下看到有个 JetBrains 员工说关于中文包的事：
 
 Hi, I'm a JetBrains employee, and we're working on initial support for the Chinese language pack. If you're interested in, feel free to contact me: [ignatov@jetbrains.com](mailto:ignatov@jetbrains.com)
 

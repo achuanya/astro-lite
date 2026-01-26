@@ -9,7 +9,8 @@ categories:
 toc: false
 comments: false
 image: xihu.jpg_50
----> 本文转自[廖雪峰的博客](https://www.liaoxuefeng.com/article/1087739344711968)
+---
+> 本文转自[廖雪峰的博客](https://www.liaoxuefeng.com/article/1087739344711968)
 
 ![ ](theory-of-maens.jpeg)
 

@@ -13,7 +13,8 @@ categories:
 toc: false
 comments: false
 image: tubulartirerepair.jpg_50
----管胎被扎了，还是后轮，我心如刀绞啊，太贵了，换不起，大多数技师都不会修的
+---
+管胎被扎了，还是后轮，我心如刀绞啊，太贵了，换不起，大多数技师都不会修的
 
 ![先拆后轮](20240718143947.jpg)
 

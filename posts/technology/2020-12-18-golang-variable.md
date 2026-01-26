@@ -10,7 +10,8 @@ categories:
 toc: false
 comments: false
 image: golang.jpg_50
----## 变量的定义
+---
+## 变量的定义
 
 ```go
 package main

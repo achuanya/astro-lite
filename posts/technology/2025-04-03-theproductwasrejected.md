@@ -11,7 +11,8 @@ categories:
 toc: false
 comments: false
 image: easyfill128.webp_50
----晚上下了班打开电脑刚坐下就看到了一封 Google 邮件，首先看到了发件人 "Chrome Web Store"，当时就心想提交审核一个多星期了，终于看到一点音信了。点开后，还没等我高兴，便看到了：
+---
+晚上下了班打开电脑刚坐下就看到了一封 Google 邮件，首先看到了发件人 "Chrome Web Store"，当时就心想提交审核一个多星期了，终于看到一点音信了。点开后，还没等我高兴，便看到了：
 
 ![ ](easyfillrejectionnotice.webp)
 

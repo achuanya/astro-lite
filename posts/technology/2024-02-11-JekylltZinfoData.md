@@ -11,7 +11,8 @@ categories:
 toc: false
 comments: false
 image: jekylltzinfodata.png_50
----由于Jekyll默认使用UTC时区，导致博客更新时间不准确。这里需要写入上海时间：timezone: Asia/Shanghai，但是我在本地调试时需要在配置内注释掉，不然就会报错
+---
+由于Jekyll默认使用UTC时区，导致博客更新时间不准确。这里需要写入上海时间：timezone: Asia/Shanghai，但是我在本地调试时需要在配置内注释掉，不然就会报错
 
 * jekyll 3.9.3 | Error:  No source of timezone data could be found.
 Please refer to https://tzinfo.github.io/datasourcenotfound for help resolving this error.

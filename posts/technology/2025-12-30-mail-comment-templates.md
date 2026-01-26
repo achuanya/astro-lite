@@ -12,7 +12,8 @@ categories:
 toc: true
 comments: false
 image: photosuite.svg
----## 安装
+---
+## 安装
 
 Mail Comment Templates 已发布至 npm，可直接安装：
 

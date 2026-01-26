@@ -11,7 +11,8 @@ categories:
 toc: false
 comments: false
 image: update.jpg_50
----## 图片预览
+---
+## 图片预览
 
 ```javascript
 var preview = document.getElementById("preview");

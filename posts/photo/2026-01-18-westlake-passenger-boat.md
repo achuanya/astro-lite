@@ -11,7 +11,6 @@ toc: false
 comments: false
 image: cover.svg
 ---
-
 ![ ](westlake-passenger-boat-1.jpg)
 ![ ](westlake-passenger-boat-2.jpg)
 

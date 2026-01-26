@@ -11,7 +11,8 @@ categories:
 toc: false
 comments: false
 image: oop.jpg_50
----## 一. 面向对象(OOP)的发展历程
+---
+## 一. 面向对象(OOP)的发展历程
 ### 1. OOP的诞生
 [**Simulaq**][1]面向对象技术最早是在编程语言Simual中提出，1967年2月20日，在挪威奥斯陆郊外的小镇莉沙布举行的IFIP TC-2 工作会议上，
 

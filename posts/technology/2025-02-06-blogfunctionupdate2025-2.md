@@ -10,7 +10,8 @@ categories:
 toc: false
 comments: false
 image: update.jpg_50
----## Update details
+---
+## Update details
 
 - **移除红灯笼**
 - **新增 `sitemap.xml` 和 `sitemap.txt`，自动生成，不再手动更新！**

@@ -11,7 +11,8 @@ categories:
 toc: false
 comments: false
 image: manjaro.jpg_50
----## 1.卸载原有开源驱动
+---
+## 1.卸载原有开源驱动
 
 ```shell
 # 查看安装了哪些显卡驱动，全部删除

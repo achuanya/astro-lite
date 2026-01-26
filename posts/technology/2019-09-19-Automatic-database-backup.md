@@ -10,7 +10,8 @@ categories:
 toc: false
 comments: false
 image: centos.jpg_50
----前几次系统数据老是出问题，前几天经理让我给写个数据库自动备份，Shell能力有限，周六日再改改...
+---
+前几次系统数据老是出问题，前几天经理让我给写个数据库自动备份，Shell能力有限，周六日再改改...
 
 ## 编写 Shell
 ```shell

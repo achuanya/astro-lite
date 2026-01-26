@@ -10,7 +10,8 @@ categories:
 toc: false
 comments: false
 image: lightgallerylogo.png_50
----月初，一个博友留言反馈讲到文章页面图片看不清楚，今下午花点时间，收拾了一下
+---
+月初，一个博友留言反馈讲到文章页面图片看不清楚，今下午花点时间，收拾了一下
 
 LightGallery 这款灯箱我老博客用过，后来换到 Astro 就搁置了
 
