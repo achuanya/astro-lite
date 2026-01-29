@@ -2,7 +2,7 @@
 title: 民族劣根性
 date: 2026-01-23 10:05:00+08:00
 featured: false
-draft: true
+draft: false
 tags:
 - 人性
 - 随笔
