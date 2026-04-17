@@ -176,13 +176,21 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
       class:list={[
         "hidden", // 移动端默认隐藏
         "my-2 flex flex-wrap gap-2",
-        "[&>li>a]:block [&>li>a]:px-4 [&>li>a]:py-3 [&>li>a]:text-center [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-0 sm:[&>li>a]:py-1",
-        "[&>li>a]:text-[var(--nav-link)] [&>li>a]:text-sm",
-        "sm:flex sm:gap-x-5 sm:gap-y-0", // 桌面端横向展开
-        // 移动端全屏居中垂直排列
-        "max-sm:fixed max-sm:inset-0 max-sm:z-50 max-sm:flex-col max-sm:items-center max-sm:justify-center max-sm:gap-1 max-sm:my-0 max-sm:mx-0",
-      ]}
-    >
+        // 基础链接样式
+        "[&>li>a]:block [&>li>a]:font-medium [&>li>a]:hover:text-accent sm:[&>li>a]:px-0 sm:[&>li>a]:py-1 sm:[&>li>a]:text-center",
+        "sm:[&>li>a]:text-[var(--nav-link)]",
+        // 桌面端样式
+        "sm:flex sm:gap-x-5 sm:gap-y-0 sm:[&>li>a]:text-sm",
+        // 移动端样式：全屏、左对齐、大字体、实色背景
+          "max-sm:fixed max-sm:inset-0 max-sm:z-50 max-sm:flex-col max-sm:items-start max-sm:justify-start max-sm:pt-16 max-sm:pl-8 max-sm:gap-7 max-sm:my-0 max-sm:mx-0 max-sm:bg-background max-sm:overflow-y-auto max-sm:w-full max-sm:h-screen max-sm:flex-nowrap",
+         // 移动端文字样式覆盖
+          "max-sm:[&_a]:!text-2xl max-sm:[&_a]:!font-medium max-sm:[&_a]:text-foreground max-sm:[&_a]:!px-0 max-sm:[&_a]:!py-0 max-sm:[&_a]:leading-tight",
+         // 移动端按钮样式覆盖（主题切换）
+          "max-sm:[&_button]:!text-2xl max-sm:[&_button]:!font-medium max-sm:[&_button]:text-foreground max-sm:[&_button]:!px-0 max-sm:[&_button]:!py-0 max-sm:[&_button]:leading-tight",
+         // 移动端激活状态高亮
+          "max-sm:[&_.active-nav]:!text-accent",
+       ]}
+     >
       <!-- 文章 -->
       <li>
         <a href="/posts" class:list={{ "active-nav": isActive("/posts") }}>
@@ -222,7 +230,7 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
           <li class="flex items-center">
             <button
               id="theme-btn"
-              class="text-sm focus-outline block px-4 py-3 sm:px-0 sm:py-1 hover:text-accent text-[var(--nav-link)] font-medium"
+              class="text-sm focus-outline block sm:px-0 sm:py-1 hover:text-accent text-[var(--nav-link)] font-medium"
               title={_t.common.themeBtn}
               aria-label="auto"
               aria-live="polite"
@@ -431,17 +439,6 @@ else if (isActive("/favorites")) mobileTitle = _t.favorites.title;
   @media (max-width: 640px) {
     .dropdown-menu {
       clip-path: none;
-    }
-
-    /* 移动端菜单导航文字颜色固定为深色模式配色 */
-    #menu-items a,
-    #menu-items button {
-      color: #d19a66 !important;
-    }
-
-    /* 移动端菜单激活状态颜色 */
-    #menu-items a.active-nav {
-      color: #eaedf3 !important;
     }
   }
 </style>
