@@ -10,7 +10,7 @@
  * 3. View Transitions：启用 Astro 的页面切换动画
  * 4. 第三方集成：
  *    - Artalk 评论系统
- *    - Matomo 网站分析（仅生产环境）
+ *    - Umami 网站分析（仅生产环境）
  *    - Google Fonts 字体
  * 5. 条件加载：根据 toc、math 属性动态加载对应资源
  *
@@ -180,13 +180,22 @@ const structuredData = {
     <script is:inline src="/toggle-theme.js"></script>
 
     <!-- Artalk 评论系统资源 -->
-    <link href="https://cos.lhasa.icu/dist/artalk/Artalk.css" rel="stylesheet" />
-    <script is:inline src="https://cos.lhasa.icu/dist/artalk/Artalk.js" defer></script>
+    <link
+      href="https://cos.lhasa.icu/dist/artalk/Artalk.css"
+      rel="stylesheet"
+    />
+    <script is:inline src="https://cos.lhasa.icu/dist/artalk/Artalk.js" defer
+    ></script>
 
     <!-- Umami 网站分析（仅生产环境） -->
     {
       import.meta.env.PROD && (
-        <script is:inline src="https://analytics.lhasa.icu/script.js" data-website-id="1d902460-7aa2-4c4e-b75d-6a70e5ef160d" defer></script>
+        <script
+          is:inline
+          src="https://analytics.lhasa.icu/script.js"
+          data-website-id="b386fda6-1af6-441d-9c23-17b659fb65c1"
+          defer
+        />
       )
     }
 
@@ -218,7 +227,7 @@ const structuredData = {
     <!-- 站点框架容器 -->
     <div
       id="site-frame"
-      class="mx-auto w-full px-4 pt-3 sm:mt-5 sm:w-[768px] sm:max-w-[72rem] sm:bg-[var(--color-background)] sm:shadow-[0_8px_24px_rgba(0,0,0,0.15)] sm:px-[3.75rem] sm:pt-[1.875rem]"
+      class="mx-auto w-full px-4 pt-3 sm:mt-5 sm:w-[768px] sm:max-w-[72rem] sm:bg-[var(--color-background)] sm:px-[3.75rem] sm:pt-[1.875rem] sm:shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
     >
       <!-- 插槽：子布局内容 -->
       <slot />
@@ -231,29 +240,37 @@ const structuredData = {
 </html>
 
 <script is:inline>
-window.__artalkConfig = { server: 'https://artalk.lhasa.icu', site: '游钓四方的博客' };
-document.addEventListener('astro:after-swap', tryLoad);
-document.addEventListener('DOMContentLoaded', tryLoad);
-/**
- * 加载 Artalk 评论数统计组件
- *
- * 功能：
- * 1. 查找所有 .artalk-comment-count 元素
- * 2. 调用 Artalk.loadCountWidget 加载评论数
- * 3. 使用 data-page-key 属性标识每篇文章
- */
-function tryLoad() {
-  const els = document.querySelectorAll('.artalk-comment-count');
-  if (!els.length || typeof window === 'undefined' || typeof window.Artalk === 'undefined') return;
-  const cfg = window.__artalkConfig || {};
-  if (!cfg.server || !cfg.site) return;
-  window.Artalk.loadCountWidget({
-    server: cfg.server,
-    site: cfg.site,
-    countEl: '.artalk-comment-count',
-    statPageKeyAttr: 'data-page-key',
-  });
-}
+  window.__artalkConfig = {
+    server: "https://artalk.lhasa.icu",
+    site: "游钓四方的博客",
+  };
+  document.addEventListener("astro:after-swap", tryLoad);
+  document.addEventListener("DOMContentLoaded", tryLoad);
+  /**
+   * 加载 Artalk 评论数统计组件
+   *
+   * 功能：
+   * 1. 查找所有 .artalk-comment-count 元素
+   * 2. 调用 Artalk.loadCountWidget 加载评论数
+   * 3. 使用 data-page-key 属性标识每篇文章
+   */
+  function tryLoad() {
+    const els = document.querySelectorAll(".artalk-comment-count");
+    if (
+      !els.length ||
+      typeof window === "undefined" ||
+      typeof window.Artalk === "undefined"
+    )
+      return;
+    const cfg = window.__artalkConfig || {};
+    if (!cfg.server || !cfg.site) return;
+    window.Artalk.loadCountWidget({
+      server: cfg.server,
+      site: cfg.site,
+      countEl: ".artalk-comment-count",
+      statPageKeyAttr: "data-page-key",
+    });
+  }
 </script>
 
 <style>
@@ -286,4 +303,8 @@ function tryLoad() {
   }
 </style>
 <!-- Blogs Club 徽章预加载 -->
-<link rel="prefetch" as="image" href="https://www.blogsclub.org/badge/blog.lhasa.icu">
+<link
+  rel="prefetch"
+  as="image"
+  href="https://www.blogsclub.org/badge/blog.lhasa.icu"
+/>

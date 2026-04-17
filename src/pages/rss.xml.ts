@@ -6,7 +6,6 @@
  * 文件用途：
  * - 作为 /rss.xml 路由的处理器，生成符合 RSS 2.0 标准的 XML 订阅源
  * - 将博客文章转换为 RSS 格式，供 RSS 阅读器订阅和使用
- * - 集成文章内容追踪，用于统计订阅用户的阅读行为
  *
  * 核心逻辑：
  * 1. 从内容集合中获取所有博客文章（包括草稿）
@@ -15,7 +14,6 @@
  *    a. 使用 getPath 生成文章的正确 URL 路径
  *    b. 使用 markdown-it 将 Markdown 正文转换为 HTML
  *    c. 使用 sanitize-html 清理 HTML，移除潜在的不安全标签
- *    d. 添加 Matomo 追踪像素，用于统计订阅阅读数据
  * 4. 调用 @astrojs/rss 生成最终的 RSS XML 内容
  *
  * 依赖关系：
@@ -31,7 +29,6 @@
  *
  * 安全性：
  * - 使用 sanitize-html 限制允许的 HTML 标签，防止恶意代码注入
- * - 追踪像素使用 1x1 透明图片，不影响订阅阅读体验
  */
 
 import rss from "@astrojs/rss";
@@ -88,24 +85,6 @@ export async function GET() {
       const postPath = getPath(id, filePath);
 
       /**
-       * 生成 Matomo 追踪像素 HTML
-       *
-       * 用途：
-       * - 当 RSS 阅读器加载文章内容时，会请求这个图片 URL
-       * - Matomo 服务器记录这次请求，用于统计订阅阅读行为
-       * - 参数说明：
-       *   - idsite=1: 网站 ID
-       *   - rec=1: 记录请求
-       *   - action_name: 文章标题（URL 编码）
-       *   - url: 文章完整 URL（URL 编码）
-       *
-       * 样式说明：
-       * - width=0, height=0, border=0: 隐藏图片，不影响阅读体验
-       * - alt="": 空替代文本，符合无障碍规范
-       */
-      const trackingPixel = `<img src="https://analytics.lhasa.icu/matomo.php?idsite=1&rec=1&action_name=${encodeURIComponent(data.title)}&url=${encodeURIComponent(SITE.website + postPath)}" style="border:0;width:0;height:0;" alt="" />`;
-
-      /**
        * 将 Markdown 正文转换为安全的 HTML
        *
        * 处理步骤：
@@ -130,13 +109,13 @@ export async function GET() {
        * - title: 文章标题
        * - description: 文章描述（用于摘要显示）
        * - pubDate: 发布日期（使用更新时间或发布时间，优先更新时间）
-       * - content: 文章的完整 HTML 内容，包含追踪像素
+       * - content: 文章的完整 HTML 内容
        */
       return {
         link: postPath,
         title: data.title,
         pubDate: new Date(data.updated ?? data.date),
-        content: htmlContent + trackingPixel,
+        content: htmlContent,
       };
     }),
   });
