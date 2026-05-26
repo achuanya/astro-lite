@@ -13,6 +13,13 @@ const DARK_END_HOUR = 7;    // 早上 7 点结束
 // 调试模式配置
 const DEBUG_THEME = false;
 
+// 主题切换动画方向交替控制
+const THEME_CLIP_DIRECTIONS = [
+  ['inset(0 0 100% 0)', 'inset(0 0 0 0)'],   // 0: 从上往下
+  ['inset(100% 0 0 0)', 'inset(0 0 0 0)'],    // 1: 从下往上
+];
+let themeDirectionIndex = 0;
+
 const __memoryStore = new Map();
 
 function safeGet(key) {
@@ -257,10 +264,9 @@ window.onload = () => {
       });
 
       transition.ready.then(() => {
-        const clipPath = [
-          'inset(0 0 100% 0)', // 从上往下，初始状态底部被完全裁剪
-          'inset(0 0 0 0)',    // 结束状态完全显示
-        ];
+        // 循环取当前方向，并更新索引为下一次切换做准备
+        const clipPath = THEME_CLIP_DIRECTIONS[themeDirectionIndex];
+        themeDirectionIndex = (themeDirectionIndex + 1) % THEME_CLIP_DIRECTIONS.length;
 
         // 注入临时样式以禁用默认动画
         const style = document.createElement('style');
@@ -278,8 +284,8 @@ window.onload = () => {
             clipPath: clipPath,
           },
           {
-            duration: 1000,
-            easing: "ease-out",
+            duration: 700,
+            easing: "cubic-bezier(0.4, 0, 0.2, 1)",
             pseudoElement: "::view-transition-new(root)",
           }
         );
