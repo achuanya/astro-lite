@@ -96,7 +96,7 @@ NODE_OPTIONS="--max-old-space-size=1400" pnpm build
 
 虽然执行速度会慢一些，但不至于 build 一波拉崩系统
 
-```bash
+```md
 // .npmrc
 
 child-concurrency=1
