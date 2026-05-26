@@ -5,7 +5,7 @@ featured: false
 draft: false
 tags:
 - PHP
-- 编程思想
+- Thinkphp
 categories:
 - 技术
 toc: false

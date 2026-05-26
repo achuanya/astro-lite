@@ -4,6 +4,9 @@ date: 2019-09-19 18:44:00+08:00
 featured: false
 draft: false
 tags:
+- Shell
+- MySQL
+- Linux
 - CentOS
 categories:
 - 技术

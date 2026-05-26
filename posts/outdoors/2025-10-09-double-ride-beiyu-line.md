@@ -5,7 +5,6 @@ featured: false
 draft: false
 tags:
 - 义乌
-- 柏峰水库
 - 骑行
 categories:
 - 骑行

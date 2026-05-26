@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - 开源
+- 杂谈
 categories:
 - 技术
 toc: false

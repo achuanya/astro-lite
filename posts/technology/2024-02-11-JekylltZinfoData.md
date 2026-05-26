@@ -5,7 +5,7 @@ featured: false
 draft: false
 tags:
 - Jekyll
-- 故障排查
+- Bug
 categories:
 - 技术
 toc: false

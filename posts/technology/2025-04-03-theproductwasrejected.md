@@ -4,8 +4,10 @@ date: 2025-04-03 00:05:00+08:00
 featured: false
 draft: false
 tags:
+- 前端
 - 开源
-- 浏览器扩展
+- 插件
+- EasyFill
 categories:
 - 技术
 toc: false

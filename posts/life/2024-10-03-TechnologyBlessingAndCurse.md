@@ -3,7 +3,8 @@ title: 技术亦福亦是祸
 date: 2024-02-02 15:50:00+08:00
 featured: false
 draft: false
-tags: []
+tags:
+- 杂谈
 categories:
 - 生活
 toc: false

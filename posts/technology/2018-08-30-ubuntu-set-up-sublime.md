@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - Linux
+- Ubuntu
 categories:
 - 技术
 toc: false

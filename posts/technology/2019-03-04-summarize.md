@@ -4,9 +4,9 @@ date: 2019-03-04 10:28:00+08:00
 featured: false
 draft: false
 tags:
-- 复试
+- 面试
 - 求职
-- 郑州
+- 杂谈
 categories:
 - 技术
 toc: false

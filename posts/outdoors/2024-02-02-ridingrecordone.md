@@ -4,12 +4,10 @@ date: 2024-02-02T05:24:00+08:00
 featured: false
 draft: false
 tags:
-  - 骑行
-  - 四明山
-  - 上海
-  - TCR
-  - XTC
-  - 比赛
+- 宁波
+- 上海
+- 赛事
+- 骑行
 categories: ["骑行"]
 toc: false
 comments: false

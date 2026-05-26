@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - 开源
+- JetBrains
 categories:
 - 生活
 toc: false

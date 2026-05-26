@@ -4,7 +4,7 @@ date: 2025-10-18 19:04:00+08:00
 featured: false
 draft: false
 tags:
-- 知乎
+- 杂谈
 categories:
 - 生活
 toc: false

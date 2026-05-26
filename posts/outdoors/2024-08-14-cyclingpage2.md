@@ -4,8 +4,8 @@ date: 2024-08-14T20:40:00+08:00
 featured: false
 draft: false
 tags:
-  - 统计
-  - 开源
+- 统计
+- 骑行
 categories: ["骑行"]
 toc: false
 comments: false

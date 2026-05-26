@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - 清灰
+- 电脑
 categories:
 - 技术
 toc: false

@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - Linux
+- Manjaro
 categories:
 - 技术
 toc: false

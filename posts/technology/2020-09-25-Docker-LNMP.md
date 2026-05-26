@@ -5,7 +5,7 @@ featured: false
 draft: false
 tags:
 - Docker
-- LNMP
+- Linux
 categories:
 - 技术
 toc: false

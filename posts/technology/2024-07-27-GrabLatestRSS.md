@@ -4,7 +4,7 @@ date: 2024-07-27 09:50:00+08:00
 featured: false
 draft: false
 tags:
-- Github Actions
+- Github
 - Go
 categories:
 - 技术

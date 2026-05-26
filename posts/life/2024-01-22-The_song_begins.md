@@ -3,7 +3,8 @@ title: 我回来了
 date: 2024-01-22 12:36:00+08:00
 featured: false
 draft: false
-tags: []
+tags:
+- 杂谈
 categories:
 - 生活
 toc: false

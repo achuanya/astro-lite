@@ -4,9 +4,8 @@ date: 2025-10-12T04:51:00+08:00
 featured: false
 draft: false
 tags:
-  - 骑行
-  - 义乌
-  - 岩口水库
+- 义乌
+- 骑行
 categories: ["骑行"]
 toc: false
 comments: false

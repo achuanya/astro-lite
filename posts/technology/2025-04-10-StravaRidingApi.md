@@ -6,6 +6,7 @@ draft: false
 tags:
 - Strava
 - 开源
+- 前端
 categories:
 - 技术
 toc: false

@@ -4,9 +4,8 @@ date: 2025-01-26 00:10:00+08:00
 featured: false
 draft: false
 tags:
-- 日志
+- 更新
 - 春节
-- 统计
 categories:
 - 技术
 toc: false

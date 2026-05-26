@@ -6,7 +6,7 @@ draft: false
 tags:
 - 徒步
 - 阅读
-- 随笔
+- 杂谈
 - 骑行
 categories:
 - 阅读

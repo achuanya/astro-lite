@@ -4,8 +4,7 @@ date: 2025-12-31T23:22:00+08:00
 featured: false
 draft: false
 tags:
-  - 随笔
-  - 贾跃亭
+- 杂谈
 categories: ["生活"]
 toc: false
 comments: false

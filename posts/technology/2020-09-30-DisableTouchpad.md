@@ -4,8 +4,9 @@ date: 2020-09-30 12:57:00+08:00
 featured: false
 draft: false
 tags:
+- 触摸板
 - Linux
-- 故障排查
+- Manjaro
 categories:
 - 技术
 toc: false

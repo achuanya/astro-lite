@@ -5,8 +5,10 @@ featured: false
 draft: false
 tags:
 - 春节
+- 杂谈
+- 年报
 categories:
-- 生活
+- 年报
 toc: false
 comments: false
 image: zongjie.jpg_50

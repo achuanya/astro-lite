@@ -5,9 +5,8 @@ featured: false
 draft: false
 tags:
 - 半马
-- 跑步
 - 郑州
-- 骑行
+- 跑步
 categories:
 - 跑步
 toc: false

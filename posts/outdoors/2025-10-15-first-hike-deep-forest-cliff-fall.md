@@ -4,10 +4,9 @@ date: 2025-10-15T10:05:00+08:00
 featured: false
 draft: false
 tags:
-  - 徒步
-  - 义乌
-  - 大寒尖
-  - 深山野林
+- 徒步
+- 义乌
+- 大寒尖
 categories: ["徒步"]
 toc: false
 comments: false

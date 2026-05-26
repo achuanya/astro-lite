@@ -3,7 +3,8 @@ title: (转)一个程序员眼中的价值
 date: 2019-06-04 11:54:00+08:00
 featured: false
 draft: false
-tags: []
+tags:
+- 杂谈
 categories:
 - 生活
 toc: false

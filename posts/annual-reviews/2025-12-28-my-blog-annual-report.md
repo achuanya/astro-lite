@@ -4,9 +4,10 @@ date: 2025-12-28T08:19:00+08:00
 featured: false
 draft: false
 tags:
-  - "2025"
-  - 年报
-categories: ["年报"]
+- 杂谈
+- 年报
+categories:
+- 年报
 toc: true
 comments: false
 image: 2025.svg

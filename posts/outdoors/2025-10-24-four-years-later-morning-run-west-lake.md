@@ -5,7 +5,6 @@ featured: false
 draft: false
 tags:
 - 杭州
-- 西湖
 - 跑步
 categories:
 - 跑步

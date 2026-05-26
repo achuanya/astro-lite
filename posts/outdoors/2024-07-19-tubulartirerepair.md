@@ -5,7 +5,6 @@ featured: false
 draft: false
 tags:
 - 淮阳
-- 管胎
 - 补胎
 - 骑行
 categories:

@@ -3,7 +3,9 @@ title: 为什么你写不好一个快速排序? 谈程序员的职业发展
 date: 2018-08-31 09:44:00+08:00
 featured: false
 draft: false
-tags: []
+tags: 
+- 职业发展
+- 杂谈
 categories:
 - 技术
 toc: false

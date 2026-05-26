@@ -7,7 +7,6 @@ tags:
 - 义乌
 - 杭州
 - 骑行
-- 高温
 categories:
 - 骑行
 toc: false

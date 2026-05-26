@@ -5,7 +5,7 @@ featured: false
 draft: false
 tags:
 - 阅读
-- 随笔
+- 杂谈
 categories:
 - 阅读
 toc: false

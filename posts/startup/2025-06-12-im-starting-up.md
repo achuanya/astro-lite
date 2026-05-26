@@ -6,8 +6,6 @@ draft: false
 tags:
   - 创业
   - WIFI
-  - 独立开发者
-
 categories: ["创业"]
 toc: false
 comments: false

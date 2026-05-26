@@ -5,6 +5,9 @@ featured: false
 draft: false
 tags:
 - Astro
+- 前端
+- 开源
+- 主题
 categories:
 - 技术
 toc: false

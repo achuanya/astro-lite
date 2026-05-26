@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - Jekyll
+- Windows
 categories:
 - 技术
 toc: false

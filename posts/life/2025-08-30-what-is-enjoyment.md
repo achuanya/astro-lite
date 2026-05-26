@@ -4,7 +4,7 @@ date: 2025-08-30 17:05:00+08:00
 featured: false
 draft: false
 tags:
-- 随笔
+- 杂谈
 categories:
 - 生活
 toc: false

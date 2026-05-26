@@ -5,7 +5,7 @@ featured: false
 draft: false
 tags:
 - PHP
-- 编程思想
+- OOP
 categories:
 - 技术
 toc: false

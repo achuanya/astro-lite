@@ -5,7 +5,6 @@ featured: false
 draft: false
 tags:
 - Chrome
-- 注册
 categories:
 - 技术
 toc: false

@@ -5,7 +5,8 @@ featured: false
 draft: false
 tags:
 - Linux
-- 故障排查
+- Manjaro
+- 显卡
 categories:
 - 技术
 toc: false

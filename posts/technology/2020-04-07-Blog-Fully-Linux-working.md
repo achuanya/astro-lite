@@ -7,7 +7,7 @@ tags:
 - Linux
 - Mac
 - Windows
-- 王垠
+- 杂谈
 categories:
 - 技术
 toc: false

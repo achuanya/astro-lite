@@ -5,7 +5,7 @@ featured: false
 draft: false
 tags:
 - Canon
-- 装备
+- 摄影
 categories:
 - 摄影
 toc: false

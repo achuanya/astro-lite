@@ -4,7 +4,9 @@ date: 2025-09-18 19:33:00+08:00
 featured: false
 draft: false
 tags:
-- LightGallery
+- 前端
+- 开源
+- 灯箱
 categories:
 - 技术
 toc: false

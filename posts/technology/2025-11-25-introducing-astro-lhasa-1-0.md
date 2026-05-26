@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - Astro
+- 前端
 - 开源
 categories:
 - 技术

@@ -5,7 +5,6 @@ featured: false
 draft: false
 tags:
 - 军迷
-- 鞋子
 categories:
 - 生活
 toc: false

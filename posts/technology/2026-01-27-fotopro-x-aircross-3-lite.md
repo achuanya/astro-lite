@@ -4,9 +4,8 @@ date: 2026-01-27 00:17:00+08:00
 featured: false
 draft: false
 tags:
-- 富宝图
-- 空气三号
 - 三脚架
+- 摄影
 categories:
 - 摄影
 toc: false

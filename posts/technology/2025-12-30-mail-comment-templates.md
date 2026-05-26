@@ -4,9 +4,9 @@ date: 2025-12-29 05:07:00+08:00
 featured: true
 draft: true
 tags:
-- Maizzle
+- 前端
 - 开源
-- 开源项目
+- Postcard Mail
 categories:
 - 技术
 toc: true

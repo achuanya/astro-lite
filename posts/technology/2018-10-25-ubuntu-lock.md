@@ -4,7 +4,9 @@ date: 2018-10-25 16:44:00+08:00
 featured: false
 draft: false
 tags:
-- 故障排查
+- Bug
+- Linux
+- Ubuntu
 categories:
 - 技术
 toc: false

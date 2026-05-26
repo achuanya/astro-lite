@@ -5,6 +5,7 @@ featured: false
 draft: false
 tags:
 - PHP
+- 语法
 categories:
 - 技术
 toc: false

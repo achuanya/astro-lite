@@ -4,8 +4,8 @@ date: 2024-08-07 14:26:00+08:00
 featured: false
 draft: false
 tags:
-- 浏览器扩展
-- 自动化
+- 前端
+- 插件
 categories:
 - 技术
 toc: false

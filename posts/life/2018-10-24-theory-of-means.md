@@ -3,7 +3,9 @@ title: (转)论胡编乱造的写作技巧
 date: 2018-10-24 12:44:00+08:00
 featured: false
 draft: false
-tags: []
+tags:
+- 杂谈
+- 写作
 categories:
 - 生活
 toc: false

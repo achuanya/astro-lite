@@ -4,6 +4,7 @@ date: 2019-08-25 12:44:00+08:00
 featured: false
 draft: false
 tags:
+- 杂谈
 - 失业
 categories:
 - 生活
