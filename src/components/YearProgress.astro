@@ -29,16 +29,10 @@
     id="year-progress-label"
     class="text-accent/70 pointer-events-none absolute top-1/2 z-20 -translate-y-1/2 text-xs whitespace-nowrap opacity-0 transition-opacity duration-[1000ms] ease-out"
   >0.0%</span>
-
-  <div
-    id="year-progress-popup"
-    class="bg-background text-foreground pointer-events-none absolute top-0 z-30 -translate-y-[calc(100%+8px)] rounded border border-[color-mix(in_oklab,var(--color-border)_18%,transparent)] px-3 py-1.5 text-xs whitespace-nowrap opacity-0 shadow-sm transition-opacity duration-300 ease-out"
-  ></div>
 </div>
 
 <script>
   const ANIMATION_DURATION = 1200;
-  const POPUP_HIDE_DELAY = 2000;
   const HOVER_HIDE_DELAY = 1000;
   const LABEL_GAP = 6;
 
@@ -47,17 +41,15 @@
     fill: HTMLElement;
     label: HTMLElement;
     cover: HTMLElement;
-    popup: HTMLElement;
-  };
+    };
 
   function getElements(): Elements | null {
     const root = document.getElementById("year-progress");
     const fill = document.getElementById("year-progress-fill");
     const label = document.getElementById("year-progress-label");
     const cover = document.getElementById("year-progress-cover");
-    const popup = document.getElementById("year-progress-popup");
-    if (!root || !fill || !label || !cover || !popup) return null;
-    return { root, fill, label, cover, popup };
+    if (!root || !fill || !label || !cover) return null;
+    return { root, fill, label, cover };
   }
 
   function calcProgress(): number {
@@ -68,22 +60,13 @@
     return Math.max(0, Math.min(1, (now.getTime() - start) / (end - start)));
   }
 
-  function calcDaysLeft(): number {
-    const now = new Date();
-    const end = new Date(now.getFullYear() + 1, 0, 1).getTime();
-    return Math.max(0, Math.ceil((end - now.getTime()) / 86_400_000));
-  }
-
   function positionLabel(els: Elements, progress: number) {
     const cw = els.root.clientWidth;
     const lw = els.label.offsetWidth;
-    const pw = els.popup.offsetWidth;
     const labelX = Math.max(0, Math.min(cw * progress + LABEL_GAP, cw - lw));
-    const popupX = Math.max(0, Math.min(cw * progress + LABEL_GAP, cw - pw));
     els.label.style.left = `${labelX}px`;
     els.cover.style.left = `${labelX}px`;
     els.cover.style.width = `${lw}px`;
-    els.popup.style.left = `${popupX}px`;
   }
 
   // 动画每帧的轻量写入：只动 width / textContent / 位置，避免触发 a11y 树和原生 tooltip 更新
@@ -138,7 +121,6 @@
     els.root.dataset.bound = "1";
 
     let hoverTimer = 0;
-    let popupTimer = 0;
 
     els.root.addEventListener("mouseenter", () => {
       window.clearTimeout(hoverTimer);
@@ -152,18 +134,6 @@
         hide(els.label);
         hide(els.cover);
       }, HOVER_HIDE_DELAY);
-    });
-
-    els.root.addEventListener("click", () => {
-      const days = calcDaysLeft();
-      els.popup.textContent =
-        days > 0
-          ? `时间走的太快了，今年只剩下 ${days} 天了...`
-          : "新的一年开始了，加油！";
-      positionLabel(els, getProgress());
-      show(els.popup);
-      window.clearTimeout(popupTimer);
-      popupTimer = window.setTimeout(() => hide(els.popup), POPUP_HIDE_DELAY);
     });
   }
 
@@ -180,12 +150,7 @@
       window.setTimeout(() => {
         hide(els.label);
         hide(els.cover);
-      }, POPUP_HIDE_DELAY);
-
-      els.popup.textContent = "欢迎观临，随喜入座";
-      positionLabel(els, target);
-      show(els.popup);
-      window.setTimeout(() => hide(els.popup), POPUP_HIDE_DELAY);
+      }, 2000);
     });
 
     bindEvents(els, () => getCurrent() || target);
