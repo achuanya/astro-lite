@@ -2,8 +2,8 @@
 author: 游钓四方
 pubDatetime: 2026-06-06T10:19:00+08:00
 title: Astro 6 开发模式下的 CSS 缓存 Bug
-featured: false
-draft: false
+featured: true
+draft: true
 tags:
   - 技术
   - Bug

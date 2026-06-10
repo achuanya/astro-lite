@@ -3,7 +3,7 @@ author: 游钓四方
 pubDatetime: 2026-06-01T12:01:00+08:00
 title: demo
 featured: true
-draft: false
+draft: true
 tags:
   - docs
   - FAQ
