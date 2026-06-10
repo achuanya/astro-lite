@@ -1,0 +1,51 @@
+/**
+ * 骨架屏样式与 shimmer 光泽动画
+ *
+ * 作用：定义全站骨架屏（Loading Skeleton）的基础占位样式与高级 shimmer 动画。
+ *       承载 Tailwind utility 无法表达的「移动光泽渐变」，其余尺寸/圆角/间距
+ *       一律由组件侧的 Tailwind 类负责，此处只做最小必要的自定义 CSS。
+ *
+ * 用法：
+ * - `.skeleton`            —— 占位底块（带主题底色，relative + overflow-hidden）。
+ * - `.skeleton-shimmer`    —— 叠加在底块上的光泽扫光（基于 ::after 伪元素）。
+ * - `animate-pulse`        —— Tailwind 内置脉冲动画，作为 shimmer 的轻量替代方案。
+ *
+ * 注意：
+ * - 配色取自 theme-light / theme-dark 的「14. 骨架屏」分区（--color-skeleton-*），
+ *   浅色深色自动切换，修改颜色请到主题文件，勿在此硬编码；
+ * - 已适配 prefers-reduced-motion：用户开启「减少动态效果」时停用全部动画。
+ */
+@layer components {
+  /* 占位底块：主题底色 + 裁剪光泽 */
+  .skeleton {
+    @apply relative overflow-hidden bg-skeleton-base;
+  }
+
+  /* shimmer 扫光：一条半透明高光从左向右循环扫过 */
+  .skeleton-shimmer::after {
+    @apply absolute inset-0 -translate-x-full content-[''];
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-skeleton-highlight) 50%,
+      transparent 100%
+    );
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  /* 可访问性：尊重系统「减少动态效果」偏好 */
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton-shimmer::after {
+      animation: none;
+    }
+    .skeleton.animate-pulse {
+      animation: none;
+    }
+  }
+}

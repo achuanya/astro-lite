@@ -1,0 +1,48 @@
+---
+/**
+ * 分类网格骨架屏
+ *
+ * 镜像 pages/categories/index.astro 的 `grid grid-cols-2 gap-0.5`，
+ * 每格为 16:9 封面占位 + 底部暗色渐变上的浅色文字条，
+ * 与 CategoryCard.astro 的最终视觉保持一致（封面图 + 渐变 + 浅色标题）。
+ *
+ * @example
+ *   <CategoryGridSkeleton count={config.posts.perPage} />
+ */
+import Skeleton from "./Skeleton.astro";
+import config from "@/config";
+
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  /** 分类卡片数量，默认从 config.posts.perPage 读取 */
+  count?: number;
+  /** 动画类型，默认 shimmer */
+  animation?: Animation;
+}
+
+const { count = config.posts.perPage, animation = "shimmer" } = Astro.props;
+---
+
+<div class="grid grid-cols-2 gap-0.5" aria-hidden="true">
+  {
+    Array.from({ length: count }).map(() => (
+      <div
+        class="bg-foreground/10 relative overflow-hidden"
+        style="aspect-ratio: 16 / 9;"
+      >
+        <Skeleton
+          rounded="rounded-none"
+          class="absolute inset-0"
+          animation={animation}
+        />
+        {/* 底部暗色渐变，复刻 CategoryCard 的浅色文字背景 */}
+        <div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+        <div class="absolute inset-x-0 bottom-0 space-y-1.5 p-3 sm:p-4">
+          <div class="h-3 w-2/5 rounded bg-white/25" />
+          <div class="h-3.5 w-3/4 rounded bg-white/30" />
+        </div>
+      </div>
+    ))
+  }
+</div>

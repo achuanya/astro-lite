@@ -1,0 +1,62 @@
+---
+/**
+ * 文章卡片骨架屏
+ *
+ * 精确镜像 components/Card.astro 的结构：
+ *   <li> → flex items-start gap-3 → 50px 方形封面 + (标题条 + 日期条)
+ * 用于首页、分类页、标签页、友链页的列表占位。
+ *
+ * @example
+ *   <PostCardSkeleton />
+ *   <PostCardSkeleton showCover={false} titleWidth="55%" />
+ */
+import Skeleton from "./Skeleton.astro";
+
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  /** 是否显示封面占位，默认 true */
+  showCover?: boolean;
+  /** 标题条宽度，默认 70% */
+  titleWidth?: string;
+  /** 动画类型，默认 shimmer */
+  animation?: Animation;
+}
+
+const {
+  showCover = true,
+  titleWidth = "70%",
+  animation = "shimmer",
+} = Astro.props;
+---
+
+<li aria-hidden="true">
+  <div class="flex items-center gap-3">
+    {
+      showCover && (
+        <Skeleton
+          width="50px"
+          height="50px"
+          rounded="rounded-md"
+          class="shrink-0"
+          animation={animation}
+        />
+      )
+    }
+    <div class="min-w-0 flex-1">
+      <Skeleton
+        height="1.1rem"
+        width={titleWidth}
+        rounded="rounded"
+        animation={animation}
+      />
+      <Skeleton
+        height="0.75rem"
+        width="6rem"
+        rounded="rounded"
+        class="mt-2.5"
+        animation={animation}
+      />
+    </div>
+  </div>
+</li>

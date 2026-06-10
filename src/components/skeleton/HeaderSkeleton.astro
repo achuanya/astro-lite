@@ -1,0 +1,52 @@
+---
+/**
+ * 顶部导航骨架屏
+ *
+ * 镜像 components/Header.astro：站点标题 + RSS 图标、年度进度条细线、
+ * 导航菜单链接。仅用于页面切换覆盖层（NavigationSkeleton），让骨架屏
+ * 在导航期间也保有完整的页头结构。
+ */
+import Skeleton from "./Skeleton.astro";
+
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  animation?: Animation;
+}
+
+const { animation = "shimmer" } = Astro.props;
+
+// 导航项宽度，模拟「首页 / 分类 / 标签 / 友链 / 关于 / 归档 / 搜索」
+const navWidths = ["2.5rem", "2.5rem", "2.5rem", "2.5rem", "2.5rem", "2.5rem", "3rem"];
+---
+
+<header class="app-layout" aria-hidden="true">
+  {/* 标题 + RSS 图标 */}
+  <div class="flex items-end gap-2 leading-none">
+    <Skeleton height="1.1rem" width="9rem" rounded="rounded" animation={animation} />
+    <Skeleton width="1rem" height="1rem" rounded="rounded" animation={animation} />
+  </div>
+
+  {/* 年度进度条细线 */}
+  <div class="mt-3 w-full max-w-3xl">
+    <Skeleton height="2px" width="100%" rounded="rounded" animation={animation} />
+  </div>
+
+  {/* 导航菜单 */}
+  <nav class="mt-3 mb-2">
+    <ul class="flex w-full flex-wrap items-center gap-x-5 gap-y-2 sm:w-auto">
+      {
+        navWidths.map(w => (
+          <li>
+            <Skeleton
+              height="0.9rem"
+              width={w}
+              rounded="rounded"
+              animation={animation}
+            />
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+</header>

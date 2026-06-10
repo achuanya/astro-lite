@@ -1,0 +1,91 @@
+---
+/**
+ * 关于页骨架屏
+ *
+ * 镜像 content/pages/about.md 在 `.app-prose` 中的排版节奏：
+ * 统计简介段落 → 小标题 → 段落 → 配图 → 小标题 → 时间线 → 小标题 → 段落。
+ *
+ * @example
+ *   <AboutSkeleton />
+ */
+import Skeleton from "./Skeleton.astro";
+import SkeletonText from "./SkeletonText.astro";
+
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  /** 动画类型，默认 shimmer */
+  animation?: Animation;
+}
+
+const { animation = "shimmer" } = Astro.props;
+
+// 时间线行的正文宽度轮换
+const timelineWidths = ["62%", "78%", "70%", "85%", "58%", "73%"];
+---
+
+<div class="app-prose" aria-hidden="true">
+  {/* 统计简介段落 */}
+  <SkeletonText lines={2} lastLineWidth="90%" animation={animation} />
+  <SkeletonText lines={1} lastLineWidth="76%" class="mt-3" animation={animation} />
+  <SkeletonText lines={2} lastLineWidth="64%" class="mt-3" animation={animation} />
+
+  {/* H2 博主 */}
+  <Skeleton
+    height="1.125rem"
+    width="5rem"
+    rounded="rounded"
+    class="mt-6 mb-3"
+    animation={animation}
+  />
+  <SkeletonText lines={2} lastLineWidth="55%" animation={animation} />
+
+  {/* 配图 */}
+  <Skeleton
+    height="13rem"
+    width="100%"
+    rounded="rounded-lg"
+    class="mt-4"
+    animation={animation}
+  />
+
+  {/* H2 博客进程 */}
+  <Skeleton
+    height="1.125rem"
+    width="7rem"
+    rounded="rounded"
+    class="mt-6 mb-3"
+    animation={animation}
+  />
+  <ul class="list-none space-y-2 pl-0">
+    {
+      timelineWidths.map(w => (
+        <li class="flex items-center gap-2">
+          <Skeleton
+            height="0.75rem"
+            width="5rem"
+            rounded="rounded"
+            class="shrink-0"
+            animation={animation}
+          />
+          <Skeleton
+            height="0.75rem"
+            width={w}
+            rounded="rounded"
+            animation={animation}
+          />
+        </li>
+      ))
+    }
+  </ul>
+
+  {/* H2 LICENSE */}
+  <Skeleton
+    height="1.125rem"
+    width="6rem"
+    rounded="rounded"
+    class="mt-6 mb-3"
+    animation={animation}
+  />
+  <SkeletonText lines={2} lastLineWidth="70%" animation={animation} />
+</div>

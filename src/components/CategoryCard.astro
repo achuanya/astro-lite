@@ -1,0 +1,55 @@
+---
+import { getRelativeLocaleUrl } from "astro:i18n";
+import { getCategoryImageUrl } from "@/utils/categoryImages";
+import type { CategoryInfo } from "@/utils/categories";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
+
+type Props = CategoryInfo;
+
+const { slug, name, count, latestTitle } = Astro.props;
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
+const imageUrl = getCategoryImageUrl(name);
+const href = getRelativeLocaleUrl(locale, `categories/${slug}/`);
+---
+<a
+  href={href}
+  class="group relative block overflow-hidden bg-foreground/10"
+  style="aspect-ratio: 16 / 9;"
+>
+{
+  imageUrl ? (
+    <Fragment>
+      <div
+        data-skeleton-ph
+        class="skeleton skeleton-shimmer absolute inset-0"
+      />
+      <img
+        src={imageUrl}
+        alt={`${name} 封面图`}
+        loading="lazy"
+        data-skeleton
+        class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-300"
+      />
+    </Fragment>
+  ) : (
+    <div class="absolute inset-0 bg-foreground/20" />
+  )
+}
+<div class="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
+<div class="absolute inset-x-0 bottom-0 p-3 text-category-cover-text sm:p-4">
+    <p class="truncate text-xs opacity-90 sm:text-sm">
+      {name}
+      {t.pages.categoryPostCount(count)}
+    </p>
+    {
+      latestTitle && (
+          <p class="mt-0.5 truncate text-sm font-medium sm:text-base">
+            {latestTitle}
+          </p>
+      )
+    }
+  </div>
+</a>
+

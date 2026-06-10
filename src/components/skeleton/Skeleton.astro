@@ -1,0 +1,58 @@
+---
+/**
+ * 骨架屏基础原子组件
+ *
+ * 一切复杂骨架屏的最小构建单元——一个带主题底色与动画的占位块。
+ * 尺寸通过 width / height（任意 CSS 值，内联 style）控制，圆角与其它
+ * 视觉细节通过 Tailwind 类（rounded / class）控制，浅色深色自动适配。
+ *
+ * @example
+ *   <Skeleton width="50px" height="50px" />
+ *   <Skeleton height="1rem" width="70%" rounded="rounded" />
+ *   <Skeleton circle width="2.5rem" height="2.5rem" animation="pulse" />
+ */
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  /** 宽度，任意 CSS 值（如 "50px"、"70%"、"6rem"） */
+  width?: string;
+  /** 高度，任意 CSS 值 */
+  height?: string;
+  /** 圆角 Tailwind 类，默认 rounded-md；circle 为 true 时此项忽略 */
+  rounded?: string;
+  /** 是否为圆形（头像等） */
+  circle?: boolean;
+  /** 动画类型，默认 shimmer */
+  animation?: Animation;
+  /** 透传的额外类名 */
+  class?: string;
+}
+
+const {
+  width,
+  height,
+  rounded = "rounded-md",
+  circle = false,
+  animation = "shimmer",
+  class: className,
+} = Astro.props;
+
+const style = [width && `width:${width}`, height && `height:${height}`]
+  .filter(Boolean)
+  .join(";");
+---
+
+<div
+  aria-hidden="true"
+  class:list={[
+    "skeleton",
+    circle ? "rounded-full" : rounded,
+    {
+      "skeleton-shimmer": animation === "shimmer",
+      "animate-pulse": animation === "pulse",
+    },
+    className,
+  ]}
+  style={style || undefined}
+>
+</div>

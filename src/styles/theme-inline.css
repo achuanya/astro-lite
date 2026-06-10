@@ -1,0 +1,122 @@
+/**
+ * Tailwind v4 主题桥接层
+ *
+ * 作用：通过 @theme inline 将 CSS 自定义属性映射为 Tailwind v4 可识别的
+ *       design token（如 --color-foreground → text-foreground），
+ *       使得 theme-light / theme-dark 中定义的变量能以 utility class 使用。
+ *
+ * 编码规范 — 变量分区及顺序：
+ *   1. 字体 — 全局字体定义（inline 独有）
+ *   2. 基础 — 页面底层色
+ *   3. 年度进度条 — 页面底部
+ *   4. 导航栏 — 顶部导航
+ *   5. 文章标题 — 标题色
+ *   6. 正文标题 — 正文 H1-H3 左边框
+ *   7. 标签 — 标签背景
+ *   8. 分类封面 — 封面文字
+ *   9. 引用块 — 正文引用
+ *  10. 列表 — 正文列表
+ *  11. 复选框 — 任务列表
+ *  12. 代码 — 代码块/行内代码
+ *  13. 表格 — 正文表格
+ *  14. 骨架屏 — 加载占位
+ *  15. 滚动条 — 页面滚动条
+ *
+ * 新增类别时：
+ *   - 根据语义确定应插入的序号位置；
+ *   - 在 theme-inline.css、theme-light.css、theme-dark.css 中同步插入对应分区及变量；
+ *   - 更新本注释中的序号列表以保持连续。
+ *
+ * 注意：
+ * - 此文件不定义颜色值，仅做一一映射；
+ * - 新增主题变量时必须在此同步添加对应的 --color-* 映射条目；
+ * - 字体变量（--font-*）直接在此定义，不依赖外部主题文件。
+ */
+@theme inline {
+  /* ===== 字体 =====
+   * 思源宋体同时覆盖中英文；Regular(400) 与 Bold(700) 共用
+   * family 名 "Source Han Serif SC"，由 font-weight 自动择字重。
+   */
+  --font-app: "Source Han Serif SC", serif;
+  --font-heading: "Source Han Serif SC", serif;
+  --font-heading-sub: "Source Han Serif SC", serif;
+  --font-ui: "Source Han Serif SC", serif;
+  --font-bold: "Source Han Serif SC", serif;
+  --font-code: "FiraCode", "Source Han Serif SC", monospace;
+
+  /* Tailwind 默认字体 token 覆盖，确保 font-sans/serif/mono 与全站一致 */
+  --font-sans: var(--font-app);
+  --font-serif: var(--font-app);
+  --font-mono: var(--font-code);
+
+  /* ===== 基础 ===== */
+  --color-background: var(--background);
+  --color-page-background: var(--page-background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-selection-bg: var(--selection-bg);
+
+  /* ===== 年度进度条 ===== */
+  --color-year-progress-fill: var(--year-progress-fill);
+  --color-year-progress-track: var(--year-progress-track);
+
+  /* ===== 导航栏 ===== */
+  --color-nav-link: var(--nav-link);
+  --color-nav-link-active: var(--nav-link-active);
+  --color-nav-title: var(--nav-title);
+
+  /* ===== 文章标题 ===== */
+  --color-post-title: var(--post-title);
+
+  /* ===== 正文标题 ===== */
+  --color-prose-heading-border: var(--prose-heading-border);
+
+  /* ===== 标签 ===== */
+  --color-tag-bg: var(--tag-bg);
+  --color-tag-bg-hover: var(--tag-bg-hover);
+
+  /* ===== 分类封面 ===== */
+  --color-category-cover-text: var(--category-cover-text);
+
+  /* ===== 引用块 ===== */
+  --color-blockquote-border: var(--blockquote-border);
+  --color-blockquote-text: var(--blockquote-text);
+
+  /* ===== 列表 ===== */
+  --color-list-marker: var(--list-marker);
+
+  /* ===== 复选框 ===== */
+  --color-checkbox-border: var(--checkbox-border);
+  --color-checkbox-bg: var(--checkbox-bg);
+  --color-checkbox-checked-bg: var(--checkbox-checked-bg);
+  --color-checkbox-check: var(--checkbox-check);
+
+  /* ===== 代码 ===== */
+  --color-code-block-border: var(--code-block-border);
+  --color-code-block-bg: var(--code-block-bg);
+  --color-code-inline-bg: var(--code-inline-bg);
+  --color-code-copy-bg: var(--code-copy-bg);
+  --color-code-filename-text: var(--code-filename-text);
+  --color-code-filename-dot: var(--code-filename-dot);
+  --color-code-highlight-bg: var(--code-highlight-bg);
+  --color-code-diff-add-bg: var(--code-diff-add-bg);
+  --color-code-diff-add-text: var(--code-diff-add-text);
+  --color-code-diff-remove-bg: var(--code-diff-remove-bg);
+  --color-code-diff-remove-text: var(--code-diff-remove-text);
+
+  /* ===== 表格 ===== */
+  --color-table-header-border: var(--table-header-border);
+  --color-table-row-border: var(--table-row-border);
+
+  /* ===== 骨架屏 ===== */
+  --color-skeleton-base: var(--skeleton-base);
+  --color-skeleton-highlight: var(--skeleton-highlight);
+
+  /* ===== 滚动条 ===== */
+  --color-scrollbar-thumb: var(--scrollbar-thumb);
+  --color-scrollbar-thumb-hover: var(--scrollbar-thumb-hover);
+}

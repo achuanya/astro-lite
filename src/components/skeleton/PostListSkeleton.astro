@@ -1,0 +1,48 @@
+---
+/**
+ * 文章列表骨架屏
+ *
+ * 镜像首页 / 分类页 / 标签页 / 友链页的 `ul#post-list.space-y-4` 列表，
+ * 由 N 个 PostCardSkeleton 组成，标题宽度按数组轮换以增加真实感。
+ *
+ * @example
+ *   <PostListSkeleton count={config.posts.perPage} />
+ */
+import PostCardSkeleton from "./PostCardSkeleton.astro";
+import config from "@/config";
+
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  /** 卡片数量，默认从 config.posts.perPage 读取 */
+  count?: number;
+  /** 是否显示封面占位，默认 true */
+  showCover?: boolean;
+  /** 动画类型，默认 shimmer */
+  animation?: Animation;
+  /** 透传到 ul 的额外类名 */
+  class?: string;
+}
+
+const {
+  count = config.posts.perPage,
+  showCover = true,
+  animation = "shimmer",
+  class: className,
+} = Astro.props;
+
+// 标题宽度轮换，避免每条卡片都等宽显得呆板
+const titleWidths = ["72%", "58%", "65%", "80%", "50%", "68%"];
+---
+
+<ul class:list={["space-y-4", className]} aria-hidden="true">
+  {
+    Array.from({ length: count }).map((_, i) => (
+      <PostCardSkeleton
+        showCover={showCover}
+        titleWidth={titleWidths[i % titleWidths.length]}
+        animation={animation}
+      />
+    ))
+  }
+</ul>

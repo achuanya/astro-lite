@@ -1,0 +1,45 @@
+---
+/**
+ * 标签云骨架屏
+ *
+ * 镜像 pages/tags/index.astro 的 `flex flex-wrap gap-2` 药丸布局，
+ * 由宽度轮换的 h-8 圆角药丸组成，模拟不同长度的标签。
+ *
+ * @example
+ *   <TagCloudSkeleton count={50} />
+ */
+import Skeleton from "./Skeleton.astro";
+
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  /** 药丸数量，默认 50 */
+  count?: number;
+  /** 动画类型，默认 shimmer */
+  animation?: Animation;
+}
+
+const { count = 50, animation = "shimmer" } = Astro.props;
+
+// 宽度轮换，模拟长短不一的标签名
+const widths = [
+  "3.5rem", "5rem", "4rem", "6.5rem", "4.5rem", "7rem",
+  "3rem", "5.5rem", "4rem", "6rem", "8rem", "3.5rem",
+  "5rem", "4.5rem", "6rem", "3rem", "7.5rem", "4rem",
+];
+---
+
+<ul class="flex flex-wrap gap-2" aria-hidden="true">
+  {
+    Array.from({ length: count }).map((_, i) => (
+      <li>
+        <Skeleton
+          height="2rem"
+          width={widths[i % widths.length]}
+          rounded="rounded-md"
+          animation={animation}
+        />
+      </li>
+    ))
+  }
+</ul>

@@ -1,53 +1,124 @@
 ---
-/**
- * 标签索引页
- *
- * @fileoverview 显示所有标签及其文章数量
- *
- * 核心逻辑：
- * 1. 获取所有标签（使用 getUniqueTags）
- * 2. 使用 Tag 组件显示每个标签
- * 3. 大号显示（size="lg"）
- * 4. 显示标签使用次数
- *
- * 视觉设计：
- * - 标签云布局
- * - 圆角胶囊样式
- * - 悬停效果：向上移动
- *
- * 依赖关系：
- * - 被 /tags 路径访问
- * - 使用 Tag 组件显示标签
- */
-
 import { getCollection } from "astro:content";
-import Main from "@/layouts/Main.astro";
+import { getRelativeLocaleUrl } from "astro:i18n";
 import Layout from "@/layouts/Layout.astro";
-import Tag from "@/components/Tag.astro";
 import Header from "@/components/Header.astro";
+import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
-import getUniqueTags from "@/utils/getUniqueTags";
-import { SITE } from "@/config";
-import { _t } from "@/i18n/lang";
+import { getUniqueTags } from "@/utils/getUniqueTags";
+import { slugifyStr } from "@/utils/slugify";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
 
-// 获取所有文章
-const posts = await getCollection("blog");
+const locale = Astro.currentLocale ?? config.site.lang;
 
-// 获取所有标签
-let tags = getUniqueTags(posts);
+// Redirect to 404 page if `showTags` config is false
+const notFoundUrl = getRelativeLocaleUrl(locale, "404");
+if (!config.features.showTags && notFoundUrl) {
+  return Astro.rewrite(notFoundUrl);
+}
+
+const t = useTranslations(locale);
+
+const posts = await getCollection("posts", ({ data }) => !data.draft);
+const tags = getUniqueTags(posts);
+
+const counts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    const slug = slugifyStr(tag);
+    counts.set(slug, (counts.get(slug) ?? 0) + 1);
+  }
+}
+
+const tagsWithCount = tags
+  .map(t => ({ ...t, count: counts.get(t.tag) ?? 0 }))
+  .sort((a, b) => b.count - a.count || a.tagName.localeCompare(b.tagName));
 ---
 
-<Layout title={`${_t.tags.title} | ${SITE.title}`}>
-  <Header />
-  <Main pageTitle="" pageDesc={_t.tags.desc}>
-    <!-- 标签列表 -->
-    <ul>
+<Layout title={`${t.pages.tagsTitle} | ${config.site.title}`}>
+  <Header pageTitle={t.pages.tagsTitle} />
+
+  <Main>
+    <ul id="tags-justified" class="flex flex-wrap gap-2">
       {
-        tags.map(({ tag, tagName, count }) => (
-          <Tag {tag} {tagName} {count} size="lg" />
+        tagsWithCount.map(({ tag, tagName }) => (
+          <li class="tag-item">
+            <a
+              href={getRelativeLocaleUrl(locale, `tags/${tag}/`)}
+              transition:name={tag}
+              class="bg-tag-bg hover:bg-tag-bg-hover flex h-full items-center justify-center gap-1 rounded-md px-3 py-1.5 text-sm whitespace-nowrap"
+            >
+              <span class="opacity-60">#</span>
+              <span>{tagName}</span>
+            </a>
+          </li>
         ))
       }
     </ul>
   </Main>
+
   <Footer />
 </Layout>
+
+<script>
+  // Justified Gallery Algorithm for tag layout.
+  // Greedy row packing → per-row proportional scaling → cap stretch ratio so
+  // sparse rows (and the last row) don't stretch individual tags too wide.
+  function layoutTags() {
+    const container = document.getElementById("tags-justified");
+    if (!container) return;
+    const items = Array.from(container.children) as HTMLElement[];
+    if (items.length === 0) return;
+
+    const maxScale = 1.6;
+    const gap = parseFloat(getComputedStyle(container).columnGap || "8") || 8;
+
+    // Reset widths to measure natural sizes.
+    for (const li of items) li.style.width = "";
+
+    const containerWidth = container.clientWidth;
+    const widths = items.map(li => li.getBoundingClientRect().width);
+
+    // Greedy pack into rows.
+    const rows: number[][] = [];
+    let row: number[] = [];
+    let rowWidth = 0;
+    for (let i = 0; i < items.length; i++) {
+      const w = widths[i];
+      const need = row.length === 0 ? w : rowWidth + gap + w;
+      if (row.length > 0 && need > containerWidth) {
+        rows.push(row);
+        row = [i];
+        rowWidth = w;
+      } else {
+        row.push(i);
+        rowWidth = need;
+      }
+    }
+    if (row.length) rows.push(row);
+
+    // Justify each row except the last; skip rows whose scale would exceed cap.
+    rows.forEach((idxs, rIdx) => {
+      const isLast = rIdx === rows.length - 1;
+      if (isLast) return;
+      const sumW = idxs.reduce((s, i) => s + widths[i], 0);
+      const avail = containerWidth - (idxs.length - 1) * gap;
+      const scale = avail / sumW;
+      if (scale <= 1 || scale > maxScale) return;
+      for (const i of idxs) {
+        items[i].style.width = widths[i] * scale + "px";
+      }
+    });
+  }
+
+  let raf = 0;
+  function schedule() {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(layoutTags);
+  }
+
+  document.addEventListener("astro:page-load", schedule);
+  window.addEventListener("resize", schedule);
+  schedule();
+</script>

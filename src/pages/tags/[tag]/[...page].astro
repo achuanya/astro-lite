@@ -1,93 +1,68 @@
 ---
-/**
- * 标签详情页（带分页）
- *
- * @fileoverview 显示某个标签下的所有文章
- *
- * 核心逻辑：
- * 1. 使用 getStaticPaths 为每个标签生成路由
- * 2. 筛选出包含当前标签的文章（使用 getPostsByTag）
- * 3. 使用 Pagination 组件显示分页导航
- * 4. 首页标题使用 View Transitions 动画
- *
- * 路由格式：
- * - /tags/javascript - 第1页
- * - /tags/javascript/2 - 第2页
- * - ...
- *
- * 分页说明：
- * - 使用 Astro 原生分页（非懒加载）
- * - pageSize: SITE.postPerPage
- * - 显示上一页/下一页按钮
- *
- * 依赖关系：
- * - 被 /tags/[tag]/[...page].astro 路由使用
- * - 使用 Card 组件显示文章
- * - 使用 Pagination 组件显示分页
- */
-
 import { getCollection } from "astro:content";
 import type { GetStaticPathsOptions } from "astro";
-import Main from "@/layouts/Main.astro";
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
-import Footer from "@/components/Footer.astro";
+import Main from "@/components/Main.astro";
 import Card from "@/components/Card.astro";
-import Pagination from "@/components/Pagination.astro";
-import getUniqueTags from "@/utils/getUniqueTags";
-import getPostsByTag from "@/utils/getPostsByTag";
-import { SITE } from "@/config";
-import { _t } from "@/i18n/lang";
+import Footer from "@/components/Footer.astro";
+import { getUniqueTags } from "@/utils/getUniqueTags";
+import { getSortedPosts } from "@/utils/getSortedPosts";
+import { slugifyAll } from "@/utils/slugify";
+import { useTranslations } from "@/i18n";
+import config from "@/config";
 
-/**
- * 生成静态路径
- *
- * 为每个标签生成带分页的路由
- */
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
-  const posts = await getCollection("blog");
+  if (!config.features.showTags) return [];
+
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
   const tags = getUniqueTags(posts);
 
-  // 为每个标签生成分页路由
   return tags.flatMap(({ tag, tagName }) => {
-    // 获取包含该标签的所有文章
-    const tagPosts = getPostsByTag(posts, tag);
+    const tagPosts = getSortedPosts(
+      posts.filter(({ data }) => slugifyAll(data.tags).includes(tag))
+    );
 
     return paginate(tagPosts, {
       params: { tag },
       props: { tagName },
-      pageSize: SITE.postPerPage,
+      pageSize: config.posts.perPage,
     });
   });
 }
 
-const params = Astro.params;
-const { tag } = params;
 const { page, tagName } = Astro.props;
+const { tag } = Astro.params as { tag?: string };
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
 ---
 
-<Layout title={`${_t.tag.title}${tagName} | ${SITE.title}`}>
-  <Header />
-  <Main
-    pageTitle={[_t.tag.title, `${tagName}`]}
-    titleTransition={tag}
-    pageDesc={_t.tag.desc(tagName)}
-  >
-    <!-- 标签标题（用于 slot） -->
-    <h1 slot="title" transition:name={tag}>{`Tag:${tag}`}</h1>
-    <!-- 文章列表 -->
-    <ul>
-      {
-        page.data.map(data => (
-          <Card {...data} />
-        ))
-      }
+<Layout title={`${t.pages.tagTitle}: ${tagName} | ${config.site.title}`}>
+  <Header pageTitle={`${t.pages.tagTitle}: ${tagName}`} />
+
+  <Main>
+    <ul id="post-list" class="space-y-4">
+      {page.data.map(data => <Card {...data} />)}
     </ul>
+    <div id="infinite-scroll-sentinel" data-next-page={page.url.next} />
   </Main>
 
-  <!-- 分页导航 -->
-  <Pagination {page} />
+  <Footer />
 
-  <!-- Footer（有分页时移除顶部外边距） -->
-  <Footer noMarginTop={page.lastPage > 1} />
+  <noscript>
+    <div class="mt-4 flex justify-center">
+      <a
+        href={page.url.next ?? page.url.prev ?? `/tags/${tag}`}
+        class="text-accent hover:underline"
+      >
+        Next Page &rarr;
+      </a>
+    </div>
+  </noscript>
 </Layout>
+
+<script>
+  import { initInfiniteScroll } from "@/scripts/infiniteScroll";
+  document.addEventListener("astro:page-load", initInfiniteScroll);
+</script>

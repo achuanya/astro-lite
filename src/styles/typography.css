@@ -1,112 +1,431 @@
-@plugin '@tailwindcss/typography';
+/**
+ * 排版与正文样式
+ *
+ * 作用：基于 @tailwindcss/typography 插件，定义 .app-prose 下的全部排版规则，
+ *       包括标题层级、段落、链接、列表、代码块、引用块、表格、复选框等。
+ *       风格参考 Typora Claude Dark，以紧凑层级和克制字号跳跃为原则。
+ *
+ * 注意：
+ * - 颜色均通过 Tailwind utility class 引用主题 token（如 text-foreground），
+ *   修改配色应在 theme-light / theme-dark 中进行，此处不做颜色硬编码；
+ * - 排版尺寸变量（--text-h*、--leading-*、--block-gap 等）定义在 :root 中，
+ *   修改排版节奏直接调整这些变量即可；
+ * - .astro-code 相关样式与 Shiki 语法高亮集成，注意不要破坏其 DOM 结构。
+ */
+@plugin "@tailwindcss/typography";
 
 @layer base {
-  .prose {
-    @apply !text-sm prose-headings:!mb-3 prose-headings:!text-accent prose-h3:italic prose-p:!text-foreground prose-p:!my-3 prose-a:underline-offset-6 prose-blockquote:!border-l-accent/50 prose-blockquote:opacity-70 prose-strong:!text-foreground prose-code:rounded prose-code:bg-muted/75 prose-code:p-0.5 prose-code:!font-normal prose-code:!text-foreground prose-code:before:!content-none prose-code:after:!content-none prose-ol:!text-foreground prose-ul:overflow-x-clip prose-ul:!text-foreground prose-li:marker:!text-accent prose-table:text-foreground prose-th:border prose-th:border-border prose-th:!text-accent prose-td:border prose-td:border-border prose-img:mx-auto prose-hr:!border-border prose-hr:!my-0;
+  /* ========================================
+     Typography Design Tokens
+
+     Principles adapted from Typora Claude Dark:
+     - Compact hierarchy with modest size jumps
+     - Tight heading-to-body coupling
+     - Relaxed body leading for comfortable reading
+     - Generous code block breathing room
+     - Refined spacing throughout
+     ======================================== */
+  :root {
+    /* Size scale — modest increases over body text.
+       Typora uses minimal size differentiation; hierarchy comes from
+       weight + spacing rather than dramatic font-size jumps. */
+    --text-h1: 1.375rem;
+    --text-h2: 1.125rem;
+    --text-h3: 1rem;
+    --text-h4: 1rem;
+    --text-h5: 0.875rem;
+    --text-h6: 0.875rem;
+
+    /* Line-height rhythm — relaxed body, tighter headings.
+       Typora uses ~1.5 for body; we use 1.65 for better readability
+       with sans-serif faces common in AstroPaper. */
+    --leading-body: 1.65;
+    --leading-heading: 1.35;
+
+    /* Inter-block gap — replaces paragraph margins.
+       Typora uses flex gap: 0.75rem; we mirror this as a consistent
+       vertical rhythm unit between block-level elements. */
+    --block-gap: 0.75rem;
+
+    /* Heading-to-content gap — space between a heading and the
+       content that follows it. Ensures visual breathing room
+       so headings feel separated from body text. */
+    --heading-gap: 0.75rem;
+
+    /* Prose measure — narrow column for comfortable reading.
+       Typora uses 752px; 720px = 45rem = widely accepted optimal
+       line length (45-75 characters). */
+    --prose-max-width: 720px;
   }
 
-  /* inline code */
-  .prose :not(pre) > code {
-    @apply !break-words !whitespace-pre-wrap;
-  }
+  /* ===== Prose overrides ===== */
+  .app-prose {
+    @apply prose;
+    max-width: var(--prose-max-width);
 
-  .prose strong {
-    font-weight: var(--strong-font-weight) !important;
-  }
+    /*
+     * Headings — modest sizes, tight spacing.
+     * Typora's headings are only slightly larger than body text (h1 = 1.375rem).
+     * We use font-weight (semibold) and spacing rather than size for hierarchy.
+     * Top margins follow a natural Fibonacci-like sequence (6-5-4-3).
+     */
+    h1 {
+      @apply text-foreground mt-6 font-medium border-l-prose-heading-border;
+      font-family: var(--font-ui);
+      font-size: var(--text-h1);
+      line-height: var(--leading-heading);
+      margin-bottom: var(--heading-gap);
+      border-left-width: 4px;
+      padding-left: 1rem;
+    }
+    h2 {
+      @apply text-foreground mt-5 font-medium border-l-prose-heading-border;
+      font-size: var(--text-h2);
+      line-height: var(--leading-heading);
+      margin-bottom: var(--heading-gap);
+      border-left-width: 4px;
+      padding-left: 1rem;
+    }
+    h3 {
+      @apply text-foreground mt-4 font-medium border-l-prose-heading-border;
+      font-size: var(--text-h3);
+      line-height: var(--leading-heading);
+      margin-bottom: var(--heading-gap);
+      border-left-width: 4px;
+      padding-left: 1rem;
+    }
+    h4 {
+      @apply text-foreground mt-4 font-medium;
+      font-size: var(--text-h4);
+      line-height: var(--leading-heading);
+      margin-bottom: var(--heading-gap);
+    }
+    h5 {
+      @apply text-foreground mt-3 font-medium;
+      font-size: var(--text-h5);
+      line-height: var(--leading-heading);
+      margin-bottom: var(--heading-gap);
+    }
+    h6 {
+      @apply text-foreground mt-3 font-medium;
+      font-size: var(--text-h6);
+      line-height: var(--leading-heading);
+      margin-bottom: var(--heading-gap);
+    }
 
-  .prose a {
-    @apply break-words !text-accent !no-underline hover:!underline;
-  }
-  .prose thead th:first-child,
-  tbody td:first-child,
-  tfoot td:first-child {
-    padding-inline-start: 0.5714286em !important;
-  }
+    /*
+     * Body text — Typora sets margin:0 on paragraphs, relying on
+     * flex gap for spacing. In a normal flow layout we use a compact
+     * bottom margin + relaxed line-height for the same dense rhythm.
+     */
+    p {
+      @apply text-foreground;
+      line-height: var(--leading-body);
+      margin-top: 0;
+      margin-bottom: var(--block-gap);
+    }
 
-  .prose blockquote {
-    @apply !font-normal; /* font-serif !not-italic */
-  }
-  .prose blockquote p::before {
-    content: "" !important;
-  }
+    strong {
+      @apply text-foreground;
+      font-family: var(--font-bold);
+    }
 
-  /* .prose h2#table-of-contents {
-    @apply mb-2;
-  } */
-  /* .prose h2#table-of-contents + p {
-    @apply hidden;
-  } */
+    /*
+     * Links — 细实线下划线，颜色弱化以减少视觉噪音；
+     * 悬停时下划线与文字同步切换到强调色。
+     */
+    a {
+      @apply text-foreground hover:text-accent wrap-break-word focus-visible:no-underline;
+      text-decoration-line: underline;
+      text-decoration-color: currentColor;
+      text-decoration-thickness: 1px;
+      text-decoration-skip-ink: none;
+      text-underline-offset: 3px;
+      transition: color 0.15s ease;
+    }
 
-  .prose details {
-    @apply inline-block cursor-pointer text-foreground select-none;
-  }
-  .prose summary {
-    @apply focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent;
-  }
+    /*
+     * Lists — tight vertical rhythm matching paragraph line-height.
+     * Nested lists collapse margins to avoid spacing drift in
+     * deeply indented structures.
+     */
+    ol,
+    ul {
+      @apply text-foreground overflow-x-clip;
+      margin-top: 0;
+      margin-bottom: var(--block-gap);
+    }
+    li {
+      margin-top: 0;
+      margin-bottom: 0;
+      line-height: var(--leading-body);
+    }
+    li::marker {
+      @apply text-list-marker;
+    }
+    li > ul,
+    li > ol {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
 
-  .prose img {
-    margin-block: 0 !important;
-  }
-  
-  .prose kbd {
-    @apply rounded border-1 border-border bg-muted text-foreground!;
-  }
+    /*
+     * Inline code — Typora uses a tinted background + subtle border.
+     * We keep the muted background approach with refined padding
+     * (less vertical, slightly more horizontal) for an elegant fit.
+     */
+    code {
+      @apply text-foreground bg-code-inline-bg rounded wrap-break-word before:content-none after:content-none;
+      font-size: 0.9em;
+      padding: 0.125rem 0.375rem;
+      font-weight: 400;
+    }
 
-  .responsive-table {
-    @apply overflow-x-auto;
-    -webkit-overflow-scrolling: touch;
-  }
+    /*
+     * Code blocks — Typora uses generous top padding for a language
+     * label area. We add consistent padding + rounded corners.
+     * Border/shiki colors are handled by .astro-code rule below.
+     */
+    pre {
+      @apply rounded-lg border border-code-block-border;
+      padding: 0;
+      /* 隐藏代码块横向滚动条，保留滚动能力 */
+      scrollbar-width: none;          /* Firefox */
+      -ms-overflow-style: none;       /* 旧版 Edge / IE */
+    }
+    pre::-webkit-scrollbar {
+      display: none;                  /* WebKit / Blink */
+    }
+    .astro-code code {
+      @apply flex-[1_0_100%] bg-inherit;
+      padding: 1.25rem 1rem;
+    }
 
-  .responsive-table table {
-    @apply w-full min-w-full table-auto;
-  }
+    /*
+     * Blockquotes — Typora uses a thick 4px left border with no opacity
+     * reduction on the text. We remove the generic opacity-80 in favor
+     * of a clean accent border. Inner paragraph margins are collapsed
+     * to keep the quote visually tight.
+     */
+    blockquote {
+      @apply border-l-blockquote-border text-blockquote-text;
+      border-left-width: 4px;
+      padding-left: 1rem;
+      margin-top: 0;
+      margin-bottom: var(--block-gap);
+      font-style: normal;
+    }
+    blockquote p {
+      @apply text-blockquote-text;
+      font-style: normal;
+    }
+    blockquote a {
+      @apply text-blockquote-text hover:text-blockquote-text;
+      text-decoration-color: var(--color-blockquote-text);
+    }
+    blockquote p:first-of-type {
+      margin-top: 0;
+    }
+    blockquote p:last-of-type {
+      margin-bottom: 0;
+    }
 
-  .prose iframe {
-    @apply aspect-video w-full max-w-full;
-  }
+    /*
+     * Horizontal rules — centered in the rhythm with consistent
+     * block-gap spacing above and below.
+     */
+    hr {
+      @apply border-border;
+      margin-top: var(--block-gap);
+      margin-bottom: var(--block-gap);
+    }
 
-  .prose .katex-display {
-    @apply text-foreground;
-  }
+    /*
+     * Images — centered and spaced consistently within the prose flow.
+     */
+    img {
+      @apply mx-auto;
+      margin-top: var(--block-gap);
+      margin-bottom: var(--block-gap);
+    }
 
-  /* Image bleed: figure uses #site-frame inline padding variable */
-  .prose figure.image-bleed {
-    margin-inline: calc(var(--frame-pad-inline) * -1);
-    width: calc(100% + (var(--frame-pad-inline) * 2));
-  }
-  .prose figure.image-bleed img {
-    display: block;
-    width: 100%;
-    height: auto;
-    margin-inline: 0 !important;
+    figcaption {
+      @apply text-muted-foreground;
+    }
+
+    /*
+     * Tables — compact and lightweight.
+     * Typora uses 0.5px borders and tight padding; we use 1px borders
+     * (minimum for 1x screens) with reduced cell padding.
+     * Explicit font-size/line-height keeps tables from feeling bulky.
+     */
+    table {
+      @apply text-foreground w-full border-collapse;
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+    th,
+    td {
+      @apply text-left;
+      padding: 0.375rem 0.5rem;
+    }
+    th {
+      @apply text-foreground font-semibold border-b-2 border-b-table-header-border;
+    }
+    td {
+      @apply border-b border-b-table-row-border;
+    }
+
+    details:not(.callout) {
+      @apply text-foreground inline-block cursor-pointer select-none [&_p]:hidden [&_ul]:my-0!;
+    }
+    summary {
+      @apply focus-visible:outline-accent focus-visible:no-underline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-dashed;
+    }
+
+    /* 复选框 — 隐藏原生样式，统一外观 */
+    input[type="checkbox"] {
+      @apply border border-checkbox-border bg-checkbox-bg;
+      appearance: none;
+      width: 1em;
+      height: 1em;
+      border-radius: 3px;
+      vertical-align: middle;
+      cursor: pointer;
+      position: relative;
+    }
+    input[type="checkbox"]:checked {
+      @apply bg-checkbox-checked-bg border-checkbox-border;
+    }
+    input[type="checkbox"]:checked::after {
+      @apply border-2 border-checkbox-check;
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      width: 5px;
+      height: 9px;
+      border-top: none;
+      border-left: none;
+      transform: translate(-50%, -50%) rotate(45deg);
+    }
+
+    /* Code block focus — kept for accessibility */
+    pre:focus-visible {
+      @apply outline-accent outline-2 outline-dashed;
+    }
   }
 
   /* ===== Code Blocks & Syntax Highlighting ===== */
-  /* pre:has(code) {
-    @apply border border-border;
-  } */
+  /* AstroPaper's Shiki integration — colors driven by CSS variables */
+  .astro-code {
+    @apply flex text-(--shiki-light) [&_span]:text-(--shiki-light) !bg-code-block-bg;
+  }
 
-  /* .prose code,
-  .prose blockquote {
-    @apply break-words;
-  } */
+  .astro-code > span {
+    @apply !bg-code-block-bg;
+  }
 
-  /* add line breaks whenever necessary for codes under table */
-  /* .prose table code {
-    @apply break-all sm:break-normal;
-  } */
+  html[data-theme="dark"] .astro-code {
+    @apply text-(--shiki-dark) [&_span]:text-(--shiki-dark);
+  }
 
-  /* pre > code {
-    white-space: pre;
-  } */
+  .copy-code {
+    /* 隐藏复制按钮：保留 JS 注入的 wrapper 作为文件名标签的定位上下文 */
+    @apply !bg-code-copy-bg !border-0;
+    display: none;
+  }
+  
+  /* 代码块文件名标签的边框 */
+  .astro-code span.absolute {
+    @apply border border-code-block-border rounded-t-lg;
+  }
 
-  /* Apply Dark Theme (if multi-theme specified) */
-  /* html[data-theme="dark"] pre:has(code),
-  html[data-theme="dark"] pre:has(code) span {
-    color: var(--shiki-dark) !important;
-    background-color: var(--shiki-dark-bg) !important;
-    font-style: var(--shiki-dark-font-style) !important;
-    font-weight: var(--shiki-dark-font-weight) !important;
-    text-decoration: var(--shiki-dark-text-decoration) !important;
-  } */
+  /* Shiki transformer visual styles — diff, highlight, error */
+  .astro-code {
+    .line.diff.add {
+      @apply relative inline-block w-full before:absolute before:-left-3 before:content-['+'] bg-code-diff-add-bg;
+      &::before { @apply text-code-diff-add-text; }
+    }
+    .line.diff.remove {
+      @apply relative inline-block w-full before:absolute before:-left-3 before:content-['-'] bg-code-diff-remove-bg;
+      &::before { @apply text-code-diff-remove-text; }
+    }
+    .line.highlighted {
+      @apply inline-block w-full bg-code-highlight-bg;
+    }
+    .highlighted-word {
+      @apply border-border rounded-sm border px-0.5 py-px;
+    }
+  }
+}
+
+/*
+ * ===== Callouts (rehype-callouts / Obsidian theme) =====
+ *
+ * 注意：这些规则需置于 @layer base 之外（unlayered），否则会被
+ * global.css 中 `@import "rehype-callouts/theme/obsidian"` 引入的
+ * 同名 `.callout` 规则覆盖（unlayered 在级联中始终优先于 @layer）。
+ *
+ * 默认主题给 .callout 设置了 padding 12px 12px 12px 24px、margin 1em 0；
+ * 而 .app-prose 下的 <p> 仍然继承了 var(--block-gap)，叠加后内部段落松散。
+ * 这里覆盖外框节奏、收紧内部段落间距，并消除首尾段落的边距重叠。
+ *
+ * DOM 结构（rehype-callouts 生成）：
+ *   .callout
+ *     ├── .callout-title (summary / div)
+ *     │     ├── .callout-title-icon
+ *     │     ├── .callout-title-text
+ *     │     └── .callout-fold-icon (可折叠时)
+ *     └── .callout-content (div)
+ *           └── <p> / <ul> / <pre> ...
+ */
+.app-prose {
+  --callout-inner-gap: 0.4rem;
+}
+
+.app-prose .callout {
+  margin-top: var(--block-gap);
+  margin-bottom: var(--block-gap);
+  padding: 0.625rem 1rem 0.625rem 1.125rem;
+  line-height: var(--leading-body);
+}
+
+.app-prose .callout-title {
+  line-height: var(--leading-heading);
+  margin-bottom: var(--callout-inner-gap);
+}
+
+/* 只有标题、没有内容时，标题不应制造底部空间 */
+.app-prose .callout-title:last-child {
+  margin-bottom: 0;
+}
+
+/* 折叠状态下闭合时，移除标题与未展开内容之间的多余间距 */
+.app-prose .callout[data-collapsible="true"]:not([open]) > .callout-title {
+  margin-bottom: 0;
+}
+
+/* 内部段落与块元素 — 显著小于正文 block-gap，营造紧凑节奏 */
+.app-prose .callout-content > p,
+.app-prose .callout-content > ul,
+.app-prose .callout-content > ol,
+.app-prose .callout-content > blockquote,
+.app-prose .callout-content > pre,
+.app-prose .callout-content > table {
+  margin-top: 0;
+  margin-bottom: var(--callout-inner-gap);
+}
+
+/* 首尾子元素归零，避免与 .callout 外框 padding 叠加 / 边距重叠 */
+.app-prose .callout-content > :first-child {
+  margin-top: 0;
+}
+.app-prose .callout-content > :last-child {
+  margin-bottom: 0;
+}
+
+/* 处理 Markdown 中 `>` 空行渲染出的空段落，避免双重视觉间距 */
+.app-prose .callout-content > p:empty {
+  display: none;
 }

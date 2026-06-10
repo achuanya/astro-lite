@@ -24,5 +24,10 @@ pnpm-debug.log*
 .idea/
 
 # pagefind
-
 public/pagefind
+
+# pnpm
+.pnpm-store
+
+# docker compose
+compose.override.yaml

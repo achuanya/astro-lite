@@ -1,0 +1,51 @@
+---
+/**
+ * 文本段落骨架屏
+ *
+ * 由多条等高 Skeleton 组成，模拟一段文字；末行可设置更短宽度，
+ * 更贴近真实段落的视觉节奏。
+ *
+ * @example
+ *   <SkeletonText lines={3} lastLineWidth="60%" />
+ */
+import Skeleton from "./Skeleton.astro";
+
+type Animation = "shimmer" | "pulse" | "none";
+
+interface Props {
+  /** 行数，默认 3 */
+  lines?: number;
+  /** 末行宽度，默认 60% */
+  lastLineWidth?: string;
+  /** 每行高度，默认 0.75rem */
+  height?: string;
+  /** 行间距 Tailwind 类，默认 space-y-2 */
+  gap?: string;
+  /** 动画类型，默认 shimmer */
+  animation?: Animation;
+  /** 透传的额外类名 */
+  class?: string;
+}
+
+const {
+  lines = 3,
+  lastLineWidth = "60%",
+  height = "0.75rem",
+  gap = "space-y-2",
+  animation = "shimmer",
+  class: className,
+} = Astro.props;
+---
+
+<div class:list={[gap, className]} aria-hidden="true">
+  {
+    Array.from({ length: lines }).map((_, i) => (
+      <Skeleton
+        height={height}
+        width={i === lines - 1 ? lastLineWidth : "100%"}
+        rounded="rounded"
+        animation={animation}
+      />
+    ))
+  }
+</div>

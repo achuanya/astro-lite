@@ -1,0 +1,163 @@
+---
+/**
+ * 页面切换骨架屏覆盖层（View Transitions）
+ *
+ * 一个持久化（transition:persist）的全屏覆盖层，自成一体地镜像站点框架
+ * （外层画布 + 居中白卡 + 页头 + 内容 + 页脚）。仅在导航**超过阈值**
+ * （约 250ms，慢网络）时按目标路由显示对应内容骨架；本地快速切换永不闪现。
+ *
+ * 工作原理：
+ *  - astro:before-preparation → 按目标 URL 归类路由，setTimeout(show, 250)
+ *  - astro:after-swap / astro:page-load → 清除计时器并隐藏覆盖层
+ *  - transition:persist 保证覆盖层在 DOM swap 期间不被销毁
+ *
+ * 放置于 Layout.astro 的 <body> 内、#site-frame 之外。
+ */
+import HeaderSkeleton from "./HeaderSkeleton.astro";
+import PostListSkeleton from "./PostListSkeleton.astro";
+import CategoryGridSkeleton from "./CategoryGridSkeleton.astro";
+import TagCloudSkeleton from "./TagCloudSkeleton.astro";
+import AboutSkeleton from "./AboutSkeleton.astro";
+import Skeleton from "./Skeleton.astro";
+import config from "@/config";
+---
+
+<div
+  id="nav-skeleton"
+  transition:persist
+  aria-hidden="true"
+  class="site-outer-bg pointer-events-none fixed inset-0 z-[60] hidden overflow-hidden opacity-0 transition-opacity duration-200"
+>
+  {/* 镜像 #site-frame 的框架类，复刻外层画布 + 居中白卡 */}
+  <div
+    class="mx-auto flex w-full flex-col pt-6 sm:mt-[7vh] sm:w-[820px] sm:max-w-[72rem] sm:bg-background sm:px-[3.75rem] sm:pt-[1.875rem] sm:shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
+  >
+    <HeaderSkeleton />
+
+    <main class="app-layout pb-4">
+      <div data-route="home" hidden>
+        <PostListSkeleton count={config.posts.perPage} />
+      </div>
+      <div data-route="categories" hidden>
+        <CategoryGridSkeleton count={config.posts.perPage} />
+      </div>
+      <div data-route="tags" hidden>
+        <TagCloudSkeleton count={50} />
+      </div>
+      <div data-route="friends" hidden>
+        <PostListSkeleton count={config.posts.perPage} />
+      </div>
+      <div data-route="about" hidden>
+        <AboutSkeleton />
+      </div>
+      <div data-route="list" hidden>
+        <PostListSkeleton count={config.posts.perPage} />
+      </div>
+    </main>
+
+    {/* 页脚占位，镜像 Footer.astro 的分隔线 + 两端内容 */}
+    <div class="app-layout">
+      <div
+        class="border-border mt-8 flex items-center justify-between border-t py-8 sm:mt-12 sm:py-6"
+      >
+        <Skeleton height="1rem" width="8rem" rounded="rounded" />
+        <Skeleton height="1rem" width="6rem" rounded="rounded" />
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  declare global {
+    interface Window {
+      __navSkelBound?: boolean;
+    }
+  }
+
+  const DELAY = 250;
+  // 顶层路由名集合，用于在去除 base 后剥离可能存在的语言前缀
+  const KNOWN = new Set([
+    "categories",
+    "tags",
+    "friends",
+    "about",
+    "posts",
+    "archives",
+    "search",
+  ]);
+
+  type RouteKey =
+    | "home"
+    | "categories"
+    | "tags"
+    | "friends"
+    | "about"
+    | "list";
+
+  /** 将目标 URL 归类为某种骨架路由 */
+  function classify(url: URL): RouteKey {
+    let path = url.pathname;
+    const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+    if (path.startsWith(base)) path = path.slice(base.length);
+
+    let segs = path.split("/").filter(Boolean);
+    // 剥离形如 /en/ 的语言前缀（非已知路由且为 2 字母代码）
+    if (
+      segs.length > 0 &&
+      !KNOWN.has(segs[0]) &&
+      /^[a-z]{2}(-[a-z]{2})?$/i.test(segs[0])
+    ) {
+      segs = segs.slice(1);
+    }
+
+    if (segs.length === 0) return "home";
+    const [first, second] = segs;
+    if (first === "categories") return second ? "list" : "categories";
+    if (first === "tags") return second ? "list" : "tags";
+    if (first === "friends") return "friends";
+    if (first === "about") return "about";
+    return "list";
+  }
+
+  let timer = 0;
+
+  function show(key: RouteKey) {
+    const overlay = document.getElementById("nav-skeleton");
+    if (!overlay) return;
+    overlay
+      .querySelectorAll<HTMLElement>("[data-route]")
+      .forEach(el => (el.hidden = el.dataset.route !== key));
+    overlay.classList.remove("hidden");
+    requestAnimationFrame(() => {
+      overlay.classList.remove("opacity-0");
+      overlay.classList.add("opacity-100");
+    });
+  }
+
+  function hide() {
+    window.clearTimeout(timer);
+    timer = 0;
+    const overlay = document.getElementById("nav-skeleton");
+    if (!overlay) return;
+    overlay.classList.add("opacity-0");
+    overlay.classList.remove("opacity-100");
+    overlay.classList.add("hidden");
+  }
+
+  function init() {
+    // 监听挂在持久的 document 上，用全局标记保证只绑定一次
+    if (window.__navSkelBound) return;
+    window.__navSkelBound = true;
+
+    document.addEventListener("astro:before-preparation", event => {
+      const key = classify((event as { to: URL }).to);
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => show(key), DELAY);
+    });
+
+    document.addEventListener("astro:after-swap", hide);
+    document.addEventListener("astro:page-load", hide);
+  }
+
+  init();
+</script>

@@ -1,36 +1,20 @@
 ---
-/**
- * 留言板页
- *
- * @fileoverview 显示留言评论区域
- *
- * 核心逻辑：
- * 1. 使用 Artalk 组件提供评论功能
- * 2. 页面只包含评论容器，无其他内容
- * 3. 评论的 pageKey 自动设为当前路径
- *
- * 依赖关系：
- * - 被 /guestbook 路径访问
- * - 使用 Artalk 组件
- */
-
 import Layout from "@/layouts/Layout.astro";
 import Header from "@/components/Header.astro";
+import Main from "@/components/Main.astro";
 import Footer from "@/components/Footer.astro";
-import Main from "@/layouts/Main.astro";
 import Artalk from "@/components/Artalk.astro";
-import { SITE } from "@/config";
-import { _t } from "@/i18n/lang";
+import config from "@/config";
+import { useTranslations } from "@/i18n";
+
+const locale = Astro.currentLocale ?? config.site.lang;
+const t = useTranslations(locale);
 ---
 
-<Layout title={`${_t.guestbook.title} | ${SITE.title}`}>
-  <Header />
-  <Main pageTitle="" pageDesc={_t.guestbook.desc}>
-    <section class="mx-auto w-full max-w-3xl">
-      <div id="Comments"></div>
-    </section>
+<Layout title={`${t.nav.guestbook} | ${config.site.title}`}>
+  <Header pageTitle={t.nav.guestbook} />
+  <Main class="app-prose">
+    <Artalk pageKey="/guestbook/" pageTitle={t.nav.guestbook} class="mt-8" />
   </Main>
   <Footer />
 </Layout>
-<Artalk />
-

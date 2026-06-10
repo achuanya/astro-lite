@@ -1,0 +1,150 @@
+/**
+ * 浅色主题变量定义
+ *
+ * 作用：为 :root 和 [data-theme="light"] 定义浅色模式（及默认）的全套 CSS 自定义属性，
+ *       是整个主题系统的基线配色。
+ *
+ * 编码规范 — 变量分区及顺序：
+ *   1. 字体 — 全局字体定义（inline 独有，此文件无此项）
+ *   2. 基础 — 页面底层色
+ *   3. 年度进度条 — 页面底部
+ *   4. 导航栏 — 顶部导航
+ *   5. 文章标题 — 标题色
+ *   6. 正文标题 — 正文 H1-H3 左边框
+ *   7. 标签 — 标签背景
+ *   8. 分类封面 — 封面文字
+ *   9. 引用块 — 正文引用
+ *  10. 列表 — 正文列表
+ *  11. 复选框 — 任务列表
+ *  12. 代码 — 代码块/行内代码
+ *  13. 表格 — 正文表格
+ *  14. 骨架屏 — 加载占位
+ *  15. 滚动条 — 页面滚动条
+ *
+ * 新增类别时：
+ *   - 根据语义确定应插入的序号位置；
+ *   - 在 theme-inline.css、theme-light.css、theme-dark.css 中同步插入对应分区及变量；
+ *   - 更新本注释中的序号列表以保持连续。
+ *
+ * 注意：
+ * - 此文件仅含变量声明，不包含任何样式规则；
+ * - :root 保证无 data-theme 属性时也使用浅色配色；
+ * - 变量会被 theme-inline.css 映射为 Tailwind v4 的 @theme token 后才能在
+ *   utility class 中使用，修改变量名时需同步更新 theme-inline.css；
+ * - 修改颜色值时注意与 theme-dark.css 保持语义对应（同一变量、两套色值）。
+ */
+:root,[data-theme="light"] {
+  /* ===== 基础 ===== */
+  /* 页面背景色 */
+  --background: #ffffff;
+  /* 外层画布色 */
+  --page-background: #7db9de;
+  /* 主要文字色 */
+  --foreground: #0d141e;
+  /* 强调色（链接、高亮） */
+  --accent: #212832;
+  /* 强调色上的文字色 */
+  --accent-foreground: #ffffff;
+  /* 次要背景色（标签等） */
+  --muted: #e6e6e6;
+  /* 次要文字色（时间、描述等） */
+  --muted-foreground: #969696;
+  /* 边框色 */
+  --border: #1f1e1d;
+  /* 文字选中背景色（基于 --nav-link 主色调，20% 透明度，柔和不刺眼） */
+  --selection-bg: color-mix(in oklab, #2ea9df 20%, transparent);
+
+  /* ===== 年度进度条 ===== */
+  /* 用强调色高亮已过去的部分 */
+  --year-progress-fill: var(--page-background);
+  /* 未到部分的轨道色，该变量不能像 dark 继承 --border */
+  --year-progress-track: color-mix(in oklab, #e5e9f0 70%, transparent);
+
+  /* ===== 导航栏 ===== */
+  /* 导航栏链接默认色 */
+  --nav-link: #2ea9df;
+  /* 导航栏链接悬停/激活色 */
+  --nav-link-active: var(--foreground);
+  /* 导航栏标题色 */
+  --nav-title: var(--foreground);
+
+  /* ===== 文章标题 ===== */
+  /* 文章标题色 */
+  --post-title: var(--nav-link);
+
+  /* ===== 正文标题 ===== */
+  /* 正文 H1-H3 左边框色（继承自引用块边框色） */
+  --prose-heading-border: var(--blockquote-border);
+
+  /* ===== 标签 ===== */
+  /* 标签背景色 */
+  --tag-bg: #F5F5F7;
+  /* 标签悬停背景色 */
+  --tag-bg-hover: #E8E8ED;
+
+  /* ===== 分类封面 ===== */
+  /* 分类封面文字色 */
+  --category-cover-text: #e6e6e6;
+
+  /* ===== 引用块 ===== */
+  /* 引用块左边框色 */
+  --blockquote-border: #2ea9df;
+  /* 引用块文字色 */
+  --blockquote-text: #2ea9df;
+
+  /* ===== 列表 ===== */
+  /* 列表标记色（有序、无序、任务列表通用） */
+  --list-marker: var(--foreground);
+
+  /* ===== 复选框 ===== */
+  /* 复选框边框色 */
+  --checkbox-border: #d0cfce;
+  /* 复选框背景色（未选中） */
+  --checkbox-bg: #f7f6f5;
+  /* 复选框背景色（已选中） */
+  --checkbox-checked-bg: #d0d0cf;
+  /* 复选框勾选符号色 */
+  --checkbox-check: #6b6b6b;
+
+  /* ===== 代码 ===== */
+  /* 代码块边框色 */
+  --code-block-border: #e5e5e6;
+  /* 代码块背景色（不透明，避免与文件名标签叠加产生色差） */
+  --code-block-bg: #fafafb;
+  /* 行内代码背景色 */
+  --code-inline-bg: var(--code-block-bg);
+  /* 复制按钮背景色 */
+  --code-copy-bg: var(--code-block-bg);
+  /* 文件名标签文字色 */
+  --code-filename-text: #c2c3c5;
+  /* 文件名标签绿点色 */
+  --code-filename-dot: #22c55e;
+  /* 代码高亮行背景色 */
+  --code-highlight-bg: #94a3b833;
+  /* diff 新增行背景色 */
+  --code-diff-add-bg: #4ade8033;
+  /* diff 新增行标记色 */
+  --code-diff-add-text: #22c55e;
+  /* diff 删除行背景色 */
+  --code-diff-remove-bg: #ef444433;
+  /* diff 删除行标记色 */
+  --code-diff-remove-text: #ef4444;
+
+  /* ===== 表格 ===== */
+  /* 表头分隔线色 */
+  --table-header-border: var(--border);
+  /* 表格行分隔线色 */
+  --table-row-border: var(--border);
+
+  /* ===== 骨架屏 ===== */
+  /* 骨架占位底色 */
+  --skeleton-base: #e9e9ec;
+  /* shimmer 光泽高光色（自左向右扫过） */
+  --skeleton-highlight: rgba(255, 255, 255, 0.6);
+
+  /* ===== 滚动条 ===== */
+  /* 滚动条滑块默认色（与外层画布一致） */
+  --scrollbar-thumb: var(--page-background);
+  /* 滚动条滑块悬停/拖动色 */
+  --scrollbar-thumb-hover: color-mix(in oklab, var(--page-background) 70%, white);
+}
