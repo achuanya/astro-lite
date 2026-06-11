@@ -1,8 +1,23 @@
-# Astro Lite
+---
+author: 游钓四方
+pubDatetime: 2026-06-12T00:15:00+08:00
+title: Astro Lite 6
+featured: true
+draft: false
+tags:
+  - 技术
+  - 前端
+  - 开源
+  - Astro
+cover: cover.svg
+description: Astro Lite 6 主题文档整理，涵盖统一配置、排版、主题切换、无限滚动等核心特性
+---
 
-![AstroPaper](public/default-og.jpg)
+![](astro-lite-v6.png)
 
-基于 Astro Paper  6二次开发的极简博客，注重写作，阅读
+如图所示，我又换博客了
+
+这次依然用 Astro Paper 做底子，不同于 v5 版本，Astro Paper v6 是为了迎合 Astro 6 新特性而做的重构，这也是我无法继续打磨老博客的原因之一，没办法，v6太香辣！经过我这段时间的调教，终于有了现在的**Astro Lite 6**，现整理文档，放心食用
 
 主要技术栈如下：
 
@@ -176,14 +191,14 @@ import Chart from "@/components/Chart.astro";
 
 <Chart data={[1, 2, 3]} />
 
-也支持 JS 表达式，例如 { 1 + 1 } 会渲染为 2，
+也支持 JS 表达式，例如 { 1 + 1 } 会渲染为 2
 ```
 
 需要交互式图表、可视化或自定义排版时用 `.mdx`；纯文字博客用 `.md` 即可，二者 URL 规则一致
 
 ### 提示框
 
-提示框由 `rehype-callouts` 提供，采用 Obsidian 主题，语法与 GitHub 一致，使用 `> [!TYPE]` 引导：
+由 `rehype-callouts` 提供，采用 Obsidian 主题，语法与 GitHub 一致
 
 ```markdown
 > [!NOTE]
@@ -211,7 +226,9 @@ import Chart from "@/components/Chart.astro";
 > [!WARNING]
 > 警告，需要谨慎操作，
 
-除上述常用类型外，还支持 `info`、`abstract`、`success`、`question`、`failure`、`danger`、`bug`、`example`、`quote` 等多种类型，每种类型都有其专属的图标和颜色，完整的参考请查看 [rehype-callouts 文档](https://github.com/lin-stephanie/rehype-callouts)
+除上述常用类型外，还支持 `info`、`abstract`、`success`、`question`、`failure`、`danger`、`bug`、`example`、`quote` 等多种类型，每种类型都有其专属的图标和颜色
+
+完整的参考请查看 [rehype-callouts 文档](https://github.com/lin-stephanie/rehype-callouts)
 
 ### 可折叠提示框
 
@@ -419,3 +436,7 @@ const observer = new IntersectionObserver(handle, { rootMargin: "300px" });
 ```
 
 在此基础上，还封装了 `PostCardSkeleton`、`PostListSkeleton` 与 `CategoryGridSkeleton` 等组件。其中 `PostListSkeleton` 默认按 `posts.perPage`（15条）渲染，此外，所有骨架屏均标记 `aria-hidden="true"`，对屏幕阅读器完全透明
+
+至此，Astro Lite v6 的大概能力就介绍完了
+
+源码已开源在 [achuanya/astro-lhasa](https://github.com/achuanya/astro-lhasa)，欢迎 Fork 食用
