@@ -10,6 +10,7 @@ import { unified } from "@astrojs/markdown-remark";
 import remarkToc from "remark-toc";
 import remarkCollapse from "remark-collapse";
 import rehypeCallouts from "rehype-callouts";
+import rehypeExternalLinks from "rehype-external-links";
 import {
   transformerNotationDiff,
   transformerNotationHighlight,
@@ -46,7 +47,10 @@ export default defineConfig({
         remarkToc,
         [remarkCollapse, { test: "Table of contents" }],
       ],
-      rehypePlugins: [rehypeCallouts],
+      rehypePlugins: [
+        rehypeCallouts,
+        [rehypeExternalLinks, { target: "_blank", rel: ["noopener", "noreferrer"] }],
+      ],
     }),
     shikiConfig: {
       themes: { light: "min-light", dark: "night-owl" },
