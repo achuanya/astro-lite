@@ -23,7 +23,7 @@
     "astro": "^6.4.2",
     "dayjs": "^1.11.20",
     "lodash.kebabcase": "^4.1.1",
-    "photosuite": "0.5.0-beta",
+    "photosuite": "^0.7.0-beta",
     "rehype-callouts": "^2.1.2",
     "rehype-external-links": "^3.0.0",
     "remark-collapse": "^0.1.2",

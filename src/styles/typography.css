@@ -189,16 +189,16 @@
     pre {
       @apply rounded-lg border border-code-block-border;
       padding: 0;
+    }
+    .astro-code code {
+      @apply flex-[1_0_100%] bg-inherit overflow-x-auto;
+      padding: 1.25rem 1rem;
       /* 隐藏代码块横向滚动条，保留滚动能力 */
       scrollbar-width: none;          /* Firefox */
       -ms-overflow-style: none;       /* 旧版 Edge / IE */
     }
-    pre::-webkit-scrollbar {
+    .astro-code code::-webkit-scrollbar {
       display: none;                  /* WebKit / Blink */
-    }
-    .astro-code code {
-      @apply flex-[1_0_100%] bg-inherit;
-      padding: 1.25rem 1rem;
     }
 
     /*
@@ -319,7 +319,7 @@
   /* ===== Code Blocks & Syntax Highlighting ===== */
   /* AstroPaper's Shiki integration — colors driven by CSS variables */
   .astro-code {
-    @apply flex text-(--shiki-light) [&_span]:text-(--shiki-light) !bg-code-block-bg;
+    @apply relative !overflow-visible flex text-(--shiki-light) [&_span]:text-(--shiki-light) !bg-code-block-bg;
   }
 
   .astro-code > span {
