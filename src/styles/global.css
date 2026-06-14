@@ -120,6 +120,16 @@ nav button:hover {
 /* 文章标题配色 */
 .post-title {
   @apply text-post-title;
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+}
+/* 标题强制单行，溢出显示省略号（首页/分类/标签/友联列表） */
+.post-title > h2,
+.post-title > h3 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 :target {
