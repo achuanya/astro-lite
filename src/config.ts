@@ -38,7 +38,6 @@ const config: ResolvedAstroPaperConfig = {
   },
   friends: {
     dataUrl: userConfig.friends?.dataUrl ?? "",
-    defaultAvatar: userConfig.friends?.defaultAvatar ?? "",
   },
   timeBasedTheme: {
     enabled: userConfig.timeBasedTheme?.enabled ?? false,

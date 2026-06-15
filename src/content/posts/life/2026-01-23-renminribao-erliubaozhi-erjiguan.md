@@ -3,7 +3,7 @@ author: 游钓四方
 pubDatetime: 2026-01-23T10:05:00+08:00
 title: 民族劣根性
 featured: false
-draft: false
+draft: true
 tags:
   - 生活
   - 杂谈

@@ -5,17 +5,17 @@ import { parseDate, relativeTime } from "@/utils/relativeTime";
 import { attachImageSkeleton } from "@/scripts/imageSkeleton";
 
 const PER_PAGE = config.posts.perPage;
-const DEFAULT_AVATAR = config.friends.defaultAvatar;
 const DATA_URL = config.friends.dataUrl;
 
 const locale = document.documentElement.lang || "zh";
 const rt = locale === "zh" ? zh.relativeTime : en.relativeTime;
 
 interface FriendsItem {
-  blog_name: string;
+  category: string;
+  url: string;
   title: string;
-  published: string;
-  link: string;
+  published_at: string;
+  author: string;
   avatar: string;
 }
 
@@ -40,16 +40,12 @@ function createCard(item: FriendsItem): HTMLLIElement {
   avatarPh.setAttribute("data-skeleton-ph", "");
 
   const img = document.createElement("img");
-  img.src = item.avatar || DEFAULT_AVATAR;
-  img.alt = item.blog_name;
+  img.src = item.avatar;
+  img.alt = item.author;
   img.loading = "lazy";
   img.setAttribute("data-skeleton", "");
   img.className =
     "absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-500";
-  img.onerror = function () {
-    this.onerror = null;
-    this.src = DEFAULT_AVATAR;
-  };
 
   avatar.appendChild(avatarPh);
   avatar.appendChild(img);
@@ -59,9 +55,10 @@ function createCard(item: FriendsItem): HTMLLIElement {
   innerDiv.className = "min-w-0 flex-1";
 
   const a = document.createElement("a");
-  a.href = item.link;
+  a.href = item.url;
   a.target = "_blank";
   a.rel = "noopener noreferrer";
+  a.title = item.category;
   a.className =
     "inline-block text-base font-normal decoration-solid underline-offset-4 hover:underline post-title";
 
@@ -73,16 +70,18 @@ function createCard(item: FriendsItem): HTMLLIElement {
   dateDiv.className = "text-muted-foreground flex items-center gap-x-2";
   const time = document.createElement("time");
   time.className = "text-xs";
-  time.textContent = relativeTime(item.published, rt);
-  time.setAttribute("datetime", parseDate(item.published).toISOString());
+  time.textContent = relativeTime(item.published_at, rt);
+  time.setAttribute("datetime", parseDate(item.published_at).toISOString());
   dateDiv.appendChild(time);
 
-  if (item.blog_name) {
-    const separator = document.createTextNode(" ");
+  if (item.author) {
+    const sep = document.createElement("span");
+    sep.className = "text-xs";
+    sep.textContent = " · ";
     const authorSpan = document.createElement("span");
     authorSpan.className = "text-xs";
-    authorSpan.textContent = item.blog_name;
-    dateDiv.appendChild(separator);
+    authorSpan.textContent = item.author;
+    dateDiv.appendChild(sep);
     dateDiv.appendChild(authorSpan);
   }
 
@@ -153,7 +152,7 @@ export async function initFriends(): Promise<void> {
   try {
     const res = await fetch(DATA_URL);
     const data = await res.json();
-    allItems = data.items || [];
+    allItems = Array.isArray(data) ? data : [];
     currentIndex = 0;
 
     while (list.firstChild) {

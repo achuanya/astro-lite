@@ -114,8 +114,6 @@ interface TimeBasedThemeConfig {
 interface FriendsConfig {
   /** JSON data URL for friends page */
   dataUrl?: string;
-  /** Default avatar URL for friends page */
-  defaultAvatar?: string;
 }
 
 interface CommentsConfig {

@@ -50,10 +50,9 @@ export default defineAstroPaperConfig({
     search: false,                         // 可选，是否启用搜索功能
     coverUrl: "https://cos.lhasa.icu/dist/images", // 可选，封面图 CDN 前缀
   },
-  // https://github.com/achuanya/rss-lhasa
+  // https://github.com/achuanya/miniflux-lite
   friends: {
-    dataUrl: "https://cos.lhasa.icu/lhasaRSS/data.json", // 必填，友链数据 JSON 地址
-    defaultAvatar: "https://cos.lhasa.icu/dist/avatar/default.png", // 可选，友链默认头像
+    dataUrl: "/feed.json",                // 必填，友链数据 JSON 地址
   },
   // https://github.com/achuanya/artalk-lite
   comments: {
