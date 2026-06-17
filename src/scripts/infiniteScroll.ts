@@ -1,3 +1,5 @@
+import { revealLoadedImages } from "@/scripts/imageSkeleton";
+
 let observer: IntersectionObserver | null = null;
 
 export function initInfiniteScroll() {
@@ -44,6 +46,7 @@ export function initInfiniteScroll() {
 
         const newItems = doc.querySelectorAll("#post-list > li");
         list.append(...newItems);
+        revealLoadedImages(list);
 
         for (const style of doc.querySelectorAll("style")) {
           let css = style.textContent ?? "";
