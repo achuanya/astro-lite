@@ -258,6 +258,18 @@ const ogImage = ogImageUrl
   }
   attachCopyButtons();
 
+  function wrapTables() {
+    const tables = document.querySelectorAll("#article > table, #article table");
+    for (const table of tables) {
+      if (table.parentElement?.classList.contains("table-scroll")) continue;
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-scroll w-full overflow-x-auto";
+      table.parentNode?.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+  }
+  wrapTables();
+
   document.addEventListener("astro:after-swap", () =>
     window.scrollTo({ left: 0, top: 0, behavior: "instant" })
   );
