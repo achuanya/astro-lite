@@ -66,6 +66,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    preview: {
+      allowedHosts: ["blog.lhasa.icu"],
+    },
   },
   env: {
     schema: {
