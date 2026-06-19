@@ -28,7 +28,7 @@ const pathWithoutTrailingSlash =
 const currentPath = stripLocale(pathWithoutTrailingSlash, locale);
 
 const displayTitle = pageTitle || site.title;
-const defaultTitleClass = "text-nav-title text-base font-normal whitespace-nowrap font-ui";
+const defaultTitleClass = "text-nav-title text-base font-normal whitespace-nowrap font-sans";
 
 const isActive = (path: string) => {
   const currentPathArray = currentPath.split("/").filter(p => p.trim());
@@ -51,7 +51,7 @@ const rssHref = `${import.meta.env.BASE_URL.replace(/\/?$/, "/")}rss.xml`;
   <div class="relative flex items-end gap-2 leading-none">
     <h1
       class:list={[titleClass || defaultTitleClass]}
-      style={{ ...(viewTransitionName ? { viewTransitionName } : {}), fontFamily: 'var(--font-ui)' }}
+      style={{ ...(viewTransitionName ? { viewTransitionName } : {}), fontFamily: 'var(--font-sans)' }}
     >
       {displayTitle}
     </h1>

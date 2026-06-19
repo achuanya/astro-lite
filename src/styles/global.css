@@ -3,21 +3,10 @@
 @import "./theme-light.css";
 @import "./theme-dark.css";
 @import "./typography.css";
+@import "./fonts.css";
 @import "./skeleton.css";
 
-/* 切片字体：思源宋体（含中英文） */
-@import "../assets/fonts/SourceHanSerifSC-Regular/result.css";
-@import "../assets/fonts/SourceHanSerifSC-Bold/result.css";
 @import "rehype-callouts/theme/obsidian";
-
-/* 代码字体：Fira Code 可变字体单文件 */
-@font-face {
-  font-family: "FiraCode";
-  src: url("../assets/fonts/FiraCode-VF.woff2") format("woff2");
-  font-weight: 300 700;
-  font-style: normal;
-  font-display: swap;
-}
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
@@ -54,24 +43,6 @@
   }
   html.scrollbar-near *::-webkit-scrollbar-thumb {
     background: var(--color-scrollbar-thumb-hover);
-  }
-  h1 {
-    font-family: var(--font-heading);
-  }
-  h2, h3 {
-    font-family: var(--font-heading-sub);
-  }
-  h4, h5, h6 {
-    font-family: var(--font-heading-sub);
-  }
-  code, pre, kbd, samp {
-    font-family: var(--font-code);
-  }
-  strong, b {
-    font-family: var(--font-bold);
-  }
-  nav {
-    font-family: var(--font-ui);
   }
   a,
   button {

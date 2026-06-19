@@ -71,7 +71,7 @@
      */
     h1 {
       @apply text-foreground mt-6 font-medium border-l-prose-heading-border;
-      font-family: var(--font-ui);
+      font-family: var(--font-sans);
       font-size: var(--text-h1);
       line-height: var(--leading-heading);
       margin-bottom: var(--heading-gap);
@@ -127,7 +127,7 @@
 
     strong {
       @apply text-foreground;
-      font-family: var(--font-bold);
+      font-family: var(--font-sans-bold);
     }
 
     /*

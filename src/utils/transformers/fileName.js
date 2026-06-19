@@ -15,11 +15,42 @@ export const transformerFileName = ({
   style = "v2",
   hideDot = false,
 } = {}) => ({
+  root(hast) {
+    hast.children = hast.children.map(child => {
+      if (child?.type === "element" && child.tagName === "pre") {
+        return {
+          type: "element",
+          tagName: "div",
+          properties: { class: ["relative"] },
+          children: [child],
+        };
+      }
+      return child;
+    });
+  },
   pre(node) {
     // Add CSS custom property to the node
     const fileNameOffset = style === "v1" ? "0.75rem" : "-0.75rem";
     node.properties.style =
       (node.properties.style || "") + `--file-name-offset: ${fileNameOffset};`;
+    node.properties.tabindex = "0";
+
+    // Add copy button (SSR) so it paints in place on first render and never
+    // appears after JS hydration.
+    node.children.push({
+      type: "element",
+      tagName: "button",
+      properties: {
+        type: "button",
+        "aria-label": "Copy code",
+        class: [
+          "copy-code absolute end-3 top-(--file-name-offset)",
+          "rounded bg-muted border border-muted px-2 py-1",
+          "text-xs leading-4 text-foreground font-medium",
+        ],
+      },
+      children: [{ type: "text", value: "Copy" }],
+    });
 
     const raw = this.options.meta?.__raw?.split(" ");
 
@@ -49,13 +80,13 @@ export const transformerFileName = ({
       tagName: "span",
       properties: {
         class: [
-          "absolute py-1 text-code-filename-text text-xs font-medium leading-4",
+          "absolute py-1 text-foreground text-xs font-medium leading-4",
           hideDot
             ? "px-2"
-            : "pl-4 pr-2 before:inline-block before:size-1 before:bg-code-filename-dot before:rounded-full before:absolute before:top-[45%] before:left-2",
+            : "pl-4 pr-2 before:inline-block before:size-1 before:bg-green-500 before:rounded-full before:absolute before:top-[45%] before:left-2",
           style === "v1"
-            ? "left-0 -top-6 rounded-t-md border border-b-0 border-border bg-muted/50"
-            : "left-2 top-(--file-name-offset) rounded-md bg-code-block-bg",
+            ? "left-0 -top-6 rounded-t-md border border-b-0 bg-muted/50"
+            : "left-2 top-(--file-name-offset) border rounded-md bg-background",
         ],
       },
       children: [

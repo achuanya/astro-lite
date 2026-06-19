@@ -1,0 +1,52 @@
+---
+import { getAssetPath } from "@/utils/withBase";
+---
+
+<!--
+  本地字体，使用 cn-font-split 子集化后从 /public/fonts 直接提供
+  result.css 文件包含 @font-face 声明，预加载 SF Pro Text（Regular + Bold）
+  的基本拉丁字符切片和完整的 SF Mono 字体，确保首屏文字无闪烁（FOUT-free）
+  CJK 切片按需按字符加载
+-->
+  
+<link
+  rel="preload"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+  href={getAssetPath("fonts/SFMono-Regular.woff2")}
+/>
+<link
+  rel="preload"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+  href={getAssetPath(
+    "fonts/SF-Pro-Text-Regular/d8f2d1cb3e8cfaf4f379c5c0fde8e93d.woff2"
+  )}
+/>
+<link
+  rel="preload"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+  href={getAssetPath(
+    "fonts/SF-Pro-Text-Bold/66b078c2701d179a838a753c7f2f0a81.woff2"
+  )}
+/>
+<link
+  rel="stylesheet"
+  href={getAssetPath("fonts/SF-Pro-Text-Regular/result.css")}
+/>
+<link
+  rel="stylesheet"
+  href={getAssetPath("fonts/SF-Pro-Text-Bold/result.css")}
+/>
+<link
+  rel="stylesheet"
+  href={getAssetPath("fonts/PingFangSC-Regular/result.css")}
+/>
+<link
+  rel="stylesheet"
+  href={getAssetPath("fonts/PingFangSC-Semibold/result.css")}
+/>

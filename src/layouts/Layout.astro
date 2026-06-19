@@ -3,6 +3,7 @@ import { ClientRouter } from "astro:transitions";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { resolveDefaultOgImagePath } from "@/utils/resolveDefaultOgImagePath";
 import { getAssetPath } from "@/utils/withBase";
+import FontLinks from "@/components/FontLinks.astro";
 import NavigationSkeleton from "@/components/skeleton/NavigationSkeleton.astro";
 import config from "@/config";
 import "@/styles/global.css";
@@ -43,6 +44,8 @@ const rssHref = getRelativeLocaleUrl(
     <link rel="icon" href={getAssetPath("favicon.ico")} />
     <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
+
+    <FontLinks />
 
     <!-- Primary meta -->
     <title>{title}</title>

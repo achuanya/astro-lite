@@ -1,0 +1,46 @@
+/* =============================================================
+   Local fonts
+   -------------------------------------------------------------
+   The subsetted SF Pro Text / PingFang SC faces are declared by the
+   cn-font-split `result.css` files under /public/fonts/**. Those files
+   are loaded verbatim via <link rel="stylesheet"> in Layout.astro:
+   their woff2 slice URLs are RELATIVE (url("./<hash>.woff2")), so the
+   browser must resolve them against the result.css location and the
+   bundler must never rewrite them. They keep `font-display: swap` and
+   per-slice `unicode-range`, so the browser only downloads the slices
+   that the rendered glyphs actually need (on-demand CJK loading).
+
+   Only the standalone monospace face is declared here, because it ships
+   as a single woff2 with no result.css of its own.
+   ============================================================= */
+
+@font-face {
+  font-family: "SF Mono";
+  src: url("/fonts/SFMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  /* Route bold contexts to the SF Pro Text Bold + PingFang Semibold stack.
+     CSS resolves a *family* before it resolves a weight, and regular vs.
+     bold Chinese are two distinct families ("苹方_中等" 500 vs "苹方_特粗"
+     900) — so bold Chinese can only reach the Semibold subset by swapping
+     the family list, not by bumping font-weight. `.font-medium` is left on
+     the regular stack on purpose: "苹方_中等" *is* PingFang Medium (500). */
+  :is(b, strong, th),
+  .font-bold,
+  .font-semibold {
+    font-family: var(--font-sans-bold);
+  }
+
+  /* Code / monospace contexts use SF Mono (CJK inside code falls back to
+     the PingFang subset, then the generic monospace keyword). */
+  code,
+  kbd,
+  samp,
+  pre {
+    font-family: var(--font-mono);
+  }
+}

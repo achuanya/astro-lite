@@ -33,21 +33,19 @@
  * - 字体变量（--font-*）直接在此定义，不依赖外部主题文件。
  */
 @theme inline {
-  /* ===== 字体 =====
-   * 思源宋体同时覆盖中英文；Regular(400) 与 Bold(700) 共用
-   * family 名 "Source Han Serif SC"，由 font-weight 自动择字重。
-   */
-  --font-app: "Source Han Serif SC", serif;
-  --font-heading: "Source Han Serif SC", serif;
-  --font-heading-sub: "Source Han Serif SC", serif;
-  --font-ui: "Source Han Serif SC", serif;
-  --font-bold: "Source Han Serif SC", serif;
-  --font-code: "FiraCode", "Source Han Serif SC", monospace;
+  /* ===== Font tokens =====
+     Western first, Chinese subset after — Latin chars hit the SF Pro Text
+     faces, CJK chars fall through to the cn-font-split PingFang subsets.
+     The Chinese family NAMES and WEIGHTS below are dictated by the
+     (unmodifiable) result.css files: PingFangSC-Regular -> "苹方_中等" 500,
+     PingFangSC-Semibold -> "苹方_特粗" 900. */
+  --font-sans: "SF Pro Text", "苹方_中等", sans-serif;
+  --font-sans-bold: "SF Pro Text", "苹方_特粗", sans-serif;
+  --font-mono: "SF Mono", "苹方_中等", monospace;
 
-  /* Tailwind 默认字体 token 覆盖，确保 font-sans/serif/mono 与全站一致 */
-  --font-sans: var(--font-app);
-  --font-serif: var(--font-app);
-  --font-mono: var(--font-code);
+  /* AstroPaper's app-wide font hook (consumed by the `font-app` utility
+     on <body> and by Pagefind via --pagefind-ui-font). */
+  --font-app: var(--font-sans);
 
   /* ===== 基础 ===== */
   --color-background: var(--background);
